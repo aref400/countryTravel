@@ -13,6 +13,7 @@ export interface TravelPreferences {
   travelMonth: number;
   climate: number;
   withChildren: boolean;
+  region: string;
   touristPopularity: number;
 }
 

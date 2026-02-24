@@ -1,4 +1,4 @@
-import { IsInt, Min, Max, IsBoolean, IsArray, IsEnum } from "class-validator";
+import { IsInt, Min, Max, IsBoolean, IsArray, IsEnum, IsString } from "class-validator";
 import { TravelType } from "../types/recommendation.types";
 
 export class TravelPreferencesDto {
@@ -14,6 +14,8 @@ export class TravelPreferencesDto {
    climate: number;
    @IsBoolean()
    withChildren: boolean;
+   @IsString()
+   region: string;
    @IsInt() @Min(1) @Max(5) 
    touristPopularity: number;   
 }
