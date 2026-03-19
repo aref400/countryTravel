@@ -1,0 +1,18 @@
+{
+  "name": "country-travel",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:front": "npm run dev --workspace=apps/front",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:front\"",
+    "build:api": "npm run build --workspace=apps/api",
+    "build:front": "npm run build --workspace=apps/front",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
