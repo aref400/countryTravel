@@ -1,0 +1,214 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  user
+  admin
+}
+
+enum OAuthProvider {
+  google
+  github
+}
+
+enum FriendshipStatus {
+  pending
+  accepted
+  blocked
+}
+
+enum Continent {
+  europe
+  asia
+  americas
+  africa
+  oceania
+  poles
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  username      String   @unique
+  passwordHash  String?
+  avatarUrl     String?
+  bio           String?  @db.VarChar(500)
+  role          Role     @default(user)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+
+  oauthAccounts OAuthAccount[]
+  reviews       Review[]
+  visits        Visit[]
+  savedRecos    SavedRecommendation[]
+  sentRequests     Friendship[] @relation("Requester")
+  receivedRequests Friendship[] @relation("Addressee")
+
+
+  @@map("users")
+}
+
+model OAuthAccount {
+  id           String        @id @default(uuid())
+  userId       String
+  provider     OAuthProvider
+  providerId   String
+  accessToken  String?
+  refreshToken String?
+  expiresAt    DateTime?
+  createdAt    DateTime      @default(now())
+
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  @@unique([provider, providerId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+
+model Country {
+  id          String    @id @default(uuid())
+  name        String
+  isoCode     String    @unique @db.Char(2)
+  continent   Continent
+  capital     String?
+  flagUrl     String?
+  imageUrl    String?
+  description String?
+  currency    String?   @db.VarChar(10)
+  language    String?
+  isPublished Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+
+  criteria CountryCriteria?
+  reviews  Review[]
+  visits   Visit[]
+
+
+  @@index([continent])
+  @@index([isPublished])
+  @@map("countries")
+}
+
+model CountryCriteria {
+  id              String  @id @default(uuid())
+  countryId       String  @unique
+  budget          Int     @default(3)
+  safety          Int     @default(3)
+  temperature     Int     @default(3)
+  tourismLevel    Int     @default(3)
+  familyFriendly  Boolean @default(false)
+  natureLevel     Int     @default(0)
+  partyLevel      Int     @default(0)
+  sportLevel      Int     @default(0)
+  cultureLevel    Int     @default(0)
+  historyLevel    Int     @default(0)
+  gastronomyLevel Int     @default(0)
+  cityLevel       Int     @default(0)
+  relaxationLevel Int     @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+
+  @@index([countryId])
+  @@map("country_criteria")
+}
+
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  countryId String
+  rating    Int
+  content   String?
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+
+  @@unique([userId, countryId])
+  @@index([countryId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+
+model Visit {
+  id        String   @id @default(uuid())
+  userId    String
+  countryId String
+  visitedAt DateTime?
+  createdAt DateTime @default(now())
+
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+
+  @@unique([userId, countryId])
+  @@index([userId])
+  @@index([countryId])
+  @@map("visits")
+}
+
+
+model SavedRecommendation {
+  id                String   @id @default(uuid())
+  userId            String
+  name              String?  @db.VarChar(100)
+  criteriaSnapshot  Json
+  resultsSnapshot   Json
+  createdAt         DateTime @default(now())
+
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  @@index([userId])
+  @@map("saved_recommendations")
+}
+
+
+model Friendship {
+  id          String           @id @default(uuid())
+  requesterId String
+  addresseeId String
+  status      FriendshipStatus @default(pending)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+
+  requester User @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("Addressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+
+  @@unique([requesterId, addresseeId])
+  @@index([requesterId])
+  @@index([addresseeId])
+  @@map("friendships")
+}
+
+

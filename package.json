@@ -2,7 +2,10 @@
   "name": "country-travel",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:front": "npm run dev --workspace=apps/front",
@@ -14,5 +17,9 @@
   },
   "devDependencies": {
     "concurrently": "^8.0.0"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1"
   }
 }
