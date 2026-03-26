@@ -1,0 +1,847 @@
+{
+  "meta": {
+    "project": "CountryTravel",
+    "version": "1.0",
+    "generated": "2026-03-26",
+    "description": "Roadmap structurée pour agent IA — chaque ticket est bloqué jusqu'à validation complète des critères d'acceptation du ticket précédent.",
+    "instructions": [
+      "1. Lire le ticket courant (status: 'current').",
+      "2. Présenter le titre, la description et les critères d'acceptation à l'utilisateur.",
+      "3. Pour chaque critère : exécuter les commandes de vérification ET poser les questions associées.",
+      "4. Un critère est validé uniquement si commande ET question sont OK.",
+      "5. Si tous les critères sont validés : passer le ticket en 'done' et le suivant en 'current'.",
+      "6. Si un critère échoue : aider l'utilisateur à le résoudre avant de continuer.",
+      "7. Ne jamais passer au ticket suivant si au moins un critère est non validé.",
+      "8. En début de session : lire le fichier pour retrouver le ticket 'current' et reprendre là où on s'est arrêté."
+    ],
+    "stats": {
+      "total_sprints": 1,
+      "total_tickets": 7,
+      "total_criteria": 44
+    }
+  },
+  "sprints": [
+    {
+      "id": "sprint-1",
+      "title": "Sprint 1 — Setup & Auth",
+      "tickets": [
+        {
+          "id": "CT-001",
+          "title": "Initialisation du projet NestJS (apps/api)",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "done",
+          "description": "Créer le projet NestJS avec la configuration de base : TypeScript strict, ESLint, Prettier, structure des dossiers, variables d'environnement, Helmet, CORS, Swagger, ValidationPipe, préfixe /api/v1.",
+          "dependencies": [],
+          "acceptance_criteria": [
+            {
+              "id": "CT-001-AC-1",
+              "description": "Le projet NestJS démarre sans erreur",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run start:dev",
+                    "expect": "NestJS running on http://localhost:3000",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que http://localhost:3000/api/docs est accessible dans ton navigateur et affiche l'interface Swagger ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-2",
+              "description": "Helmet et CORS configurés dans main.ts",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -n 'helmet\\|enableCors' apps/api/src/main.ts",
+                    "expect": "helmet\nenableCors",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que tu vois app.use(helmet()) et app.enableCors() dans ton main.ts ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-3",
+              "description": "Préfixe global /api/v1 configuré",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -n 'setGlobalPrefix' apps/api/src/main.ts",
+                    "expect": "api/v1",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que http://localhost:3000/api/v1 répond (même avec un 404, le préfixe est actif) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-4",
+              "description": "ValidationPipe global configuré",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -n 'ValidationPipe' apps/api/src/main.ts",
+                    "expect": "ValidationPipe",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que useGlobalPipes(new ValidationPipe({whitelist: true, transform: true})) est présent dans main.ts ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-5",
+              "description": "Variables d'env configurées via @nestjs/config",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -rn 'ConfigModule' apps/api/src/app.module.ts",
+                    "expect": "ConfigModule.forRoot",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "test -f apps/api/.env && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que ton fichier .env contient au moins DATABASE_URL, JWT_SECRET et JWT_REFRESH_SECRET ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-6",
+              "description": "Structure des dossiers src/ correcte",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "ls apps/api/src/",
+                    "expect": "auth\nusers\ncountries\ncommon\nprisma",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que tu vois les dossiers auth/, users/, countries/, common/ et prisma/ dans apps/api/src/ ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-7",
+              "description": "ESLint + Prettier opérationnels",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run lint",
+                    "expect": "0 errors",
+                    "timeout": 30
+                  }
+                ],
+                "questions": [
+                  "Est-ce que npm run lint passe sans erreur bloquante ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-001-AC-8",
+              "description": "README rédigé",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/api/README.md && wc -l apps/api/README.md",
+                    "expect": "",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que apps/api/README.md existe et contient les instructions de setup (install, migrate, start) ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-002",
+          "title": "Initialisation du projet React + Vite (apps/front)",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "done",
+          "description": "Créer le projet React 18 + Vite 5 + TypeScript. Configurer TailwindCSS, shadcn/ui, React Router v7 (declarative), Axios avec intercepteurs JWT, Zustand pour le state auth, React Query pour le fetching. Architecture feature-based.",
+          "dependencies": ["CT-001"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-002-AC-1",
+              "description": "Le projet Vite démarre sans erreur sur :5173",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/front && npm run dev &",
+                    "expect": "localhost:5173",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que http://localhost:5173 s'ouvre dans ton navigateur sans erreur console ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-2",
+              "description": "TailwindCSS fonctionnel",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -n '@tailwind' apps/front/src/index.css",
+                    "expect": "@tailwind base",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce qu'une classe Tailwind comme className='text-red-500' applique bien le style dans le navigateur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-3",
+              "description": "shadcn/ui initialisé",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/front/components.json && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "ls apps/front/src/shared/components/ui/",
+                    "expect": "button",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le composant Button de shadcn/ui s'importe et s'affiche correctement ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-4",
+              "description": "React Router v7 configuré (mode declarative)",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -rn 'BrowserRouter\\|Routes\\|Route' apps/front/src/app/",
+                    "expect": "BrowserRouter",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la navigation entre routes fonctionne (ex: / et /auth/login) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-5",
+              "description": "Axios instance avec intercepteur Bearer JWT",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/front/src/shared/lib/axios.instance.ts && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "grep -n 'Authorization\\|Bearer' apps/front/src/shared/lib/axios.instance.ts",
+                    "expect": "Bearer",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que l'intercepteur Axios ajoute bien Authorization: Bearer <token> dans les headers quand un token est présent ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-6",
+              "description": "Zustand store auth configuré",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/front/src/shared/store/auth.store.ts && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "grep -n 'setAuth\\|logout\\|isAuthenticated' apps/front/src/shared/store/auth.store.ts",
+                    "expect": "setAuth",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le store contient bien user, accessToken, isAuthenticated, setAuth et logout ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-7",
+              "description": "React Query QueryClient configuré",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -rn 'QueryClient\\|QueryClientProvider' apps/front/src/app/",
+                    "expect": "QueryClientProvider",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que QueryClientProvider enveloppe bien l'application dans providers.tsx ou App.tsx ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-8",
+              "description": "Structure feature-based correcte",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "ls apps/front/src/",
+                    "expect": "app\nfeatures\npages\nshared\nassets",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "ls apps/front/src/features/",
+                    "expect": "auth\ncountries\nrecommendations\nreviews\nvisits\nfriendships\ndashboard\nadmin",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la structure app/, features/, pages/, shared/ est bien en place avec les sous-dossiers de chaque feature ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-002-AC-9",
+              "description": "Variable d'env VITE_API_URL configurée",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep 'VITE_API_URL' apps/front/.env.local",
+                    "expect": "localhost:3000",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que VITE_API_URL=http://localhost:3000/api/v1 est bien dans apps/front/.env.local ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-003",
+          "title": "Configuration Prisma + PostgreSQL (schéma complet)",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "done",
+          "description": "Installer Prisma, créer le schéma complet (7 modèles), générer la première migration, créer le PrismaService NestJS singleton injectable globalement.",
+          "dependencies": ["CT-001"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-003-AC-1",
+              "description": "schema.prisma contient les 7 modèles",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -c 'model ' apps/api/prisma/schema.prisma",
+                    "expect": "7",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que tu vois les 7 modèles dans schema.prisma : User, OAuthAccount, Country, CountryCriteria, Review, Visit, SavedRecommendation, Friendship ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-003-AC-2",
+              "description": "Migration initiale appliquée avec succès",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "ls apps/api/prisma/migrations/",
+                    "expect": "init",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que npx prisma migrate dev --name init s'est exécuté sans erreur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-003-AC-3",
+              "description": "Les 7 tables sont visibles dans Prisma Studio",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx prisma studio &",
+                    "expect": "Studio ready",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que Prisma Studio (http://localhost:5555) affiche bien les 8 tables : users, oauth_accounts, countries, country_criteria, reviews, visits, saved_recommendations, friendships ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-003-AC-4",
+              "description": "PrismaService injectable dans tous les modules",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/api/src/prisma/prisma.service.ts && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "grep -n 'Global\\|PrismaModule' apps/api/src/prisma/prisma.module.ts",
+                    "expect": "Global",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que PrismaModule est bien décoré @Global() et importé dans AppModule ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-003-AC-5",
+              "description": "Client Prisma généré correctement",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -d apps/api/generated && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le dossier generated/prisma/client/ existe dans apps/api après npx prisma generate ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-004",
+          "title": "Configuration CI/CD GitHub Actions",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "current",
+          "description": "Créer les pipelines GitHub Actions : lint + tests sur chaque PR, déploiement automatique sur Railway (api) et Netlify (front) sur push main.",
+          "dependencies": ["CT-001", "CT-002"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-004-AC-1",
+              "description": "Workflow PR créé et fonctionnel",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f .github/workflows/pr.yml && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce qu'une PR sur GitHub déclenche bien le workflow (lint + build) visible dans l'onglet Actions ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-004-AC-2",
+              "description": "Workflow déploiement API Railway configuré",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f .github/workflows/deploy-api.yml && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "grep -n 'RAILWAY_TOKEN' .github/workflows/deploy-api.yml",
+                    "expect": "RAILWAY_TOKEN",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le secret RAILWAY_TOKEN est configuré dans GitHub Settings > Secrets ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-004-AC-3",
+              "description": "Workflow déploiement Front Netlify configuré",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f .github/workflows/deploy-front.yml && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  },
+                  {
+                    "cmd": "grep -n 'NETLIFY_AUTH_TOKEN' .github/workflows/deploy-front.yml",
+                    "expect": "NETLIFY_AUTH_TOKEN",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que les secrets NETLIFY_AUTH_TOKEN et NETLIFY_SITE_ID sont configurés dans GitHub Settings > Secrets ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-004-AC-4",
+              "description": "Badges CI visibles dans les README",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -n 'badge\\|actions/workflows' README.md",
+                    "expect": "workflows",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le badge CI est visible dans le README.md à la racine du monorepo ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-005",
+          "title": "API — Inscription et connexion email/password",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Implémenter AuthModule avec RegisterDto, LoginDto, bcrypt, génération access token JWT (15min) + refresh token (7j) signés. HttpExceptionFilter global.",
+          "dependencies": ["CT-003"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-005-AC-1",
+              "description": "POST /api/v1/auth/register crée un user et retourne les tokens",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"test@test.com\",\"username\":\"testuser\",\"password\":\"password123\"}' | grep -o 'accessToken'",
+                    "expect": "accessToken",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la réponse contient bien accessToken, refreshToken et un objet user avec id, email, username, role ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-2",
+              "description": "POST /api/v1/auth/login retourne les tokens",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"test@test.com\",\"password\":\"password123\"}' | grep -o 'accessToken'",
+                    "expect": "accessToken",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que login avec mauvais mot de passe retourne bien un 401 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-3",
+              "description": "Email et username uniques — 409 si doublon",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:3000/api/v1/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"test@test.com\",\"username\":\"testuser2\",\"password\":\"password123\"}'",
+                    "expect": "409",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que réutiliser un email déjà existant retourne bien 409 Conflict ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-4",
+              "description": "Passwords hashés avec bcrypt (rounds=12)",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx prisma studio &",
+                    "expect": "",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Dans Prisma Studio, est-ce que le champ passwordHash commence bien par $2b$ (hash bcrypt) et non par le mot de passe en clair ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-5",
+              "description": "Validation RegisterDto — 400 si données invalides",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:3000/api/v1/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"pasunemail\",\"username\":\"t\",\"password\":\"123\"}'",
+                    "expect": "400",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la réponse 400 contient un tableau de messages d'erreur détaillés (ex: email must be an email, password is too short) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-6",
+              "description": "GET /api/v1/auth/me retourne l'utilisateur connecté",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "TOKEN=$(curl -s -X POST http://localhost:3000/api/v1/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"test@test.com\",\"password\":\"password123\"}' | grep -o '\"accessToken\":\"[^\"]*' | cut -d'\"' -f4) && curl -s -H \"Authorization: Bearer $TOKEN\" http://localhost:3000/api/v1/auth/me | grep -o 'username'",
+                    "expect": "username",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que GET /auth/me sans token retourne bien 401 Unauthorized ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-005-AC-7",
+              "description": "POST /api/v1/auth/refresh génère un nouveau accessToken",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que POST /auth/refresh avec un refreshToken valide retourne un nouveau accessToken ?",
+                  "Est-ce que POST /auth/refresh avec un refreshToken invalide ou expiré retourne 401 ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-006",
+          "title": "API — Authentification OAuth Google + GitHub",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Intégrer Passport.js avec stratégies Google OAuth2 et GitHub. Upsert user + oauth_account. Rediriger frontend avec tokens.",
+          "dependencies": ["CT-005"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-006-AC-1",
+              "description": "GET /auth/google redirige vers Google consent",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/v1/auth/google",
+                    "expect": "302",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que http://localhost:3000/api/v1/auth/google redirige bien vers accounts.google.com dans le navigateur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-006-AC-2",
+              "description": "Callback Google crée/lie le compte et redirige avec tokens",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que le flux OAuth Google complet fonctionne (connexion Google → redirect frontend avec ?accessToken=...) ?",
+                  "Est-ce qu'une entrée est créée dans oauth_accounts (visible dans Prisma Studio) après connexion Google ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-006-AC-3",
+              "description": "Même flux fonctionnel pour GitHub",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/v1/auth/github",
+                    "expect": "302",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le flux OAuth GitHub complet fonctionne ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-006-AC-4",
+              "description": "Si email déjà existant : liaison du compte OAuth sans créer un doublon",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Si tu te connectes avec Google avec un email déjà utilisé en email/password, est-ce qu'un seul user est créé en base (pas de doublon) ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-007",
+          "title": "Front — Pages Login et Register",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Créer les pages d'authentification avec formulaires validés (React Hook Form + Zod), boutons OAuth, gestion des erreurs API, redirection post-auth.",
+          "dependencies": ["CT-002", "CT-005", "CT-006"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-007-AC-1",
+              "description": "Page /auth/login accessible avec formulaire email + password",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "grep -rn 'useForm\\|zodResolver' apps/front/src/features/auth/",
+                    "expect": "zodResolver",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la page /auth/login affiche bien les champs email et password avec les boutons Google et GitHub ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-2",
+              "description": "Validation Zod côté client avant soumission",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que soumettre le formulaire avec un email invalide affiche bien un message d'erreur sans appeler l'API ?",
+                  "Est-ce que soumettre avec un mot de passe < 8 caractères bloque bien la soumission ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-3",
+              "description": "Après login réussi : token stocké + redirect /dashboard",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après une connexion réussie, est-ce que accessToken est bien stocké dans localStorage ?",
+                  "Est-ce que l'utilisateur est bien redirigé vers /dashboard après connexion ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-4",
+              "description": "Erreurs API affichées (401, 409)",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'un mauvais mot de passe affiche un message d'erreur dans le formulaire (pas juste une console error) ?",
+                  "Est-ce qu'un email déjà pris à l'inscription affiche 'Cet email est déjà utilisé' ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-5",
+              "description": "Callback OAuth : tokens récupérés depuis query params",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après connexion OAuth, est-ce que les tokens sont bien récupérés depuis l'URL et stockés dans Zustand + localStorage ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-6",
+              "description": "Route protégée PrivateRoute fonctionne",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "En accédant à /dashboard sans être connecté, est-ce que tu es bien redirigé vers /auth/login ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-007-AC-7",
+              "description": "Pages responsive mobile",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les pages Login et Register s'affichent correctement sur mobile (375px) dans les DevTools ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
