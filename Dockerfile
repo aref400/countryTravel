@@ -19,6 +19,9 @@ RUN npx prisma generate
 # Build l'application
 RUN npm run build
 
+# Vérifier que dist existe
+RUN ls -la dist/
+
 # Stage de production
 FROM node:20-alpine
 
@@ -39,8 +42,12 @@ COPY --from=builder /app/apps/api/src/generated ./src/generated
 # Générer Prisma Client en production
 RUN npx prisma generate
 
+# Vérifier les fichiers copiés
+RUN ls -la
+RUN ls -la dist/
+ 
 # Exposer le port
 EXPOSE 3000
-
+ 
 # Démarrer l'application
-CMD ["node", "dist/main"]
+CMD ["node", "dist/main.js"]
