@@ -1,19 +1,20 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import { PrismaClient } from '../generated/prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
-    const adapter = new PrismaPg({
+    const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const adapter = new PrismaPg(pool); // ← Passer le pool au lieu de l'objet
+
     super({ adapter });
   }
 
   async onModuleInit() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$connect();
   }
 }
