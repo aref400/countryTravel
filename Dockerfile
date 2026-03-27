@@ -45,9 +45,10 @@ RUN npx prisma generate
 # Vérifier les fichiers copiés
 RUN ls -la
 RUN ls -la dist/
+RUN ls -la dist/src/
  
 # Exposer le port
 EXPOSE 3000
  
 # Démarrer l'application
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
