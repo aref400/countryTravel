@@ -12,6 +12,8 @@
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:front\"",
     "build:api": "npm run build --workspace=apps/api",
     "build:front": "npm run build --workspace=apps/front",
+    "start:api": "npm run start:prod --workspace=apps/api",
+    "start:front": "npm run start:prod --workspace=apps/front",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   },
