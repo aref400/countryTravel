@@ -26,10 +26,10 @@ WORKDIR /app
 
 # Copier package.json ET package-lock.json
 COPY --from=builder /app/apps/api/package.json ./
-COPY --from=builder /app/apps/api/package-lock.json ./
 
-# Installer uniquement les dépendances de production
-RUN npm install --omit=dev
+
+# Installer les dépendances de production (sans package-lock)
+RUN npm install --production --no-package-lock
 
 # Copier le build et Prisma
 COPY --from=builder /app/apps/api/dist ./dist
