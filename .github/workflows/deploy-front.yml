@@ -23,10 +23,14 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        working-directory: apps/front
         run: npm ci
 
       - name: Build
+        working-directory: apps/front
         run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master
