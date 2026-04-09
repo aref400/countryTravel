@@ -1,0 +1,217 @@
+import { UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { RequestWithUser } from './types/request-with-user.types';
+import { RefreshDto } from './dto/refresh.dto';
+
+describe('AuthService', () => {
+  let service: AuthService;
+
+  // Mock de PrismaService
+  const mockPrismaService = {
+    user: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+  };
+
+  // Mock de JwtService
+  const mockJwtService = {
+    signAsync: jest.fn(),
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        { provide: PrismaService, useValue: mockPrismaService },
+        { provide: JwtService, useValue: mockJwtService },
+      ],
+    }).compile();
+
+    service = module.get<AuthService>(AuthService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('register', () => {
+    const registerDto: RegisterDto = {
+      email: 'test@test.com',
+      username: 'testuser',
+      password: 'password123',
+    };
+
+    it('should create a new user and return tokens', async () => {
+      // Arrange
+      mockPrismaService.user.findUnique.mockResolvedValue(null); // Pas d'utilisateur existant
+      mockPrismaService.user.create.mockResolvedValue({
+        id: 'user-id',
+        email: registerDto.email,
+        username: registerDto.username,
+        passwordHash: 'hashed-password',
+        role: 'user',
+      });
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('access-token')
+        .mockResolvedValueOnce('refresh-token');
+
+      // Act
+      const result = await service.register(registerDto);
+
+      // Assert
+      expect(result).toEqual({
+        user: {
+          id: 'user-id',
+          email: registerDto.email,
+          username: registerDto.username,
+          role: 'user',
+        },
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+      });
+      expect(mockPrismaService.user.findUnique).toHaveBeenCalledTimes(2); // Email + username
+      expect(mockPrismaService.user.create).toHaveBeenCalledWith({
+        data: {
+          email: registerDto.email,
+          username: registerDto.username,
+          passwordHash: expect.any(String) as string,
+          role: 'user',
+        },
+      });
+    });
+
+    it('should throw ConflictException if email already exists', async () => {
+      // Arrange
+      mockPrismaService.user.findUnique.mockResolvedValueOnce({
+        id: 'existing-user',
+        email: registerDto.email,
+      });
+
+      await expect(service.register(registerDto)).rejects.toThrow(
+        'Email already exists',
+      );
+    });
+
+    it('should throw ConflictException if username already exists', async () => {
+      // Arrange
+      mockPrismaService.user.findUnique
+        .mockResolvedValueOnce(null) // Email n'existe pas
+        .mockResolvedValueOnce({
+          id: 'existing-user',
+          username: registerDto.username,
+        }); // Username existe
+
+      await expect(service.register(registerDto)).rejects.toThrow(
+        'Username already exists',
+      );
+    });
+  });
+
+  describe('login', () => {
+    const loginDto: LoginDto = {
+      email: 'test@test.com',
+      password: 'password123',
+    };
+
+    it('should return user and tokens on successful login', async () => {
+      // Arrange
+      const hashedPassword = await bcrypt.hash(loginDto.password, 12);
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'user-id',
+        email: loginDto.email,
+        username: 'testuser',
+        passwordHash: hashedPassword,
+        role: 'user',
+      });
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('access-token')
+        .mockResolvedValueOnce('refresh-token');
+
+      // Act
+      const result = await service.login(loginDto);
+
+      // Assert
+      expect(result).toEqual({
+        user: {
+          id: 'user-id',
+          email: loginDto.email,
+          username: 'testuser',
+          role: 'user',
+        },
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+      });
+    });
+
+    it('should throw UnauthorizedException if user not found', async () => {
+      // Arrange
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+
+      // Act & Assert
+      await expect(service.login(loginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should throw UnauthorizedException if password is invalid', async () => {
+      // Arrange
+      const hashedPassword = await bcrypt.hash('wrong-password', 12);
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'user-id',
+        email: loginDto.email,
+        passwordHash: hashedPassword,
+      });
+
+      // Act & Assert
+      await expect(service.login(loginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+  describe('getMe', () => {
+    it('should return user from request', () => {
+      // Arrange
+      const mockRequest = {
+        user: {
+          id: 'user-id',
+          email: 'test@test.com',
+          username: 'testuser',
+          role: 'user',
+        },
+      } as RequestWithUser;
+ 
+      // Act
+      const result = controller.getMe(mockRequest);
+ 
+      // Assert
+      expect(result).toEqual(mockRequest.user);
+    });
+  });
+ 
+  describe('refresh', () => {
+    it('should call authService.refresh with correct dto', async () => {
+      // Arrange
+      const refreshDto: RefreshDto = {
+        refreshToken: 'valid-refresh-token',
+      };
+      const expectedResult = {
+        accessToken: 'new-access-token',
+        refreshToken: 'new-refresh-token',
+      };
+      mockJwtService.refresh.mockResolvedValue(expectedResult);
+ 
+      // Act
+      const result = await controller.refresh(refreshDto);
+ 
+      // Assert
+      expect(service.refresh).toHaveBeenCalledWith(refreshDto);
+      expect(result).toEqual(expectedResult);
+    });
+});
