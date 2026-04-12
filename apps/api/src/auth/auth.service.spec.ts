@@ -6,8 +6,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { RequestWithUser } from './types/request-with-user.types';
-import { RefreshDto } from './dto/refresh.dto';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -175,43 +173,4 @@ describe('AuthService', () => {
       );
     });
   });
-  describe('getMe', () => {
-    it('should return user from request', () => {
-      // Arrange
-      const mockRequest = {
-        user: {
-          id: 'user-id',
-          email: 'test@test.com',
-          username: 'testuser',
-          role: 'user',
-        },
-      } as RequestWithUser;
- 
-      // Act
-      const result = controller.getMe(mockRequest);
- 
-      // Assert
-      expect(result).toEqual(mockRequest.user);
-    });
-  });
- 
-  describe('refresh', () => {
-    it('should call authService.refresh with correct dto', async () => {
-      // Arrange
-      const refreshDto: RefreshDto = {
-        refreshToken: 'valid-refresh-token',
-      };
-      const expectedResult = {
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
-      };
-      mockJwtService.refresh.mockResolvedValue(expectedResult);
- 
-      // Act
-      const result = await controller.refresh(refreshDto);
- 
-      // Assert
-      expect(service.refresh).toHaveBeenCalledWith(refreshDto);
-      expect(result).toEqual(expectedResult);
-    });
 });
