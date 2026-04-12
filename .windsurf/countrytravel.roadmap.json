@@ -467,14 +467,14 @@
           "title": "Configuration CI/CD GitHub Actions",
           "type": "Technique",
           "priority": "Must Have",
-          "status": "current",
+          "status": "done",
           "description": "Créer les pipelines GitHub Actions : lint + tests sur chaque PR, déploiement automatique sur Railway (api) et Netlify (front) sur push main.",
           "dependencies": ["CT-001", "CT-002"],
           "acceptance_criteria": [
             {
               "id": "CT-004-AC-1",
               "description": "Workflow PR créé et fonctionnel",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -491,7 +491,7 @@
             {
               "id": "CT-004-AC-2",
               "description": "Workflow déploiement API Railway configuré",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -513,7 +513,7 @@
             {
               "id": "CT-004-AC-3",
               "description": "Workflow déploiement Front Netlify configuré",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -535,7 +535,7 @@
             {
               "id": "CT-004-AC-4",
               "description": "Badges CI visibles dans les README",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -556,7 +556,7 @@
           "title": "API — Inscription et connexion email/password",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Implémenter AuthModule avec RegisterDto, LoginDto, bcrypt, génération access token JWT (15min) + refresh token (7j) signés. HttpExceptionFilter global.",
           "dependencies": ["CT-003"],
           "acceptance_criteria": [
