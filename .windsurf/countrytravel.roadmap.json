@@ -556,7 +556,7 @@
           "title": "API — Inscription et connexion email/password",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "current",
+          "status": "done",
           "description": "Implémenter AuthModule avec RegisterDto, LoginDto, bcrypt, génération access token JWT (15min) + refresh token (7j) signés. HttpExceptionFilter global.",
           "dependencies": ["CT-003"],
           "acceptance_criteria": [
