@@ -681,7 +681,7 @@
           "title": "API — Authentification OAuth Google + GitHub",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "skipped",
           "description": "Intégrer Passport.js avec stratégies Google OAuth2 et GitHub. Upsert user + oauth_account. Rediriger frontend avec tokens.",
           "dependencies": ["CT-005"],
           "acceptance_criteria": [
@@ -749,14 +749,14 @@
           "title": "Front — Pages Login et Register",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Créer les pages d'authentification avec formulaires validés (React Hook Form + Zod), boutons OAuth, gestion des erreurs API, redirection post-auth.",
           "dependencies": ["CT-002", "CT-005", "CT-006"],
           "acceptance_criteria": [
             {
               "id": "CT-007-AC-1",
               "description": "Page /auth/login accessible avec formulaire email + password",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -773,7 +773,7 @@
             {
               "id": "CT-007-AC-2",
               "description": "Validation Zod côté client avant soumission",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -785,7 +785,7 @@
             {
               "id": "CT-007-AC-3",
               "description": "Après login réussi : token stocké + redirect /dashboard",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -797,7 +797,7 @@
             {
               "id": "CT-007-AC-4",
               "description": "Erreurs API affichées (401, 409)",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -809,7 +809,7 @@
             {
               "id": "CT-007-AC-5",
               "description": "Callback OAuth : tokens récupérés depuis query params",
-              "status": "pending",
+              "status": "skipped",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -820,7 +820,7 @@
             {
               "id": "CT-007-AC-6",
               "description": "Route protégée PrivateRoute fonctionne",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -831,7 +831,7 @@
             {
               "id": "CT-007-AC-7",
               "description": "Pages responsive mobile",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
