@@ -839,7 +839,7 @@
           "title": "Seed — Critères de scoring pour les 195 pays",
           "type": "Technique",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Script prisma/seed-criteria.ts avec données manuelles : budget, safety, temperature, tourism_level, family_friendly, et les 8 niveaux (nature_level, party_level, etc.).",
           "dependencies": ["CT-008"],
           "acceptance_criteria": [
