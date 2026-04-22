@@ -57,7 +57,7 @@ interface RestCountry {
   flags?: { svg: string };
 }
 
-async function seedCountries() {
+export async function seedCountries(client: PrismaClient = prisma) {
   //fetch api Rest Countries
   const response = await fetch(
     'https://restcountries.com/v3.1/all?fields=cca2,name,region,capital,flags',
@@ -67,7 +67,7 @@ async function seedCountries() {
   const countries = all.filter((c) => SELECTED_ISO.includes(c.cca2));
 
   for (const country of countries) {
-    await prisma.country.upsert({
+    await client.country.upsert({
       where: { isoCode: country.cca2 },
       update: { continent: continentMap[country.region] ?? Continent.europe },
       create: {
@@ -82,12 +82,14 @@ async function seedCountries() {
   console.log(`✅ ${countries.length} pays insérés`);
 }
 
-seedCountries()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-    await pool.end();
-  });
+if (require.main === module) {
+  seedCountries()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+      await pool.end();
+    });
+}
