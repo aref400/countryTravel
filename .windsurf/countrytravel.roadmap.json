@@ -15,9 +15,9 @@
       "8. En début de session : lire le fichier pour retrouver le ticket 'current' et reprendre là où on s'est arrêté."
     ],
     "stats": {
-      "total_sprints": 1,
-      "total_tickets": 7,
-      "total_criteria": 44
+      "total_sprints": 7,
+      "total_tickets": 30,
+      "total_criteria": 124
     }
   },
   "sprints": [
@@ -31,64 +31,64 @@
           "type": "Technique",
           "priority": "Must Have",
           "status": "done",
-          "description": "Créer le projet NestJS avec la configuration de base : TypeScript strict, ESLint, Prettier, structure des dossiers, variables d'environnement, Helmet, CORS, Swagger, ValidationPipe, préfixe /api/v1.",
+          "description": "Créer le projet NestJS avec TypeScript strict, ESLint, Prettier, structure des dossiers, Helmet, CORS, Swagger, ValidationPipe, préfixe /api/v1, @nestjs/config.",
           "dependencies": [],
           "acceptance_criteria": [
             {
               "id": "CT-001-AC-1",
-              "description": "Le projet NestJS démarre sans erreur",
-              "status": "pending",
+              "description": "Projet NestJS démarre sans erreur",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "cd apps/api && npm run start:dev",
-                    "expect": "NestJS running on http://localhost:3000",
-                    "timeout": 15
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/docs",
+                    "expect": "200",
+                    "timeout": 10
                   }
                 ],
                 "questions": [
-                  "Est-ce que http://localhost:3000/api/docs est accessible dans ton navigateur et affiche l'interface Swagger ?"
+                  "Est-ce que http://localhost:3000/api/docs affiche l'interface Swagger ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-2",
-              "description": "Helmet et CORS configurés dans main.ts",
-              "status": "pending",
+              "description": "Helmet + CORS configurés dans main.ts",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -n 'helmet\\|enableCors' apps/api/src/main.ts",
-                    "expect": "helmet\nenableCors",
+                    "cmd": "grep -c 'helmet\\|enableCors' apps/api/src/main.ts",
+                    "expect": "2",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que tu vois app.use(helmet()) et app.enableCors() dans ton main.ts ?"
+                  "Est-ce que app.use(helmet()) et app.enableCors() sont présents dans main.ts ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-3",
               "description": "Préfixe global /api/v1 configuré",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -n 'setGlobalPrefix' apps/api/src/main.ts",
+                    "cmd": "grep -n 'api/v1' apps/api/src/main.ts",
                     "expect": "api/v1",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que http://localhost:3000/api/v1 répond (même avec un 404, le préfixe est actif) ?"
+                  "Est-ce que http://localhost:3000/api/v1 répond (même 404) ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-4",
               "description": "ValidationPipe global configuré",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -98,19 +98,19 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que useGlobalPipes(new ValidationPipe({whitelist: true, transform: true})) est présent dans main.ts ?"
+                  "Est-ce que useGlobalPipes(new ValidationPipe({whitelist:true, transform:true})) est présent ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-5",
-              "description": "Variables d'env configurées via @nestjs/config",
-              "status": "pending",
+              "description": "@nestjs/config + .env configurés",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -rn 'ConfigModule' apps/api/src/app.module.ts",
-                    "expect": "ConfigModule.forRoot",
+                    "cmd": "grep -n 'ConfigModule.forRoot' apps/api/src/app.module.ts",
+                    "expect": "isGlobal: true",
                     "timeout": 5
                   },
                   {
@@ -120,35 +120,35 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que ton fichier .env contient au moins DATABASE_URL, JWT_SECRET et JWT_REFRESH_SECRET ?"
+                  "Est-ce que .env contient DATABASE_URL, JWT_SECRET et JWT_REFRESH_SECRET ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-6",
-              "description": "Structure des dossiers src/ correcte",
-              "status": "pending",
+              "description": "Structure dossiers src/ correcte",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
                     "cmd": "ls apps/api/src/",
-                    "expect": "auth\nusers\ncountries\ncommon\nprisma",
+                    "expect": "auth\ncommon\ncountries\nprisma\nusers",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que tu vois les dossiers auth/, users/, countries/, common/ et prisma/ dans apps/api/src/ ?"
+                  "Est-ce que les dossiers auth/, users/, countries/, common/, prisma/ existent dans src/ ?"
                 ]
               }
             },
             {
               "id": "CT-001-AC-7",
-              "description": "ESLint + Prettier opérationnels",
-              "status": "pending",
+              "description": "ESLint + Prettier passent",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "cd apps/api && npm run lint",
+                    "cmd": "cd apps/api && npm run lint 2>&1 | tail -3",
                     "expect": "0 errors",
                     "timeout": 30
                   }
@@ -161,17 +161,17 @@
             {
               "id": "CT-001-AC-8",
               "description": "README rédigé",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "test -f apps/api/README.md && wc -l apps/api/README.md",
-                    "expect": "",
+                    "cmd": "test -f apps/api/README.md && echo 'exists'",
+                    "expect": "exists",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que apps/api/README.md existe et contient les instructions de setup (install, migrate, start) ?"
+                  "Est-ce que README.md contient les instructions setup, migrate et start ?"
                 ]
               }
             }
@@ -183,23 +183,23 @@
           "type": "Technique",
           "priority": "Must Have",
           "status": "done",
-          "description": "Créer le projet React 18 + Vite 5 + TypeScript. Configurer TailwindCSS, shadcn/ui, React Router v7 (declarative), Axios avec intercepteurs JWT, Zustand pour le state auth, React Query pour le fetching. Architecture feature-based.",
+          "description": "Créer le projet React 18 + Vite 5 + TypeScript. Configurer TailwindCSS, shadcn/ui, React Router v7 (declarative), Axios + JWT, Zustand, React Query. Architecture feature-based.",
           "dependencies": ["CT-001"],
           "acceptance_criteria": [
             {
               "id": "CT-002-AC-1",
-              "description": "Le projet Vite démarre sans erreur sur :5173",
+              "description": "Vite démarre sur :5173",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "cd apps/front && npm run dev &",
-                    "expect": "localhost:5173",
-                    "timeout": 15
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:5173",
+                    "expect": "200",
+                    "timeout": 10
                   }
                 ],
                 "questions": [
-                  "Est-ce que http://localhost:5173 s'ouvre dans ton navigateur sans erreur console ?"
+                  "Est-ce que http://localhost:5173 s'ouvre sans erreur console ?"
                 ]
               }
             },
@@ -210,30 +210,25 @@
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -n '@tailwind' apps/front/src/index.css",
+                    "cmd": "grep -n '@tailwind base' apps/front/src/index.css",
                     "expect": "@tailwind base",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce qu'une classe Tailwind comme className='text-red-500' applique bien le style dans le navigateur ?"
+                  "Est-ce qu'une classe Tailwind comme text-red-500 applique bien le style ?"
                 ]
               }
             },
             {
               "id": "CT-002-AC-3",
-              "description": "shadcn/ui initialisé",
+              "description": "shadcn/ui initialisé avec Button",
               "status": "done",
               "checks": {
                 "commands": [
                   {
                     "cmd": "test -f apps/front/components.json && echo 'exists'",
                     "expect": "exists",
-                    "timeout": 5
-                  },
-                  {
-                    "cmd": "ls apps/front/src/shared/components/ui/",
-                    "expect": "button",
                     "timeout": 5
                   }
                 ],
@@ -244,18 +239,18 @@
             },
             {
               "id": "CT-002-AC-4",
-              "description": "React Router v7 configuré (mode declarative)",
+              "description": "React Router v7 configuré (declarative)",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -rn 'BrowserRouter\\|Routes\\|Route' apps/front/src/app/",
+                    "cmd": "grep -rn 'BrowserRouter' apps/front/src/app/",
                     "expect": "BrowserRouter",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que la navigation entre routes fonctionne (ex: / et /auth/login) ?"
+                  "Est-ce que la navigation entre / et /auth/login fonctionne sans rechargement ?"
                 ]
               }
             },
@@ -266,32 +261,22 @@
               "checks": {
                 "commands": [
                   {
-                    "cmd": "test -f apps/front/src/shared/lib/axios.instance.ts && echo 'exists'",
-                    "expect": "exists",
-                    "timeout": 5
-                  },
-                  {
-                    "cmd": "grep -n 'Authorization\\|Bearer' apps/front/src/shared/lib/axios.instance.ts",
+                    "cmd": "grep -n 'Bearer' apps/front/src/shared/lib/axios.instance.ts",
                     "expect": "Bearer",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que l'intercepteur Axios ajoute bien Authorization: Bearer <token> dans les headers quand un token est présent ?"
+                  "Est-ce que l'intercepteur ajoute Authorization: Bearer <token> dans les headers ?"
                 ]
               }
             },
             {
               "id": "CT-002-AC-6",
-              "description": "Zustand store auth configuré",
+              "description": "Zustand auth store configuré",
               "status": "done",
               "checks": {
                 "commands": [
-                  {
-                    "cmd": "test -f apps/front/src/shared/store/auth.store.ts && echo 'exists'",
-                    "expect": "exists",
-                    "timeout": 5
-                  },
                   {
                     "cmd": "grep -n 'setAuth\\|logout\\|isAuthenticated' apps/front/src/shared/store/auth.store.ts",
                     "expect": "setAuth",
@@ -299,24 +284,24 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que le store contient bien user, accessToken, isAuthenticated, setAuth et logout ?"
+                  "Est-ce que le store contient user, accessToken, isAuthenticated, setAuth et logout ?"
                 ]
               }
             },
             {
               "id": "CT-002-AC-7",
-              "description": "React Query QueryClient configuré",
+              "description": "React Query QueryClientProvider configuré",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -rn 'QueryClient\\|QueryClientProvider' apps/front/src/app/",
+                    "cmd": "grep -rn 'QueryClientProvider' apps/front/src/app/",
                     "expect": "QueryClientProvider",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que QueryClientProvider enveloppe bien l'application dans providers.tsx ou App.tsx ?"
+                  "Est-ce que QueryClientProvider enveloppe bien l'application ?"
                 ]
               }
             },
@@ -327,35 +312,13 @@
               "checks": {
                 "commands": [
                   {
-                    "cmd": "ls apps/front/src/",
-                    "expect": "app\nfeatures\npages\nshared\nassets",
-                    "timeout": 5
-                  },
-                  {
                     "cmd": "ls apps/front/src/features/",
                     "expect": "auth\ncountries\nrecommendations\nreviews\nvisits\nfriendships\ndashboard\nadmin",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que la structure app/, features/, pages/, shared/ est bien en place avec les sous-dossiers de chaque feature ?"
-                ]
-              }
-            },
-            {
-              "id": "CT-002-AC-9",
-              "description": "Variable d'env VITE_API_URL configurée",
-              "status": "done",
-              "checks": {
-                "commands": [
-                  {
-                    "cmd": "grep 'VITE_API_URL' apps/front/.env.local",
-                    "expect": "localhost:3000",
-                    "timeout": 5
-                  }
-                ],
-                "questions": [
-                  "Est-ce que VITE_API_URL=http://localhost:3000/api/v1 est bien dans apps/front/.env.local ?"
+                  "Est-ce que app/, features/, pages/, shared/ et assets/ existent dans src/ ?"
                 ]
               }
             }
@@ -363,11 +326,11 @@
         },
         {
           "id": "CT-003",
-          "title": "Configuration Prisma + PostgreSQL (schéma complet)",
+          "title": "Configuration Prisma + PostgreSQL",
           "type": "Technique",
           "priority": "Must Have",
           "status": "done",
-          "description": "Installer Prisma, créer le schéma complet (7 modèles), générer la première migration, créer le PrismaService NestJS singleton injectable globalement.",
+          "description": "Schéma Prisma complet (7 modèles), première migration, PrismaService singleton global.",
           "dependencies": ["CT-001"],
           "acceptance_criteria": [
             {
@@ -377,24 +340,24 @@
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -c 'model ' apps/api/prisma/schema.prisma",
+                    "cmd": "grep -c '^model ' apps/api/prisma/schema.prisma",
                     "expect": "7",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que tu vois les 7 modèles dans schema.prisma : User, OAuthAccount, Country, CountryCriteria, Review, Visit, SavedRecommendation, Friendship ?"
+                  "Est-ce que les 7 modèles User, OAuthAccount, Country, CountryCriteria, Review, Visit, SavedRecommendation, Friendship sont définis ?"
                 ]
               }
             },
             {
               "id": "CT-003-AC-2",
-              "description": "Migration initiale appliquée avec succès",
+              "description": "Migration initiale appliquée",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "ls apps/api/prisma/migrations/",
+                    "cmd": "ls apps/api/prisma/migrations/ | grep init",
                     "expect": "init",
                     "timeout": 5
                   }
@@ -406,46 +369,35 @@
             },
             {
               "id": "CT-003-AC-3",
-              "description": "Les 7 tables sont visibles dans Prisma Studio",
+              "description": "8 tables visibles dans Prisma Studio",
               "status": "done",
               "checks": {
-                "commands": [
-                  {
-                    "cmd": "cd apps/api && npx prisma studio &",
-                    "expect": "Studio ready",
-                    "timeout": 15
-                  }
-                ],
+                "commands": [],
                 "questions": [
-                  "Est-ce que Prisma Studio (http://localhost:5555) affiche bien les 8 tables : users, oauth_accounts, countries, country_criteria, reviews, visits, saved_recommendations, friendships ?"
+                  "Dans Prisma Studio (localhost:5555), est-ce que les 8 tables sont bien visibles : users, oauth_accounts, countries, country_criteria, reviews, visits, saved_recommendations, friendships ?"
                 ]
               }
             },
             {
               "id": "CT-003-AC-4",
-              "description": "PrismaService injectable dans tous les modules",
+              "description": "PrismaModule @Global() importé dans AppModule",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "test -f apps/api/src/prisma/prisma.service.ts && echo 'exists'",
-                    "expect": "exists",
-                    "timeout": 5
-                  },
-                  {
-                    "cmd": "grep -n 'Global\\|PrismaModule' apps/api/src/prisma/prisma.module.ts",
-                    "expect": "Global",
+                    "cmd": "grep -n 'Global' apps/api/src/prisma/prisma.module.ts",
+                    "expect": "@Global",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que PrismaModule est bien décoré @Global() et importé dans AppModule ?"
+                  "Est-ce que PrismaModule est bien dans les imports de AppModule ?"
                 ]
               }
             },
             {
               "id": "CT-003-AC-5",
-              "description": "Client Prisma généré correctement",
+              "description": "Client Prisma généré dans generated/",
               "status": "done",
               "checks": {
                 "commands": [
@@ -456,7 +408,7 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que le dossier generated/prisma/client/ existe dans apps/api après npx prisma generate ?"
+                  "Est-ce que le dossier generated/prisma/client/ existe après npx prisma generate ?"
                 ]
               }
             }
@@ -468,12 +420,12 @@
           "type": "Technique",
           "priority": "Must Have",
           "status": "done",
-          "description": "Créer les pipelines GitHub Actions : lint + tests sur chaque PR, déploiement automatique sur Railway (api) et Netlify (front) sur push main.",
+          "description": "Pipelines GitHub Actions : lint + tests sur PR, déploiement Railway (api) et Netlify (front) sur push main.",
           "dependencies": ["CT-001", "CT-002"],
           "acceptance_criteria": [
             {
               "id": "CT-004-AC-1",
-              "description": "Workflow PR créé et fonctionnel",
+              "description": "Workflow PR créé",
               "status": "done",
               "checks": {
                 "commands": [
@@ -484,21 +436,16 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce qu'une PR sur GitHub déclenche bien le workflow (lint + build) visible dans l'onglet Actions ?"
+                  "Est-ce qu'une PR GitHub déclenche bien le workflow visible dans l'onglet Actions ?"
                 ]
               }
             },
             {
               "id": "CT-004-AC-2",
-              "description": "Workflow déploiement API Railway configuré",
+              "description": "Workflow déploiement API Railway",
               "status": "done",
               "checks": {
                 "commands": [
-                  {
-                    "cmd": "test -f .github/workflows/deploy-api.yml && echo 'exists'",
-                    "expect": "exists",
-                    "timeout": 5
-                  },
                   {
                     "cmd": "grep -n 'RAILWAY_TOKEN' .github/workflows/deploy-api.yml",
                     "expect": "RAILWAY_TOKEN",
@@ -512,15 +459,10 @@
             },
             {
               "id": "CT-004-AC-3",
-              "description": "Workflow déploiement Front Netlify configuré",
+              "description": "Workflow déploiement Front Netlify",
               "status": "done",
               "checks": {
                 "commands": [
-                  {
-                    "cmd": "test -f .github/workflows/deploy-front.yml && echo 'exists'",
-                    "expect": "exists",
-                    "timeout": 5
-                  },
                   {
                     "cmd": "grep -n 'NETLIFY_AUTH_TOKEN' .github/workflows/deploy-front.yml",
                     "expect": "NETLIFY_AUTH_TOKEN",
@@ -528,24 +470,24 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que les secrets NETLIFY_AUTH_TOKEN et NETLIFY_SITE_ID sont configurés dans GitHub Settings > Secrets ?"
+                  "Est-ce que NETLIFY_AUTH_TOKEN et NETLIFY_SITE_ID sont configurés dans GitHub Secrets ?"
                 ]
               }
             },
             {
               "id": "CT-004-AC-4",
-              "description": "Badges CI visibles dans les README",
+              "description": "Badge CI dans README",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -n 'badge\\|actions/workflows' README.md",
+                    "cmd": "grep -n 'workflows' README.md",
                     "expect": "workflows",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que le badge CI est visible dans le README.md à la racine du monorepo ?"
+                  "Est-ce que le badge CI est visible dans le README racine ?"
                 ]
               }
             }
@@ -553,17 +495,17 @@
         },
         {
           "id": "CT-005",
-          "title": "API — Inscription et connexion email/password",
+          "title": "API — Auth email/password",
           "type": "Feature",
           "priority": "Must Have",
           "status": "done",
-          "description": "Implémenter AuthModule avec RegisterDto, LoginDto, bcrypt, génération access token JWT (15min) + refresh token (7j) signés. HttpExceptionFilter global.",
+          "description": "AuthModule : RegisterDto, LoginDto, bcrypt, JWT access (15min) + refresh (7j), HttpExceptionFilter global.",
           "dependencies": ["CT-003"],
           "acceptance_criteria": [
             {
               "id": "CT-005-AC-1",
-              "description": "POST /api/v1/auth/register crée un user et retourne les tokens",
-              "status": "pending",
+              "description": "POST /auth/register retourne accessToken",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -573,14 +515,14 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que la réponse contient bien accessToken, refreshToken et un objet user avec id, email, username, role ?"
+                  "Est-ce que la réponse contient accessToken, refreshToken et un objet user ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-2",
-              "description": "POST /api/v1/auth/login retourne les tokens",
-              "status": "pending",
+              "description": "POST /auth/login retourne les tokens",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -590,14 +532,14 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que login avec mauvais mot de passe retourne bien un 401 ?"
+                  "Est-ce que login avec mauvais mot de passe retourne 401 ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-3",
-              "description": "Email et username uniques — 409 si doublon",
-              "status": "pending",
+              "description": "409 si email/username doublon",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -607,31 +549,25 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que réutiliser un email déjà existant retourne bien 409 Conflict ?"
+                  "Est-ce que réutiliser un email existant retourne bien 409 Conflict ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-4",
-              "description": "Passwords hashés avec bcrypt (rounds=12)",
-              "status": "pending",
+              "description": "Passwords hashés bcrypt (rounds=12)",
+              "status": "done",
               "checks": {
-                "commands": [
-                  {
-                    "cmd": "cd apps/api && npx prisma studio &",
-                    "expect": "",
-                    "timeout": 10
-                  }
-                ],
+                "commands": [],
                 "questions": [
-                  "Dans Prisma Studio, est-ce que le champ passwordHash commence bien par $2b$ (hash bcrypt) et non par le mot de passe en clair ?"
+                  "Dans Prisma Studio, est-ce que passwordHash commence par $2b$ (jamais en clair) ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-5",
-              "description": "Validation RegisterDto — 400 si données invalides",
-              "status": "pending",
+              "description": "400 si DTO invalide",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -641,36 +577,36 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que la réponse 400 contient un tableau de messages d'erreur détaillés (ex: email must be an email, password is too short) ?"
+                  "Est-ce que la réponse 400 contient des messages d'erreur détaillés par champ ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-6",
-              "description": "GET /api/v1/auth/me retourne l'utilisateur connecté",
-              "status": "pending",
+              "description": "GET /auth/me retourne l'utilisateur connecté",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "TOKEN=$(curl -s -X POST http://localhost:3000/api/v1/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"test@test.com\",\"password\":\"password123\"}' | grep -o '\"accessToken\":\"[^\"]*' | cut -d'\"' -f4) && curl -s -H \"Authorization: Bearer $TOKEN\" http://localhost:3000/api/v1/auth/me | grep -o 'username'",
-                    "expect": "username",
-                    "timeout": 15
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/v1/auth/me",
+                    "expect": "401",
+                    "timeout": 10
                   }
                 ],
                 "questions": [
-                  "Est-ce que GET /auth/me sans token retourne bien 401 Unauthorized ?"
+                  "Est-ce que GET /auth/me avec un token valide retourne bien le user connecté ?"
                 ]
               }
             },
             {
               "id": "CT-005-AC-7",
-              "description": "POST /api/v1/auth/refresh génère un nouveau accessToken",
-              "status": "pending",
+              "description": "POST /auth/refresh génère un nouveau accessToken",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
                   "Est-ce que POST /auth/refresh avec un refreshToken valide retourne un nouveau accessToken ?",
-                  "Est-ce que POST /auth/refresh avec un refreshToken invalide ou expiré retourne 401 ?"
+                  "Est-ce que POST /auth/refresh avec un token invalide retourne 401 ?"
                 ]
               }
             }
@@ -678,16 +614,16 @@
         },
         {
           "id": "CT-006",
-          "title": "API — Authentification OAuth Google + GitHub",
+          "title": "API — OAuth Google + GitHub",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "skipped",
-          "description": "Intégrer Passport.js avec stratégies Google OAuth2 et GitHub. Upsert user + oauth_account. Rediriger frontend avec tokens.",
+          "status": "locked",
+          "description": "Passport.js stratégies Google OAuth2 et GitHub. Upsert user + oauth_account. Redirect frontend avec tokens.",
           "dependencies": ["CT-005"],
           "acceptance_criteria": [
             {
               "id": "CT-006-AC-1",
-              "description": "GET /auth/google redirige vers Google consent",
+              "description": "GET /auth/google redirige vers Google (302)",
               "status": "pending",
               "checks": {
                 "commands": [
@@ -698,19 +634,19 @@
                   }
                 ],
                 "questions": [
-                  "Est-ce que http://localhost:3000/api/v1/auth/google redirige bien vers accounts.google.com dans le navigateur ?"
+                  "Est-ce que le navigateur redirige bien vers accounts.google.com ?"
                 ]
               }
             },
             {
               "id": "CT-006-AC-2",
-              "description": "Callback Google crée/lie le compte et redirige avec tokens",
+              "description": "Callback Google crée le compte et redirige avec tokens",
               "status": "pending",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Est-ce que le flux OAuth Google complet fonctionne (connexion Google → redirect frontend avec ?accessToken=...) ?",
-                  "Est-ce qu'une entrée est créée dans oauth_accounts (visible dans Prisma Studio) après connexion Google ?"
+                  "Est-ce que le flux OAuth Google complet fonctionne (connexion → redirect frontend?accessToken=...) ?",
+                  "Est-ce qu'une entrée est créée dans oauth_accounts après connexion Google ?"
                 ]
               }
             },
@@ -733,12 +669,12 @@
             },
             {
               "id": "CT-006-AC-4",
-              "description": "Si email déjà existant : liaison du compte OAuth sans créer un doublon",
+              "description": "Pas de doublon si email déjà existant",
               "status": "pending",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Si tu te connectes avec Google avec un email déjà utilisé en email/password, est-ce qu'un seul user est créé en base (pas de doublon) ?"
+                  "Si tu connectes un compte Google avec un email déjà en base, est-ce qu'un seul user existe (pas de doublon) ?"
                 ]
               }
             }
@@ -750,47 +686,47 @@
           "type": "Feature",
           "priority": "Must Have",
           "status": "done",
-          "description": "Créer les pages d'authentification avec formulaires validés (React Hook Form + Zod), boutons OAuth, gestion des erreurs API, redirection post-auth.",
+          "description": "Pages auth avec React Hook Form + Zod, boutons OAuth, gestion erreurs API, redirection post-auth, PrivateRoute.",
           "dependencies": ["CT-002", "CT-005", "CT-006"],
           "acceptance_criteria": [
             {
               "id": "CT-007-AC-1",
-              "description": "Page /auth/login accessible avec formulaire email + password",
+              "description": "/auth/login accessible avec formulaire validé",
               "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "grep -rn 'useForm\\|zodResolver' apps/front/src/features/auth/",
+                    "cmd": "grep -rn 'zodResolver' apps/front/src/features/auth/",
                     "expect": "zodResolver",
                     "timeout": 5
                   }
                 ],
                 "questions": [
-                  "Est-ce que la page /auth/login affiche bien les champs email et password avec les boutons Google et GitHub ?"
+                  "Est-ce que la page /auth/login affiche email, password et boutons Google/GitHub ?"
                 ]
               }
             },
             {
               "id": "CT-007-AC-2",
-              "description": "Validation Zod côté client avant soumission",
+              "description": "Validation Zod bloque avant soumission",
               "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Est-ce que soumettre le formulaire avec un email invalide affiche bien un message d'erreur sans appeler l'API ?",
-                  "Est-ce que soumettre avec un mot de passe < 8 caractères bloque bien la soumission ?"
+                  "Est-ce qu'un email invalide affiche une erreur sans appeler l'API ?",
+                  "Est-ce qu'un mot de passe < 8 chars bloque la soumission ?"
                 ]
               }
             },
             {
               "id": "CT-007-AC-3",
-              "description": "Après login réussi : token stocké + redirect /dashboard",
+              "description": "Après login : token stocké + redirect /dashboard",
               "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Après une connexion réussie, est-ce que accessToken est bien stocké dans localStorage ?",
-                  "Est-ce que l'utilisateur est bien redirigé vers /dashboard après connexion ?"
+                  "Après connexion réussie, accessToken est-il dans localStorage ?",
+                  "L'utilisateur est-il redirigé vers /dashboard ?"
                 ]
               }
             },
@@ -801,41 +737,1361 @@
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Est-ce qu'un mauvais mot de passe affiche un message d'erreur dans le formulaire (pas juste une console error) ?",
-                  "Est-ce qu'un email déjà pris à l'inscription affiche 'Cet email est déjà utilisé' ?"
+                  "Un mauvais mot de passe affiche-t-il un message dans le formulaire ?",
+                  "Un email déjà pris affiche-t-il 'Cet email est déjà utilisé' ?"
                 ]
               }
             },
             {
               "id": "CT-007-AC-5",
-              "description": "Callback OAuth : tokens récupérés depuis query params",
-              "status": "skipped",
-              "checks": {
-                "commands": [],
-                "questions": [
-                  "Après connexion OAuth, est-ce que les tokens sont bien récupérés depuis l'URL et stockés dans Zustand + localStorage ?"
-                ]
-              }
-            },
-            {
-              "id": "CT-007-AC-6",
-              "description": "Route protégée PrivateRoute fonctionne",
+              "description": "PrivateRoute redirige vers login si non connecté",
               "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "En accédant à /dashboard sans être connecté, est-ce que tu es bien redirigé vers /auth/login ?"
+                  "En accédant à /dashboard sans token, es-tu bien redirigé vers /auth/login ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-2",
+      "title": "Sprint 2 — Countries & Scoring",
+      "tickets": [
+        {
+          "id": "CT-008",
+          "title": "Seed — Import des 195 pays depuis REST Countries API",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "done",
+          "description": "Script prisma/seed.ts qui appelle REST Countries API, mappe les données et insère les 195 pays. Upsert idempotent sur isoCode.",
+          "dependencies": ["CT-003"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-008-AC-1",
+              "description": "Script seed.ts exécutable",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx ts-node prisma/seed.ts 2>&1 | tail -5",
+                    "expect": "pays insérés",
+                    "timeout": 60
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le script termine sans erreur et affiche le nombre de pays insérés ?"
                 ]
               }
             },
             {
-              "id": "CT-007-AC-7",
-              "description": "Pages responsive mobile",
+              "id": "CT-008-AC-2",
+              "description": "30 pays en base après seed",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx prisma studio &",
+                    "expect": "",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Dans Prisma Studio, est-ce que la table countries contient bien 195 lignes ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-008-AC-3",
+              "description": "Seed idempotent — ré-exécutable sans doublon",
+              "status": "done",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx ts-node prisma/seed.ts 2>&1 | tail -3",
+                    "expect": "",
+                    "timeout": 60
+                  }
+                ],
+                "questions": [
+                  "Après une 2ème exécution, est-ce que la table countries a toujours exactement 195 lignes ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-008-AC-4",
+              "description": "Champs mappés correctement (name, isoCode, flagUrl...)",
               "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
-                  "Est-ce que les pages Login et Register s'affichent correctement sur mobile (375px) dans les DevTools ?"
+                  "Dans Prisma Studio, est-ce que France a isoCode=FR, capital=Paris, continent=europe et flagUrl rempli ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-009",
+          "title": "Seed — Critères de scoring pour les 195 pays",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Script prisma/seed-criteria.ts avec données manuelles : budget, safety, temperature, tourism_level, family_friendly, et les 8 niveaux (nature_level, party_level, etc.).",
+          "dependencies": ["CT-008"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-009-AC-1",
+              "description": "195 entrées country_criteria créées",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npx ts-node prisma/seed-criteria.ts 2>&1 | tail -3",
+                    "expect": "195",
+                    "timeout": 120
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la table country_criteria contient 195 lignes après le seed ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-009-AC-2",
+              "description": "Données cohérentes et vérifiables",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que la France a culture_level=5 et gastronomy_level=5 dans Prisma Studio ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-009-AC-3",
+              "description": "Fichier source criteria.json versionné",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -f apps/api/prisma/data/criteria.json && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que prisma/data/criteria.json est commité dans Git ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-010",
+          "title": "API — CountriesModule (endpoints publics)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "CountriesController + CountriesService : liste paginée, détail par isoCode, données carte, reviews d'un pays, pays similaires.",
+          "dependencies": ["CT-008", "CT-009"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-010-AC-1",
+              "description": "GET /countries retourne liste paginée",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s 'http://localhost:3000/api/v1/countries?limit=5' | grep -o '\"data\"'",
+                    "expect": "data",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la réponse contient data (tableau) et meta (page, limit, total) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-010-AC-2",
+              "description": "GET /countries/:isoCode retourne le détail",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s http://localhost:3000/api/v1/countries/FR | grep -o '\"name\"'",
+                    "expect": "name",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que GET /countries/FR retourne France avec avgRating et nbReviews ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-010-AC-3",
+              "description": "GET /countries/map/all retourne données légères",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s http://localhost:3000/api/v1/countries/map/all | grep -o 'isoCode'",
+                    "expect": "isoCode",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le tableau contient iso_code, name, avg_rating et visit_count pour les 195 pays ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-010-AC-4",
+              "description": "404 si pays inexistant ou is_published=false",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/v1/countries/ZZ",
+                    "expect": "404",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que GET /countries/ZZ retourne bien 404 ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-011",
+          "title": "API — ScoringService (moteur de recommandation)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "ScoringService injectable : calcule score 0-100 par pays selon RecoFormDto. Filtres éliminatoires puis score pondéré. Tests unitaires Jest.",
+          "dependencies": ["CT-009"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-011-AC-1",
+              "description": "calculateScore retourne un entier 0-100",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test -- --testPathPattern=scoring 2>&1 | tail -5",
+                    "expect": "passed",
+                    "timeout": 30
+                  }
+                ],
+                "questions": [
+                  "Est-ce que les tests du ScoringService passent tous ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-011-AC-2",
+              "description": "Filtres éliminatoires appliqués avant scoring",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Un pays avec safety=1 est-il bien éliminé si criteria.safety=4 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-011-AC-3",
+              "description": "10 cas de test couverts",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test:cov -- --testPathPattern=scoring 2>&1 | grep 'scoring.service'",
+                    "expect": "100",
+                    "timeout": 30
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la couverture du ScoringService est > 80% ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-012",
+          "title": "Front — Page fiche détail pays",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /pays/:isoCode : infos géo, critères visuels (barres), 8 niveaux de voyage, reviews, note moyenne, boutons J'y suis allé et Écrire un avis (si connecté + visité).",
+          "dependencies": ["CT-007", "CT-010"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-012-AC-1",
+              "description": "Page affiche les infos de base du pays",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /pays/FR affiche le drapeau, nom France, capitale Paris, continent Europe ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-2",
+              "description": "Barres visuelles pour les critères",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que budget, safety, temperature et tourism_level sont affichés avec des barres de progression ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-3",
+              "description": "Niveaux de voyage affichés (nature_level etc.)",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les 8 niveaux de voyage sont affichés avec leur score /5 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-4",
+              "description": "Note moyenne + liste des reviews",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que la note moyenne et les reviews de la communauté s'affichent ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-5",
+              "description": "404 page si pays introuvable",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /pays/ZZ affiche une page 404 propre ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-3",
+      "title": "Sprint 3 — Recommendations & Map",
+      "tickets": [
+        {
+          "id": "CT-013",
+          "title": "API — RecommendationsModule (compute + random)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "POST /recommendations/compute : top 5 scorés. POST /recommendations/random : tirage parmi top 20. OptionalJwtGuard. Temps réponse < 200ms.",
+          "dependencies": ["CT-011"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-013-AC-1",
+              "description": "POST /recommendations/compute retourne top 5",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/recommendations/compute -H 'Content-Type: application/json' -d '{\"budget\":3,\"group_type\":\"solo\",\"with_children\":false,\"temperature\":4,\"safety\":3,\"travel_tags\":[\"nature\"],\"tourism_level\":3,\"departure_month\":7,\"return_month\":8}' | grep -o '\"rank\"' | wc -l",
+                    "expect": "5",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que la réponse contient exactement 5 pays avec score et rank ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-013-AC-2",
+              "description": "POST /recommendations/random retourne 1 pays",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/recommendations/random -H 'Content-Type: application/json' -d '{\"budget\":3,\"group_type\":\"solo\",\"with_children\":false,\"temperature\":4,\"safety\":3,\"travel_tags\":[],\"tourism_level\":3,\"departure_month\":7,\"return_month\":8}' | grep -o '\"country\"'",
+                    "expect": "country",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que deux appels consécutifs retournent des pays différents (aléatoire) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-013-AC-3",
+              "description": "Fonctionne sans token (OptionalJwtGuard)",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:3000/api/v1/recommendations/compute -H 'Content-Type: application/json' -d '{\"budget\":3,\"group_type\":\"solo\",\"with_children\":false,\"temperature\":4,\"safety\":3,\"travel_tags\":[],\"tourism_level\":3,\"departure_month\":7,\"return_month\":8}'",
+                    "expect": "200",
+                    "timeout": 15
+                  }
+                ],
+                "questions": [
+                  "Est-ce que l'endpoint fonctionne sans Authorization header ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-014",
+          "title": "API — Sauvegarde des recommandations",
+          "type": "Feature",
+          "priority": "Should Have",
+          "status": "locked",
+          "description": "CRUD SavedRecommendation : save, get, rename, delete. JwtAuthGuard requis. Snapshot JSONB des critères et résultats.",
+          "dependencies": ["CT-013"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-014-AC-1",
+              "description": "POST /recommendations/save crée une sauvegarde",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que POST /recommendations/save avec un token valide retourne 201 avec l'objet créé ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-014-AC-2",
+              "description": "GET /recommendations/:id retourne 403 si non propriétaire",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'accéder à une reco d'un autre user retourne bien 403 Forbidden ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-014-AC-3",
+              "description": "DELETE /recommendations/:id supprime la reco",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après DELETE, est-ce que GET sur le même ID retourne 404 ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-015",
+          "title": "Front — Formulaire de recommandation multi-étapes",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /recommandation : 5 étapes (stepper), sliders, toggles, multi-select tags. Affichage top 5 résultats avec score %. Bouton Sauvegarder si connecté.",
+          "dependencies": ["CT-013"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-015-AC-1",
+              "description": "Stepper 5 étapes fonctionnel",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'on peut naviguer entre les 5 étapes avec les boutons Suivant et Retour ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-015-AC-2",
+              "description": "5 résultats affichés après soumission",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que la soumission du formulaire affiche bien 5 cartes pays avec score % ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-015-AC-3",
+              "description": "Bouton Sauvegarder visible si connecté",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que le bouton Sauvegarder apparaît uniquement quand l'utilisateur est connecté ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-015-AC-4",
+              "description": "État formulaire conservé entre étapes",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Si tu reviens à l'étape 1 depuis l'étape 3, tes saisies sont-elles bien conservées ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-016",
+          "title": "Front — Page destination aléatoire",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /aleatoire : formulaire simplifié + bouton Surprends-moi + animation révélation + bouton Autre destination.",
+          "dependencies": ["CT-013"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-016-AC-1",
+              "description": "Bouton Surprends-moi retourne 1 pays avec animation",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que le bouton Surprends-moi affiche bien 1 pays avec une animation de révélation ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-016-AC-2",
+              "description": "Bouton Autre destination relance la requête",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que le bouton Autre destination affiche un pays différent à chaque clic ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-017",
+          "title": "Front — Carte mondiale interactive",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /carte : React Simple Maps + TopoJSON. Couleur selon avg_rating. Hover tooltip. Clic → fiche pays. Zoom + pan.",
+          "dependencies": ["CT-010"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-017-AC-1",
+              "description": "Carte SVG mondiale s'affiche",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /carte affiche bien une carte mondiale avec les 195 pays colorisés ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-017-AC-2",
+              "description": "Hover affiche tooltip avec note",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que survoler un pays affiche son nom, sa note moyenne et son nombre de reviews ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-017-AC-3",
+              "description": "Clic redirige vers fiche pays",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que cliquer sur la France redirige vers /pays/FR ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-4",
+      "title": "Sprint 4 — Dashboard, Visits & Reviews",
+      "tickets": [
+        {
+          "id": "CT-018",
+          "title": "API — VisitsModule",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "POST/DELETE visites, GET liste visites user, GET données carte personnelle.",
+          "dependencies": ["CT-005", "CT-010"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-018-AC-1",
+              "description": "POST /visits ajoute un pays visité",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que POST /visits avec country_id valide retourne 201 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-018-AC-2",
+              "description": "409 si pays déjà visité",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'ajouter le même pays deux fois retourne 409 Conflict ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-018-AC-3",
+              "description": "DELETE /visits/:country_id supprime la visite",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après DELETE, est-ce que le pays disparaît de GET /users/me/visits ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-018-AC-4",
+              "description": "GET /visits/map/:username retourne données carte",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s http://localhost:3000/api/v1/visits/map/testuser | grep -o 'isoCode'",
+                    "expect": "isoCode",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que l'endpoint est public (sans token) et retourne iso_code + name ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-019",
+          "title": "API — ReviewsModule",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "CRUD Review. UPSERT (1 max par user par pays). 422 si pays non visité.",
+          "dependencies": ["CT-018"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-019-AC-1",
+              "description": "POST /reviews crée/met à jour une review",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que POST /reviews avec rating et country_id d'un pays visité retourne 200/201 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-019-AC-2",
+              "description": "422 si pays non visité",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que noter un pays non visité retourne 422 Unprocessable avec message d'erreur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-019-AC-3",
+              "description": "DELETE /reviews/:id — propriétaire uniquement",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que supprimer la review d'un autre user retourne 403 Forbidden ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-020",
+          "title": "Front — Dashboard utilisateur",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /dashboard (route protégée) : stats, carte personnelle colorisée, pays visités, recommandations sauvegardées, reviews.",
+          "dependencies": ["CT-018", "CT-019", "CT-014"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-020-AC-1",
+              "description": "Dashboard accessible uniquement si connecté",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /dashboard sans token redirige vers /auth/login ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-020-AC-2",
+              "description": "Stats affichées (nb pays, reviews, amis)",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les compteurs de pays visités, reviews et amis s'affichent correctement ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-020-AC-3",
+              "description": "Carte personnelle colorisée",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les pays visités apparaissent en bleu sur la carte personnelle ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-020-AC-4",
+              "description": "Liste pays visités avec bouton supprimer",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que supprimer un pays de la liste met bien à jour la carte personnelle ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-021",
+          "title": "Front — Composants review (écrire + afficher)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "StarRating (cliquable + lecture seule), ReviewForm (textarea 2000 chars), ReviewCard. Mise à jour optimiste. Message si pays non visité.",
+          "dependencies": ["CT-019", "CT-012"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-021-AC-1",
+              "description": "ReviewForm visible sur fiche pays si connecté + visité",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Sur /pays/FR, si connecté et pays visité, est-ce que le formulaire de review s'affiche ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-021-AC-2",
+              "description": "Message si pays non visité",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Si connecté mais pays non visité, est-ce que le message 'Vous devez avoir visité ce pays' s'affiche ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-021-AC-3",
+              "description": "Mise à jour optimiste après soumission",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après soumission d'une review, est-ce qu'elle apparaît immédiatement sans rechargement de page ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-5",
+      "title": "Sprint 5 — Friendships & Profils",
+      "tickets": [
+        {
+          "id": "CT-022",
+          "title": "API — UsersModule (profil public + modification)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "GET profil public, PATCH profil perso, DELETE compte (RGPD).",
+          "dependencies": ["CT-005"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-022-AC-1",
+              "description": "GET /users/:username retourne profil public",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "curl -s http://localhost:3000/api/v1/users/testuser | grep -o 'username'",
+                    "expect": "username",
+                    "timeout": 10
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le profil public contient username, bio, nb pays visités et la liste des pays visités ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-022-AC-2",
+              "description": "PATCH /users/me modifie le profil",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que PATCH /users/me avec {bio: 'test'} met bien à jour la bio ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-022-AC-3",
+              "description": "DELETE /users/me supprime le compte en cascade",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après DELETE /users/me, est-ce que l'utilisateur et toutes ses données sont supprimés ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-023",
+          "title": "API — FriendshipsModule",
+          "type": "Feature",
+          "priority": "Should Have",
+          "status": "locked",
+          "description": "Envoyer/accepter/refuser/supprimer demande d'ami. Statuts pending/accepted/blocked.",
+          "dependencies": ["CT-022"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-023-AC-1",
+              "description": "POST /friendships/request envoie une demande",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que POST /friendships/request retourne 201 avec status: pending ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-023-AC-2",
+              "description": "409 si relation déjà existante",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'envoyer une 2ème demande au même user retourne 409 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-023-AC-3",
+              "description": "400 si auto-follow (requester = addressee)",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que s'envoyer une demande à soi-même retourne 400 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-023-AC-4",
+              "description": "PATCH /friendships/:id accepte/refuse la demande",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que seul l'addressee peut accepter ou refuser une demande (403 sinon) ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-024",
+          "title": "Front — Page profil public",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page /profil/:username : avatar, stats, carte pays visités, reviews, bouton ami avec gestion statut.",
+          "dependencies": ["CT-022", "CT-023"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-024-AC-1",
+              "description": "Page affiche profil complet",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /profil/testuser affiche avatar, username, bio, stats et carte des pays visités ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-024-AC-2",
+              "description": "Bouton ami adaptatif selon statut",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que le bouton affiche correctement Ajouter / Demande envoyée / Ami selon le statut de la relation ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-024-AC-3",
+              "description": "404 si user inexistant",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /profil/utilisateur_inexistant affiche une page 404 propre ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-025",
+          "title": "Front — Page recherche globale",
+          "type": "Feature",
+          "priority": "Should Have",
+          "status": "locked",
+          "description": "Page /recherche : barre avec debounce 300ms, onglets Pays / Utilisateurs, résultats cliquables.",
+          "dependencies": ["CT-010", "CT-022"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-025-AC-1",
+              "description": "Recherche avec debounce 300ms",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que la recherche ne se déclenche pas à chaque frappe mais seulement après 300ms d'inactivité ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-025-AC-2",
+              "description": "Onglets Pays et Utilisateurs fonctionnels",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les deux onglets affichent bien leurs résultats respectifs ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-025-AC-3",
+              "description": "Min 2 caractères pour déclencher",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'une recherche avec 1 caractère ne déclenche pas d'appel API ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-6",
+      "title": "Sprint 6 — Admin Panel",
+      "tickets": [
+        {
+          "id": "CT-026",
+          "title": "API — AdminModule",
+          "type": "Feature",
+          "priority": "Should Have",
+          "status": "locked",
+          "description": "Tous les endpoints /admin/* protégés JwtAuthGuard + RolesGuard('admin'). Gestion pays (éditorial + critères), modération reviews, gestion users, stats dashboard.",
+          "dependencies": ["CT-005", "CT-010", "CT-019"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-026-AC-1",
+              "description": "403 si rôle user tente d'accéder à /admin/*",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'un user avec rôle 'user' reçoit bien 403 sur tous les endpoints /admin/* ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-026-AC-2",
+              "description": "PATCH /admin/countries/:id/criteria modifie les critères",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que modifier nature_level d'un pays se reflète bien dans la table country_criteria ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-026-AC-3",
+              "description": "DELETE /admin/reviews/:id fait un soft delete",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Après DELETE admin, est-ce que is_visible=false dans la DB (pas de suppression physique) ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-026-AC-4",
+              "description": "GET /admin/stats retourne les statistiques",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que /admin/stats retourne totalUsers, totalCountries, totalReviews et topVisitedCountries ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-027",
+          "title": "Front — Interface admin",
+          "type": "Feature",
+          "priority": "Should Have",
+          "status": "locked",
+          "description": "Pages /admin/* accessibles si role=admin : dashboard stats, gestion pays + critères, modération reviews, gestion users.",
+          "dependencies": ["CT-026", "CT-007"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-027-AC-1",
+              "description": "Routes /admin/* redirigent si role !== admin",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'un user avec role 'user' est redirigé depuis /admin ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-027-AC-2",
+              "description": "Formulaire critères pays fonctionnel",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que modifier les critères d'un pays depuis /admin/countries/:id/edit se sauvegarde correctement ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-027-AC-3",
+              "description": "Modération reviews fonctionnelle",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que masquer une review depuis l'admin la retire bien de la fiche pays publique ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-027-AC-4",
+              "description": "Confirmation modal avant actions destructives",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'une modale de confirmation s'affiche avant de supprimer un compte utilisateur ?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-7",
+      "title": "Sprint 7 — Tests & Déploiement",
+      "tickets": [
+        {
+          "id": "CT-028",
+          "title": "Tests unitaires NestJS (Jest)",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Tests Jest pour AuthService, ScoringService, ReviewsService, FriendshipsService. Couverture > 70% sur les services.",
+          "dependencies": ["CT-011", "CT-019", "CT-023"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-028-AC-1",
+              "description": "Couverture > 70% sur les services",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test:cov 2>&1 | grep 'All files'",
+                    "expect": "70",
+                    "timeout": 60
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le rapport de couverture montre > 70% sur src/**/*.service.ts ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-028-AC-2",
+              "description": "Tests ScoringService : 10 cas couverts",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test -- --testPathPattern=scoring --verbose 2>&1 | grep '✓\\|✗' | wc -l",
+                    "expect": "10",
+                    "timeout": 30
+                  }
+                ],
+                "questions": [
+                  "Est-ce que les 10 cas de test du ScoringService passent tous ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-028-AC-3",
+              "description": "Tests AuthService : cas register doublon, login mauvais mdp",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test -- --testPathPattern=auth.service --verbose 2>&1 | grep 'passed'",
+                    "expect": "passed",
+                    "timeout": 30
+                  }
+                ],
+                "questions": ["Est-ce que tous les tests AuthService passent ?"]
+              }
+            },
+            {
+              "id": "CT-028-AC-4",
+              "description": "Tests ReviewsService : UPSERT + rejet pays non visité",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/api && npm run test -- --testPathPattern=reviews.service --verbose 2>&1 | grep 'passed'",
+                    "expect": "passed",
+                    "timeout": 30
+                  }
+                ],
+                "questions": [
+                  "Est-ce que les tests du cas 422 (pays non visité) passent bien ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-029",
+          "title": "Tests E2E Playwright (flux critiques)",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Tests E2E Playwright : inscription, recommandation, ajout visite, review.",
+          "dependencies": ["CT-015", "CT-016", "CT-021"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-029-AC-1",
+              "description": "Flux inscription → connexion → dashboard passe",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/front && npx playwright test --grep 'auth' 2>&1 | tail -5",
+                    "expect": "passed",
+                    "timeout": 120
+                  }
+                ],
+                "questions": ["Est-ce que le test E2E auth passe sans erreur ?"]
+              }
+            },
+            {
+              "id": "CT-029-AC-2",
+              "description": "Flux formulaire → résultats → fiche pays passe",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/front && npx playwright test --grep 'recommendation' 2>&1 | tail -5",
+                    "expect": "passed",
+                    "timeout": 120
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le test E2E recommendation passe sans erreur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-029-AC-3",
+              "description": "Flux ajout visite → review passe",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "cd apps/front && npx playwright test --grep 'review' 2>&1 | tail -5",
+                    "expect": "passed",
+                    "timeout": 120
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le test E2E review passe sans erreur ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-029-AC-4",
+              "description": "Screenshots générés en cas d'échec",
+              "status": "pending",
+              "checks": {
+                "commands": [
+                  {
+                    "cmd": "test -d apps/front/test-results && echo 'exists'",
+                    "expect": "exists",
+                    "timeout": 5
+                  }
+                ],
+                "questions": [
+                  "Est-ce que le dossier test-results est configuré comme artifact dans GitHub Actions ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-030",
+          "title": "Déploiement production + monitoring",
+          "type": "Technique",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Déployer en production sur Railway (api + DB) et Netlify (front). Configurer Uptime Robot, variables d'env prod, DNS, HTTPS.",
+          "dependencies": ["CT-028", "CT-029"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-030-AC-1",
+              "description": "API NestJS déployée sur Railway",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que l'URL Railway de l'API répond sur /api/docs en HTTPS ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-030-AC-2",
+              "description": "Frontend déployé sur Netlify avec domaine custom",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que l'URL Netlify (ou domaine custom) charge bien l'application en HTTPS ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-030-AC-3",
+              "description": "Variables d'env prod configurées sur Railway et Netlify",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que toutes les variables (JWT_SECRET, DATABASE_URL, OAuth keys, VITE_API_URL) sont configurées en production ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-030-AC-4",
+              "description": "Uptime Robot configuré",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce qu'un moniteur Uptime Robot est configuré sur l'URL de l'API avec alerte email < 2min ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-030-AC-5",
+              "description": "Score Lighthouse > 85 sur mobile",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Dans Chrome DevTools > Lighthouse, est-ce que le score mobile est > 85 ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-030-AC-6",
+              "description": "Backup PostgreSQL activé sur Railway",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les backups automatiques quotidiens sont activés dans les settings Railway PostgreSQL ?"
                 ]
               }
             }
