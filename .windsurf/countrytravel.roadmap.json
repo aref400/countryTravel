@@ -1027,6 +1027,50 @@
         },
         {
           "id": "CT-012",
+          "title": "Front — Page d'accueil (landing page)",
+          "type": "Feature",
+          "priority": "Must Have",
+          "status": "locked",
+          "description": "Page d'accueil publique accessible sans connexion. Présente le concept du site, un accès au formulaire de recommandation, la destination aléatoire, et des liens vers login/register.",
+          "dependencies": ["CT-002"],
+          "acceptance_criteria": [
+            {
+              "id": "CT-012-AC-1",
+              "description": "Page / accessible sans être connecté",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "En accédant à / sans token, est-ce que la page s'affiche bien sans redirection vers /auth/login ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-2",
+              "description": "Design responsive avec hero section, CTA et liens de navigation",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que la page affiche bien un titre, une description du site, et des boutons d'action ?"
+                ]
+              }
+            },
+            {
+              "id": "CT-012-AC-3",
+              "description": "Liens vers /auth/login et /auth/register visibles pour les non connectés",
+              "status": "pending",
+              "checks": {
+                "commands": [],
+                "questions": [
+                  "Est-ce que les boutons Se connecter et S'inscrire sont bien visibles sur la landing ?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "CT-013",
           "title": "Front — Page fiche détail pays",
           "type": "Feature",
           "priority": "Must Have",
@@ -1035,7 +1079,7 @@
           "dependencies": ["CT-007", "CT-010"],
           "acceptance_criteria": [
             {
-              "id": "CT-012-AC-1",
+              "id": "CT-013-AC-1",
               "description": "Page affiche les infos de base du pays",
               "status": "pending",
               "checks": {
@@ -1046,7 +1090,7 @@
               }
             },
             {
-              "id": "CT-012-AC-2",
+              "id": "CT-013-AC-2",
               "description": "Barres visuelles pour les critères",
               "status": "pending",
               "checks": {
@@ -1057,7 +1101,7 @@
               }
             },
             {
-              "id": "CT-012-AC-3",
+              "id": "CT-013-AC-3",
               "description": "Niveaux de voyage affichés (nature_level etc.)",
               "status": "pending",
               "checks": {
@@ -1068,7 +1112,7 @@
               }
             },
             {
-              "id": "CT-012-AC-4",
+              "id": "CT-013-AC-4",
               "description": "Note moyenne + liste des reviews",
               "status": "pending",
               "checks": {
@@ -1079,7 +1123,7 @@
               }
             },
             {
-              "id": "CT-012-AC-5",
+              "id": "CT-013-AC-5",
               "description": "404 page si pays introuvable",
               "status": "pending",
               "checks": {
@@ -1098,7 +1142,7 @@
       "title": "Sprint 3 — Recommendations & Map",
       "tickets": [
         {
-          "id": "CT-013",
+          "id": "CT-014",
           "title": "API — RecommendationsModule (compute + random)",
           "type": "Feature",
           "priority": "Must Have",
@@ -1107,7 +1151,7 @@
           "dependencies": ["CT-011"],
           "acceptance_criteria": [
             {
-              "id": "CT-013-AC-1",
+              "id": "CT-014-AC-1",
               "description": "POST /recommendations/compute retourne top 5",
               "status": "pending",
               "checks": {
@@ -1124,7 +1168,7 @@
               }
             },
             {
-              "id": "CT-013-AC-2",
+              "id": "CT-014-AC-2",
               "description": "POST /recommendations/random retourne 1 pays",
               "status": "pending",
               "checks": {
@@ -1141,7 +1185,7 @@
               }
             },
             {
-              "id": "CT-013-AC-3",
+              "id": "CT-014-AC-3",
               "description": "Fonctionne sans token (OptionalJwtGuard)",
               "status": "pending",
               "checks": {
@@ -1160,16 +1204,16 @@
           ]
         },
         {
-          "id": "CT-014",
+          "id": "CT-015",
           "title": "API — Sauvegarde des recommandations",
           "type": "Feature",
           "priority": "Should Have",
           "status": "locked",
           "description": "CRUD SavedRecommendation : save, get, rename, delete. JwtAuthGuard requis. Snapshot JSONB des critères et résultats.",
-          "dependencies": ["CT-013"],
+          "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
-              "id": "CT-014-AC-1",
+              "id": "CT-015-AC-1",
               "description": "POST /recommendations/save crée une sauvegarde",
               "status": "pending",
               "checks": {
@@ -1180,7 +1224,7 @@
               }
             },
             {
-              "id": "CT-014-AC-2",
+              "id": "CT-015-AC-2",
               "description": "GET /recommendations/:id retourne 403 si non propriétaire",
               "status": "pending",
               "checks": {
@@ -1191,7 +1235,7 @@
               }
             },
             {
-              "id": "CT-014-AC-3",
+              "id": "CT-015-AC-3",
               "description": "DELETE /recommendations/:id supprime la reco",
               "status": "pending",
               "checks": {
@@ -1204,16 +1248,16 @@
           ]
         },
         {
-          "id": "CT-015",
+          "id": "CT-016",
           "title": "Front — Formulaire de recommandation multi-étapes",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /recommandation : 5 étapes (stepper), sliders, toggles, multi-select tags. Affichage top 5 résultats avec score %. Bouton Sauvegarder si connecté.",
-          "dependencies": ["CT-013"],
+          "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
-              "id": "CT-015-AC-1",
+              "id": "CT-016-AC-1",
               "description": "Stepper 5 étapes fonctionnel",
               "status": "pending",
               "checks": {
@@ -1224,7 +1268,7 @@
               }
             },
             {
-              "id": "CT-015-AC-2",
+              "id": "CT-016-AC-2",
               "description": "5 résultats affichés après soumission",
               "status": "pending",
               "checks": {
@@ -1235,7 +1279,7 @@
               }
             },
             {
-              "id": "CT-015-AC-3",
+              "id": "CT-016-AC-3",
               "description": "Bouton Sauvegarder visible si connecté",
               "status": "pending",
               "checks": {
@@ -1246,7 +1290,7 @@
               }
             },
             {
-              "id": "CT-015-AC-4",
+              "id": "CT-016-AC-4",
               "description": "État formulaire conservé entre étapes",
               "status": "pending",
               "checks": {
@@ -1259,16 +1303,16 @@
           ]
         },
         {
-          "id": "CT-016",
+          "id": "CT-017",
           "title": "Front — Page destination aléatoire",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /aleatoire : formulaire simplifié + bouton Surprends-moi + animation révélation + bouton Autre destination.",
-          "dependencies": ["CT-013"],
+          "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
-              "id": "CT-016-AC-1",
+              "id": "CT-017-AC-1",
               "description": "Bouton Surprends-moi retourne 1 pays avec animation",
               "status": "pending",
               "checks": {
@@ -1279,7 +1323,7 @@
               }
             },
             {
-              "id": "CT-016-AC-2",
+              "id": "CT-017-AC-2",
               "description": "Bouton Autre destination relance la requête",
               "status": "pending",
               "checks": {
@@ -1292,7 +1336,7 @@
           ]
         },
         {
-          "id": "CT-017",
+          "id": "CT-018",
           "title": "Front — Carte mondiale interactive",
           "type": "Feature",
           "priority": "Must Have",
@@ -1301,7 +1345,7 @@
           "dependencies": ["CT-010"],
           "acceptance_criteria": [
             {
-              "id": "CT-017-AC-1",
+              "id": "CT-018-AC-1",
               "description": "Carte SVG mondiale s'affiche",
               "status": "pending",
               "checks": {
@@ -1312,7 +1356,7 @@
               }
             },
             {
-              "id": "CT-017-AC-2",
+              "id": "CT-018-AC-2",
               "description": "Hover affiche tooltip avec note",
               "status": "pending",
               "checks": {
@@ -1323,7 +1367,7 @@
               }
             },
             {
-              "id": "CT-017-AC-3",
+              "id": "CT-018-AC-3",
               "description": "Clic redirige vers fiche pays",
               "status": "pending",
               "checks": {
@@ -1342,7 +1386,7 @@
       "title": "Sprint 4 — Dashboard, Visits & Reviews",
       "tickets": [
         {
-          "id": "CT-018",
+          "id": "CT-019",
           "title": "API — VisitsModule",
           "type": "Feature",
           "priority": "Must Have",
@@ -1351,7 +1395,7 @@
           "dependencies": ["CT-005", "CT-010"],
           "acceptance_criteria": [
             {
-              "id": "CT-018-AC-1",
+              "id": "CT-019-AC-1",
               "description": "POST /visits ajoute un pays visité",
               "status": "pending",
               "checks": {
@@ -1362,7 +1406,7 @@
               }
             },
             {
-              "id": "CT-018-AC-2",
+              "id": "CT-019-AC-2",
               "description": "409 si pays déjà visité",
               "status": "pending",
               "checks": {
@@ -1373,7 +1417,7 @@
               }
             },
             {
-              "id": "CT-018-AC-3",
+              "id": "CT-019-AC-3",
               "description": "DELETE /visits/:country_id supprime la visite",
               "status": "pending",
               "checks": {
@@ -1384,7 +1428,7 @@
               }
             },
             {
-              "id": "CT-018-AC-4",
+              "id": "CT-019-AC-4",
               "description": "GET /visits/map/:username retourne données carte",
               "status": "pending",
               "checks": {
@@ -1403,16 +1447,16 @@
           ]
         },
         {
-          "id": "CT-019",
+          "id": "CT-020",
           "title": "API — ReviewsModule",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "CRUD Review. UPSERT (1 max par user par pays). 422 si pays non visité.",
-          "dependencies": ["CT-018"],
+          "dependencies": ["CT-019"],
           "acceptance_criteria": [
             {
-              "id": "CT-019-AC-1",
+              "id": "CT-020-AC-1",
               "description": "POST /reviews crée/met à jour une review",
               "status": "pending",
               "checks": {
@@ -1423,7 +1467,7 @@
               }
             },
             {
-              "id": "CT-019-AC-2",
+              "id": "CT-020-AC-2",
               "description": "422 si pays non visité",
               "status": "pending",
               "checks": {
@@ -1434,7 +1478,7 @@
               }
             },
             {
-              "id": "CT-019-AC-3",
+              "id": "CT-020-AC-3",
               "description": "DELETE /reviews/:id — propriétaire uniquement",
               "status": "pending",
               "checks": {
@@ -1447,16 +1491,16 @@
           ]
         },
         {
-          "id": "CT-020",
+          "id": "CT-021",
           "title": "Front — Dashboard utilisateur",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /dashboard (route protégée) : stats, carte personnelle colorisée, pays visités, recommandations sauvegardées, reviews.",
-          "dependencies": ["CT-018", "CT-019", "CT-014"],
+          "dependencies": ["CT-019", "CT-020", "CT-015"],
           "acceptance_criteria": [
             {
-              "id": "CT-020-AC-1",
+              "id": "CT-021-AC-1",
               "description": "Dashboard accessible uniquement si connecté",
               "status": "pending",
               "checks": {
@@ -1467,7 +1511,7 @@
               }
             },
             {
-              "id": "CT-020-AC-2",
+              "id": "CT-021-AC-2",
               "description": "Stats affichées (nb pays, reviews, amis)",
               "status": "pending",
               "checks": {
@@ -1478,7 +1522,7 @@
               }
             },
             {
-              "id": "CT-020-AC-3",
+              "id": "CT-021-AC-3",
               "description": "Carte personnelle colorisée",
               "status": "pending",
               "checks": {
@@ -1489,7 +1533,7 @@
               }
             },
             {
-              "id": "CT-020-AC-4",
+              "id": "CT-021-AC-4",
               "description": "Liste pays visités avec bouton supprimer",
               "status": "pending",
               "checks": {
@@ -1502,16 +1546,16 @@
           ]
         },
         {
-          "id": "CT-021",
+          "id": "CT-022",
           "title": "Front — Composants review (écrire + afficher)",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "StarRating (cliquable + lecture seule), ReviewForm (textarea 2000 chars), ReviewCard. Mise à jour optimiste. Message si pays non visité.",
-          "dependencies": ["CT-019", "CT-012"],
+          "dependencies": ["CT-020", "CT-013"],
           "acceptance_criteria": [
             {
-              "id": "CT-021-AC-1",
+              "id": "CT-022-AC-1",
               "description": "ReviewForm visible sur fiche pays si connecté + visité",
               "status": "pending",
               "checks": {
@@ -1522,7 +1566,7 @@
               }
             },
             {
-              "id": "CT-021-AC-2",
+              "id": "CT-022-AC-2",
               "description": "Message si pays non visité",
               "status": "pending",
               "checks": {
@@ -1533,7 +1577,7 @@
               }
             },
             {
-              "id": "CT-021-AC-3",
+              "id": "CT-022-AC-3",
               "description": "Mise à jour optimiste après soumission",
               "status": "pending",
               "checks": {
@@ -1552,7 +1596,7 @@
       "title": "Sprint 5 — Friendships & Profils",
       "tickets": [
         {
-          "id": "CT-022",
+          "id": "CT-023",
           "title": "API — UsersModule (profil public + modification)",
           "type": "Feature",
           "priority": "Must Have",
@@ -1561,7 +1605,7 @@
           "dependencies": ["CT-005"],
           "acceptance_criteria": [
             {
-              "id": "CT-022-AC-1",
+              "id": "CT-023-AC-1",
               "description": "GET /users/:username retourne profil public",
               "status": "pending",
               "checks": {
@@ -1578,7 +1622,7 @@
               }
             },
             {
-              "id": "CT-022-AC-2",
+              "id": "CT-023-AC-2",
               "description": "PATCH /users/me modifie le profil",
               "status": "pending",
               "checks": {
@@ -1589,7 +1633,7 @@
               }
             },
             {
-              "id": "CT-022-AC-3",
+              "id": "CT-023-AC-3",
               "description": "DELETE /users/me supprime le compte en cascade",
               "status": "pending",
               "checks": {
@@ -1602,16 +1646,16 @@
           ]
         },
         {
-          "id": "CT-023",
+          "id": "CT-024",
           "title": "API — FriendshipsModule",
           "type": "Feature",
           "priority": "Should Have",
           "status": "locked",
           "description": "Envoyer/accepter/refuser/supprimer demande d'ami. Statuts pending/accepted/blocked.",
-          "dependencies": ["CT-022"],
+          "dependencies": ["CT-023"],
           "acceptance_criteria": [
             {
-              "id": "CT-023-AC-1",
+              "id": "CT-024-AC-1",
               "description": "POST /friendships/request envoie une demande",
               "status": "pending",
               "checks": {
@@ -1622,7 +1666,7 @@
               }
             },
             {
-              "id": "CT-023-AC-2",
+              "id": "CT-024-AC-2",
               "description": "409 si relation déjà existante",
               "status": "pending",
               "checks": {
@@ -1633,7 +1677,7 @@
               }
             },
             {
-              "id": "CT-023-AC-3",
+              "id": "CT-024-AC-3",
               "description": "400 si auto-follow (requester = addressee)",
               "status": "pending",
               "checks": {
@@ -1644,7 +1688,7 @@
               }
             },
             {
-              "id": "CT-023-AC-4",
+              "id": "CT-024-AC-4",
               "description": "PATCH /friendships/:id accepte/refuse la demande",
               "status": "pending",
               "checks": {
@@ -1657,16 +1701,16 @@
           ]
         },
         {
-          "id": "CT-024",
+          "id": "CT-025",
           "title": "Front — Page profil public",
           "type": "Feature",
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /profil/:username : avatar, stats, carte pays visités, reviews, bouton ami avec gestion statut.",
-          "dependencies": ["CT-022", "CT-023"],
+          "dependencies": ["CT-023", "CT-024"],
           "acceptance_criteria": [
             {
-              "id": "CT-024-AC-1",
+              "id": "CT-025-AC-1",
               "description": "Page affiche profil complet",
               "status": "pending",
               "checks": {
@@ -1677,7 +1721,7 @@
               }
             },
             {
-              "id": "CT-024-AC-2",
+              "id": "CT-025-AC-2",
               "description": "Bouton ami adaptatif selon statut",
               "status": "pending",
               "checks": {
@@ -1688,7 +1732,7 @@
               }
             },
             {
-              "id": "CT-024-AC-3",
+              "id": "CT-025-AC-3",
               "description": "404 si user inexistant",
               "status": "pending",
               "checks": {
@@ -1701,16 +1745,16 @@
           ]
         },
         {
-          "id": "CT-025",
+          "id": "CT-026",
           "title": "Front — Page recherche globale",
           "type": "Feature",
           "priority": "Should Have",
           "status": "locked",
           "description": "Page /recherche : barre avec debounce 300ms, onglets Pays / Utilisateurs, résultats cliquables.",
-          "dependencies": ["CT-010", "CT-022"],
+          "dependencies": ["CT-010", "CT-023"],
           "acceptance_criteria": [
             {
-              "id": "CT-025-AC-1",
+              "id": "CT-026-AC-1",
               "description": "Recherche avec debounce 300ms",
               "status": "pending",
               "checks": {
@@ -1721,7 +1765,7 @@
               }
             },
             {
-              "id": "CT-025-AC-2",
+              "id": "CT-026-AC-2",
               "description": "Onglets Pays et Utilisateurs fonctionnels",
               "status": "pending",
               "checks": {
@@ -1732,7 +1776,7 @@
               }
             },
             {
-              "id": "CT-025-AC-3",
+              "id": "CT-026-AC-3",
               "description": "Min 2 caractères pour déclencher",
               "status": "pending",
               "checks": {
@@ -1751,16 +1795,16 @@
       "title": "Sprint 6 — Admin Panel",
       "tickets": [
         {
-          "id": "CT-026",
+          "id": "CT-027",
           "title": "API — AdminModule",
           "type": "Feature",
           "priority": "Should Have",
           "status": "locked",
           "description": "Tous les endpoints /admin/* protégés JwtAuthGuard + RolesGuard('admin'). Gestion pays (éditorial + critères), modération reviews, gestion users, stats dashboard.",
-          "dependencies": ["CT-005", "CT-010", "CT-019"],
+          "dependencies": ["CT-005", "CT-010", "CT-020"],
           "acceptance_criteria": [
             {
-              "id": "CT-026-AC-1",
+              "id": "CT-027-AC-1",
               "description": "403 si rôle user tente d'accéder à /admin/*",
               "status": "pending",
               "checks": {
@@ -1771,7 +1815,7 @@
               }
             },
             {
-              "id": "CT-026-AC-2",
+              "id": "CT-027-AC-2",
               "description": "PATCH /admin/countries/:id/criteria modifie les critères",
               "status": "pending",
               "checks": {
@@ -1782,7 +1826,7 @@
               }
             },
             {
-              "id": "CT-026-AC-3",
+              "id": "CT-027-AC-3",
               "description": "DELETE /admin/reviews/:id fait un soft delete",
               "status": "pending",
               "checks": {
@@ -1793,7 +1837,7 @@
               }
             },
             {
-              "id": "CT-026-AC-4",
+              "id": "CT-027-AC-4",
               "description": "GET /admin/stats retourne les statistiques",
               "status": "pending",
               "checks": {
@@ -1806,16 +1850,16 @@
           ]
         },
         {
-          "id": "CT-027",
+          "id": "CT-028",
           "title": "Front — Interface admin",
           "type": "Feature",
           "priority": "Should Have",
           "status": "locked",
           "description": "Pages /admin/* accessibles si role=admin : dashboard stats, gestion pays + critères, modération reviews, gestion users.",
-          "dependencies": ["CT-026", "CT-007"],
+          "dependencies": ["CT-027", "CT-007"],
           "acceptance_criteria": [
             {
-              "id": "CT-027-AC-1",
+              "id": "CT-028-AC-1",
               "description": "Routes /admin/* redirigent si role !== admin",
               "status": "pending",
               "checks": {
@@ -1826,7 +1870,7 @@
               }
             },
             {
-              "id": "CT-027-AC-2",
+              "id": "CT-028-AC-2",
               "description": "Formulaire critères pays fonctionnel",
               "status": "pending",
               "checks": {
@@ -1837,7 +1881,7 @@
               }
             },
             {
-              "id": "CT-027-AC-3",
+              "id": "CT-028-AC-3",
               "description": "Modération reviews fonctionnelle",
               "status": "pending",
               "checks": {
@@ -1848,7 +1892,7 @@
               }
             },
             {
-              "id": "CT-027-AC-4",
+              "id": "CT-028-AC-4",
               "description": "Confirmation modal avant actions destructives",
               "status": "pending",
               "checks": {
@@ -1867,16 +1911,16 @@
       "title": "Sprint 7 — Tests & Déploiement",
       "tickets": [
         {
-          "id": "CT-028",
+          "id": "CT-029",
           "title": "Tests unitaires NestJS (Jest)",
           "type": "Technique",
           "priority": "Must Have",
           "status": "locked",
           "description": "Tests Jest pour AuthService, ScoringService, ReviewsService, FriendshipsService. Couverture > 70% sur les services.",
-          "dependencies": ["CT-011", "CT-019", "CT-023"],
+          "dependencies": ["CT-011", "CT-020", "CT-024"],
           "acceptance_criteria": [
             {
-              "id": "CT-028-AC-1",
+              "id": "CT-029-AC-1",
               "description": "Couverture > 70% sur les services",
               "status": "pending",
               "checks": {
@@ -1893,7 +1937,7 @@
               }
             },
             {
-              "id": "CT-028-AC-2",
+              "id": "CT-029-AC-2",
               "description": "Tests ScoringService : 10 cas couverts",
               "status": "pending",
               "checks": {
@@ -1910,7 +1954,7 @@
               }
             },
             {
-              "id": "CT-028-AC-3",
+              "id": "CT-029-AC-3",
               "description": "Tests AuthService : cas register doublon, login mauvais mdp",
               "status": "pending",
               "checks": {
@@ -1925,7 +1969,7 @@
               }
             },
             {
-              "id": "CT-028-AC-4",
+              "id": "CT-029-AC-4",
               "description": "Tests ReviewsService : UPSERT + rejet pays non visité",
               "status": "pending",
               "checks": {
@@ -1944,16 +1988,16 @@
           ]
         },
         {
-          "id": "CT-029",
+          "id": "CT-030",
           "title": "Tests E2E Playwright (flux critiques)",
           "type": "Technique",
           "priority": "Must Have",
           "status": "locked",
           "description": "Tests E2E Playwright : inscription, recommandation, ajout visite, review.",
-          "dependencies": ["CT-015", "CT-016", "CT-021"],
+          "dependencies": ["CT-016", "CT-017", "CT-022"],
           "acceptance_criteria": [
             {
-              "id": "CT-029-AC-1",
+              "id": "CT-030-AC-1",
               "description": "Flux inscription → connexion → dashboard passe",
               "status": "pending",
               "checks": {
@@ -1968,7 +2012,7 @@
               }
             },
             {
-              "id": "CT-029-AC-2",
+              "id": "CT-030-AC-2",
               "description": "Flux formulaire → résultats → fiche pays passe",
               "status": "pending",
               "checks": {
@@ -1985,7 +2029,7 @@
               }
             },
             {
-              "id": "CT-029-AC-3",
+              "id": "CT-030-AC-3",
               "description": "Flux ajout visite → review passe",
               "status": "pending",
               "checks": {
@@ -2002,7 +2046,7 @@
               }
             },
             {
-              "id": "CT-029-AC-4",
+              "id": "CT-030-AC-4",
               "description": "Screenshots générés en cas d'échec",
               "status": "pending",
               "checks": {
@@ -2021,16 +2065,16 @@
           ]
         },
         {
-          "id": "CT-030",
+          "id": "CT-031",
           "title": "Déploiement production + monitoring",
           "type": "Technique",
           "priority": "Must Have",
           "status": "locked",
           "description": "Déployer en production sur Railway (api + DB) et Netlify (front). Configurer Uptime Robot, variables d'env prod, DNS, HTTPS.",
-          "dependencies": ["CT-028", "CT-029"],
+          "dependencies": ["CT-029", "CT-030"],
           "acceptance_criteria": [
             {
-              "id": "CT-030-AC-1",
+              "id": "CT-031-AC-1",
               "description": "API NestJS déployée sur Railway",
               "status": "pending",
               "checks": {
@@ -2041,7 +2085,7 @@
               }
             },
             {
-              "id": "CT-030-AC-2",
+              "id": "CT-031-AC-2",
               "description": "Frontend déployé sur Netlify avec domaine custom",
               "status": "pending",
               "checks": {
@@ -2052,7 +2096,7 @@
               }
             },
             {
-              "id": "CT-030-AC-3",
+              "id": "CT-031-AC-3",
               "description": "Variables d'env prod configurées sur Railway et Netlify",
               "status": "pending",
               "checks": {
@@ -2063,7 +2107,7 @@
               }
             },
             {
-              "id": "CT-030-AC-4",
+              "id": "CT-031-AC-4",
               "description": "Uptime Robot configuré",
               "status": "pending",
               "checks": {
@@ -2074,7 +2118,7 @@
               }
             },
             {
-              "id": "CT-030-AC-5",
+              "id": "CT-031-AC-5",
               "description": "Score Lighthouse > 85 sur mobile",
               "status": "pending",
               "checks": {
@@ -2085,7 +2129,7 @@
               }
             },
             {
-              "id": "CT-030-AC-6",
+              "id": "CT-031-AC-6",
               "description": "Backup PostgreSQL activé sur Railway",
               "status": "pending",
               "checks": {
