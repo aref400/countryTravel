@@ -846,7 +846,7 @@
             {
               "id": "CT-009-AC-1",
               "description": "195 entrées country_criteria créées",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -863,7 +863,7 @@
             {
               "id": "CT-009-AC-2",
               "description": "Données cohérentes et vérifiables",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -874,7 +874,7 @@
             {
               "id": "CT-009-AC-3",
               "description": "Fichier source criteria.json versionné",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -895,14 +895,14 @@
           "title": "API — CountriesModule (endpoints publics)",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "CountriesController + CountriesService : liste paginée, détail par isoCode, données carte, reviews d'un pays, pays similaires.",
           "dependencies": ["CT-008", "CT-009"],
           "acceptance_criteria": [
             {
               "id": "CT-010-AC-1",
               "description": "GET /countries retourne liste paginée",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -919,7 +919,7 @@
             {
               "id": "CT-010-AC-2",
               "description": "GET /countries/:isoCode retourne le détail",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -936,7 +936,7 @@
             {
               "id": "CT-010-AC-3",
               "description": "GET /countries/map/all retourne données légères",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -953,7 +953,7 @@
             {
               "id": "CT-010-AC-4",
               "description": "404 si pays inexistant ou is_published=false",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
