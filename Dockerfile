@@ -27,16 +27,18 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copier package.json ET package-lock.json
+# Copier package.json
 COPY --from=builder /app/apps/api/package.json ./
 
+# Copier prisma AVANT npm install (requis par postinstall prisma generate)
+COPY --from=builder /app/apps/api/prisma ./prisma
+COPY --from=builder /app/apps/api/prisma.config.ts ./prisma.config.ts
 
 # Installer les dépendances de production (sans package-lock)
 RUN npm install --production --no-package-lock
 
-# Copier le build et Prisma
+# Copier le build et le client généré
 COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/apps/api/prisma ./prisma
 COPY --from=builder /app/apps/api/src/generated ./src/generated
 
 # Générer Prisma Client en production
