@@ -974,14 +974,14 @@
           "title": "API — ScoringService (moteur de recommandation)",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "ScoringService injectable : calcule score 0-100 par pays selon RecoFormDto. Filtres éliminatoires puis score pondéré. Tests unitaires Jest.",
           "dependencies": ["CT-009"],
           "acceptance_criteria": [
             {
               "id": "CT-011-AC-1",
               "description": "calculateScore retourne un entier 0-100",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -998,7 +998,7 @@
             {
               "id": "CT-011-AC-2",
               "description": "Filtres éliminatoires appliqués avant scoring",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1009,7 +1009,7 @@
             {
               "id": "CT-011-AC-3",
               "description": "10 cas de test couverts",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
