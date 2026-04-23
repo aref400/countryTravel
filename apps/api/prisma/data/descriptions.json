@@ -1,0 +1,122 @@
+[
+  {
+    "isoCode": "FR",
+    "description": "Pays des arts, de la mode et de la gastronomie. Entre la Tour Eiffel, les vignobles de Bordeaux et la Côte d'Azur, la France séduit par sa diversité culturelle et ses paysages exceptionnels."
+  },
+  {
+    "isoCode": "ES",
+    "description": "Soleil, flamenco et tapas : l'Espagne envoûte par son architecture audacieuse, ses plages méditerranéennes et l'énergie de Barcelone, Séville et Madrid."
+  },
+  {
+    "isoCode": "US",
+    "description": "Des gratte-ciels de New York aux parcs naturels de l'Ouest, les États-Unis offrent une diversité de paysages et de cultures unique au monde."
+  },
+  {
+    "isoCode": "CN",
+    "description": "Entre la Grande Muraille, les rizières en terrasses et les mégapoles futuristes, la Chine est un voyage entre tradition millénaire et modernité foudroyante."
+  },
+  {
+    "isoCode": "IT",
+    "description": "Berceau de la Renaissance, des pizzas napolitaines et du Colisée. L'Italie est un musée à ciel ouvert où chaque ville raconte une histoire unique."
+  },
+  {
+    "isoCode": "TR",
+    "description": "À la croisée de l'Europe et de l'Asie, la Turquie fascine par ses mosquées bleues, ses bazars colorés, la Cappadoce et ses côtes turquoise."
+  },
+  {
+    "isoCode": "MX",
+    "description": "Pyramides mayas, plages caribéennes et cuisine explosive : le Mexique est une explosion de couleurs, de saveurs et d'histoire précolombienne."
+  },
+  {
+    "isoCode": "TH",
+    "description": "Le sourire de l'Asie. Entre temples bouddhistes dorés, plages paradisiaques et street food inoubliable, la Thaïlande enchante tous les voyageurs."
+  },
+  {
+    "isoCode": "DE",
+    "description": "Châteaux de conte de fées, bière artisanale et forêts profondes. L'Allemagne mêle tradition bavaroise, histoire intense et villes résolument modernes."
+  },
+  {
+    "isoCode": "GB",
+    "description": "De Big Ben aux Highlands écossais, le Royaume-Uni conjugue histoire royale, pubs chaleureux et scènes culturelles parmi les plus dynamiques du monde."
+  },
+  {
+    "isoCode": "JP",
+    "description": "Tradition millénaire et futurisme spectaculaire cohabitent au Japon. Temples zen, cerisiers en fleurs, cuisine raffinée et Tokyo hallucinant vous attendent."
+  },
+  {
+    "isoCode": "AT",
+    "description": "Mozart, les Alpes et les cafés viennois : l'Autriche est une symphonie de culture, de montagnes majestueuses et d'architecture baroque époustouflante."
+  },
+  {
+    "isoCode": "GR",
+    "description": "Mer Égée cristalline, ruines antiques et villages blancs perchés. La Grèce, berceau de la civilisation occidentale, est une destination de rêve en Méditerranée."
+  },
+  {
+    "isoCode": "MY",
+    "description": "Malaisie : jungle tropicale, plages immaculées et melting-pot culinaire exceptionnel. Kuala Lumpur et ses tours Petronas contrastent avec la nature sauvage de Bornéo."
+  },
+  {
+    "isoCode": "PT",
+    "description": "Fado mélancolique, pastéis de nata et surf atlantique. Le Portugal charme par son authenticité, son patrimoine marin et ses villes aux azulejos colorés."
+  },
+  {
+    "isoCode": "CA",
+    "description": "Des Rocheuses aux chutes du Niagara, le Canada impressionne par ses grands espaces préservés, sa nature sauvage et ses villes cosmopolites et accueillantes."
+  },
+  {
+    "isoCode": "BR",
+    "description": "Samba, Amazonie et Christ Rédempteur. Le Brésil est un pays de superlatifs : plus grande forêt tropicale, carnaval mythique et plages qui font rêver le monde entier."
+  },
+  {
+    "isoCode": "NL",
+    "description": "Tulipes, moulins à vent et musées world-class. Les Pays-Bas séduisent par leur art de vivre libéral, leurs canaux pittoresques et leur scène culturelle avant-gardiste."
+  },
+  {
+    "isoCode": "AU",
+    "description": "Opéra de Sydney, Grande Barrière de Corail et kangourous dans l'outback. L'Australie est un continent-pays d'une richesse naturelle et culturelle inépuisable."
+  },
+  {
+    "isoCode": "MA",
+    "description": "Médinas labyrinthiques, dunes du Sahara et riads colorés. Le Maroc est une passerelle entre l'Afrique et l'Orient, entre tradition berbère et influence arabe."
+  },
+  {
+    "isoCode": "IN",
+    "description": "Taj Mahal, épices et spiritualité : l'Inde submerge les sens. Du Rajasthan aux backwaters du Kerala, chaque région est un voyage dans un pays différent."
+  },
+  {
+    "isoCode": "CH",
+    "description": "Alpes majestueuses, chocolat fin et montres de précision. La Suisse est un paradis pour les amoureux de nature, de ski et de qualité de vie incomparable."
+  },
+  {
+    "isoCode": "KR",
+    "description": "K-pop, palais Joseon et kimchi : la Corée du Sud mêle fièrement culture ancestrale et modernité ultraconnectée dans une énergie unique au monde."
+  },
+  {
+    "isoCode": "HR",
+    "description": "Côte dalmate aux eaux turquoise, vieille ville de Dubrovnik et îles paradisiaques. La Croatie est la perle de l'Adriatique, entre mer et montagnes."
+  },
+  {
+    "isoCode": "ID",
+    "description": "17 000 îles, temples de Bali, orangs-outans de Bornéo et volcans actifs. L'Indonésie est l'un des pays les plus riches en biodiversité et en cultures au monde."
+  },
+  {
+    "isoCode": "AR",
+    "description": "Tango, Patagonie et biftecks légendaires. L'Argentine séduit par ses contrastes : Buenos Aires la cosmopolite, les glaciers de Patagonie et les vignobles de Mendoza."
+  },
+  {
+    "isoCode": "EG",
+    "description": "Pyramides de Gizeh, Nil légendaire et plongée en mer Rouge. L'Égypte est le berceau de l'une des plus grandes civilisations de l'histoire humaine."
+  },
+  {
+    "isoCode": "VN",
+    "description": "Baie d'Ha Long, lanternes de Hoi An et street food explosive. Le Vietnam captive par la beauté de ses paysages, la richesse de sa cuisine et la chaleur de ses habitants."
+  },
+  {
+    "isoCode": "CZ",
+    "description": "Prague, la ville aux cent clochers, est l'un des joyaux médiévaux d'Europe. La République tchèque charme par son architecture gothique, sa bière et ses châteaux de conte."
+  },
+  {
+    "isoCode": "PE",
+    "description": "Machu Picchu, lac Titicaca et gastronomie primée. Le Pérou est le cœur de l'empire inca, une destination de trekking et d'histoire fascinante en Amérique du Sud."
+  }
+]
