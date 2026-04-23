@@ -9,8 +9,8 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppLayouts />}>
+        <Route path="/" element={<Home />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
         </Route>
         {authRoutes.map((route) => (

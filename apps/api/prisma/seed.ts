@@ -2,6 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
 import { Pool } from 'pg';
 import { Continent, PrismaClient } from '../src/generated/prisma/client';
+import decriptionPays from './data/descriptions.json';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -67,18 +68,24 @@ export async function seedCountries(client: PrismaClient = prisma) {
   const countries = all.filter((c) => SELECTED_ISO.includes(c.cca2));
 
   for (const country of countries) {
+    const descriptions = decriptionPays.find((d) => d.isoCode === country.cca2);
     await client.country.upsert({
       where: { isoCode: country.cca2 },
-      update: { continent: continentMap[country.region] ?? Continent.europe },
+      update: {
+        continent: continentMap[country.region] ?? Continent.europe,
+        description: descriptions?.description ?? null,
+      },
       create: {
         isoCode: country.cca2,
         name: country.name.common,
         continent: continentMap[country.region] ?? Continent.europe,
+        description: descriptions?.description ?? null,
         capital: country.capital?.[0] ?? null,
         flagUrl: country.flags?.svg ?? null,
       },
     });
   }
+
   console.log(`✅ ${countries.length} pays insérés`);
 }
 

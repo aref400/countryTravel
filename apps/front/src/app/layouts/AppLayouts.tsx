@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { Navbar } from "../../shared/components/Navbar";
 
 export const AppLayouts = () => {
   return (
@@ -19,10 +20,7 @@ export const AppLayouts = () => {
           background: "radial-gradient(circle, #86efac 0%, #f0fdf4 70%)",
         }}
       />
-
-      {/* Navbar ici plus tard */}
-
-      {/* Le contenu de chaque page s'affiche ici */}
+      <Navbar />
       <div className="relative z-10">
         <Outlet />
       </div>
