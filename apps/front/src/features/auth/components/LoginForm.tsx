@@ -39,7 +39,6 @@ export const LoginForm = () => {
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-8 w-full">
-      {/* Logo */}
       <div className="flex justify-center mb-4">
         <div
           className="w-12 h-12 rounded-xl flex items-center justify-center"
@@ -49,7 +48,6 @@ export const LoginForm = () => {
         </div>
       </div>
 
-      {/* Titre */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-heading">Bienvenue</h2>
         <p className="text-sm text-gray-400 mt-1">
@@ -61,7 +59,6 @@ export const LoginForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-4">
-          {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold text-gray-700">
               Adresse Email
@@ -80,7 +77,6 @@ export const LoginForm = () => {
             )}
           </div>
 
-          {/* Mot de passe */}
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
               <label className="text-sm font-semibold text-gray-700">
@@ -117,7 +113,6 @@ export const LoginForm = () => {
             )}
           </div>
 
-          {/* Se souvenir */}
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -129,7 +124,6 @@ export const LoginForm = () => {
         {apiError && (
           <p className="text-red-500 text-xs text-center mt-2">{apiError}</p>
         )}
-        {/* Bouton submit */}
         <button
           className="w-full mt-5 bg-green-500 hover:bg-green-600 transition-colors text-white font-semibold py-2.5 rounded-lg text-sm"
           type="submit"
@@ -138,7 +132,6 @@ export const LoginForm = () => {
         </button>
       </form>
 
-      {/* Lien register */}
       <p className="text-center text-xs text-gray-400 mt-6">
         Vous n'avez pas de compte ?{" "}
         <Link

@@ -1,4 +1,6 @@
 import { About } from "@/pages/About";
+import { CountriesPage } from "@/pages/CountriesPage";
+import { CountryDetail } from "@/pages/CountryDetail";
 import { Home } from "@/pages/Home";
 import { Route, Routes } from "react-router";
 import { authRoutes } from "../features/auth/auth.routes";
@@ -10,6 +12,8 @@ export function AppRoutes() {
     <Routes>
       <Route element={<AppLayouts />}>
         <Route path="/" element={<Home />} />
+        <Route path="/pays" element={<CountriesPage />} />
+        <Route path="/pays/:isoCode" element={<CountryDetail />} />
         <Route element={<PrivateRoute />}>
           <Route path="/about" element={<About />} />
         </Route>

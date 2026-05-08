@@ -1,11 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuthStore } from "../store/auth.store";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const { isAuthenticated, user, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchValue.trim()) {
+      navigate(`/pays?search=${encodeURIComponent(searchValue.trim())}`);
+      setSearchValue("");
+      setSearchOpen(false);
+    }
+  }
 
   return (
     <nav className="w-full bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
@@ -40,6 +51,9 @@ export function Navbar() {
             </svg>
             <input
               type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
               placeholder="Où voulez-vous aller ?"
               className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-400"
             />
@@ -54,7 +68,10 @@ export function Navbar() {
           <Link to="#" className="text-sm text-gray-500 hover:text-gray-700">
             Dashboard
           </Link>
-          <Link to="#" className="text-sm text-gray-500 hover:text-gray-700">
+          <Link
+            to="/pays"
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
             Page pays
           </Link>
           {isAuthenticated() ? (
@@ -167,6 +184,9 @@ export function Navbar() {
             <input
               autoFocus
               type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
               placeholder="Où voulez-vous aller ?"
               className="w-full pl-8 pr-3 py-2 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-400"
             />
@@ -192,7 +212,7 @@ export function Navbar() {
             Dashboard
           </Link>
           <Link
-            to="#"
+            to="/pays"
             className="text-sm text-gray-600"
             onClick={() => setMenuOpen(false)}
           >
