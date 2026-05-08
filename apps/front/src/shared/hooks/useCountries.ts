@@ -1,26 +1,61 @@
-import { useEffect, useState } from "react";
-import { getCountries, type Country } from "../services/countries.service";
+import { useCallback, useEffect, useState } from "react";
+import {
+  getCountries,
+  type Country,
+  type CountryFilters,
+} from "../services/countries.service";
 
-export function useCountries(limit?: number) {
+const PAGE_SIZE = 20;
+
+export function useCountries(staticLimit?: number) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<CountryFilters>({});
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
-    async function fetchCountries() {
+    let cancelled = false;
+    const run = async () => {
       setLoading(true);
       try {
-        const data = await getCountries(limit);
-        setCountries(data.data);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch countries",
+        const result = await getCountries({
+          ...filters,
+          page,
+          limit: staticLimit ?? PAGE_SIZE,
+        });
+        if (cancelled) return;
+        setCountries((prev) =>
+          page === 1 ? result.data : [...prev, ...result.data],
         );
+        const fetchedSoFar =
+          page === 1
+            ? result.data.length
+            : (page - 1) * (staticLimit ?? PAGE_SIZE) + result.data.length;
+        setHasMore(fetchedSoFar < result.meta.total);
+      } catch {
+        if (!cancelled) setError("Impossible de charger les pays.");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      setLoading(false);
-    }
-    fetchCountries();
-  }, [limit]);
+    };
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [page, filters, staticLimit, reset]);
 
-  return { countries, loading, error };
+  const applyFilters = useCallback((newFilters: CountryFilters) => {
+    setFilters(newFilters);
+    setPage(1);
+    setReset((r) => !r);
+  }, []);
+
+  const loadMore = useCallback(() => {
+    setPage((p) => p + 1);
+  }, []);
+
+  return { countries, loading, error, hasMore, applyFilters, loadMore };
 }

@@ -1030,14 +1030,14 @@
           "title": "Front — Page d'accueil (landing page)",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Page d'accueil publique accessible sans connexion. Présente le concept du site, un accès au formulaire de recommandation, la destination aléatoire, et des liens vers login/register.",
           "dependencies": ["CT-002"],
           "acceptance_criteria": [
             {
               "id": "CT-012-AC-1",
               "description": "Page / accessible sans être connecté",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1048,7 +1048,7 @@
             {
               "id": "CT-012-AC-2",
               "description": "Design responsive avec hero section, CTA et liens de navigation",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1059,7 +1059,7 @@
             {
               "id": "CT-012-AC-3",
               "description": "Liens vers /auth/login et /auth/register visibles pour les non connectés",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1074,14 +1074,14 @@
           "title": "Front — Page fiche détail pays",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Page /pays/:isoCode : infos géo, critères visuels (barres), 8 niveaux de voyage, reviews, note moyenne, boutons J'y suis allé et Écrire un avis (si connecté + visité).",
           "dependencies": ["CT-007", "CT-010"],
           "acceptance_criteria": [
             {
               "id": "CT-013-AC-1",
               "description": "Page affiche les infos de base du pays",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1092,7 +1092,7 @@
             {
               "id": "CT-013-AC-2",
               "description": "Barres visuelles pour les critères",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1103,7 +1103,7 @@
             {
               "id": "CT-013-AC-3",
               "description": "Niveaux de voyage affichés (nature_level etc.)",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1114,7 +1114,7 @@
             {
               "id": "CT-013-AC-4",
               "description": "Note moyenne + liste des reviews",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1125,7 +1125,7 @@
             {
               "id": "CT-013-AC-5",
               "description": "404 page si pays introuvable",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [

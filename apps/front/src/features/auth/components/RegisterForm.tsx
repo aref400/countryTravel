@@ -51,7 +51,6 @@ export const RegisterForm = () => {
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-8 w-full">
-      {/* Logo */}
       <div className="flex justify-center mb-4">
         <div
           className="w-12 h-12 rounded-xl flex items-center justify-center"
@@ -60,8 +59,6 @@ export const RegisterForm = () => {
           <span className="text-2xl">✈️</span>
         </div>
       </div>
-
-      {/* Titre */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-heading">Rejoignez-nous</h2>
         <p className="text-sm text-gray-400 mt-1">
@@ -73,7 +70,6 @@ export const RegisterForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-4">
-          {/* Nom complet */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold text-gray-700">
               Username
@@ -91,8 +87,6 @@ export const RegisterForm = () => {
               <p className="text-red-500 text-xs">{errors.username.message}</p>
             )}
           </div>
-
-          {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold text-gray-700">
               Adresse Email
@@ -110,8 +104,6 @@ export const RegisterForm = () => {
               <p className="text-red-500 text-xs">{errors.email.message}</p>
             )}
           </div>
-
-          {/* Mot de passe */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold text-gray-700">
               Mot de passe
@@ -139,8 +131,6 @@ export const RegisterForm = () => {
               <p className="text-red-500 text-xs">{errors.password.message}</p>
             )}
           </div>
-
-          {/* Confirmer mot de passe */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold text-gray-700">
               Confirmer le mot de passe
@@ -170,8 +160,6 @@ export const RegisterForm = () => {
               </p>
             )}
           </div>
-
-          {/* CGU */}
           <label className="flex items-start gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -196,7 +184,6 @@ export const RegisterForm = () => {
         {apiError && (
           <p className="text-red-500 text-xs text-center mt-2">{apiError}</p>
         )}
-        {/* Bouton submit */}
         <button
           type="submit"
           className="w-full mt-5 bg-green-500 hover:bg-green-600 transition-colors text-white font-semibold py-2.5 rounded-lg text-sm"
@@ -204,8 +191,6 @@ export const RegisterForm = () => {
           Créer un compte
         </button>
       </form>
-
-      {/* Lien login */}
       <p className="text-center text-xs text-gray-400 mt-6">
         Déjà un compte ?{" "}
         <Link
