@@ -56,12 +56,13 @@ interface RestCountry {
   region: string;
   capital?: string[];
   flags?: { svg: string };
+  currencies?: Record<string, { name: string; symbol: string }>;
 }
 
 export async function seedCountries(client: PrismaClient = prisma) {
   //fetch api Rest Countries
   const response = await fetch(
-    'https://restcountries.com/v3.1/all?fields=cca2,name,region,capital,flags',
+    'https://restcountries.com/v3.1/all?fields=cca2,name,region,capital,flags,currencies',
   );
   const all = (await response.json()) as RestCountry[];
 
@@ -69,11 +70,16 @@ export async function seedCountries(client: PrismaClient = prisma) {
 
   for (const country of countries) {
     const descriptions = decriptionPays.find((d) => d.isoCode === country.cca2);
+    const currency = country.currencies
+      ? Object.keys(country.currencies)[0]
+      : null;
+
     await client.country.upsert({
       where: { isoCode: country.cca2 },
       update: {
         continent: continentMap[country.region] ?? Continent.europe,
         description: descriptions?.description ?? null,
+        currency,
       },
       create: {
         isoCode: country.cca2,
@@ -82,6 +88,7 @@ export async function seedCountries(client: PrismaClient = prisma) {
         description: descriptions?.description ?? null,
         capital: country.capital?.[0] ?? null,
         flagUrl: country.flags?.svg ?? null,
+        currency,
       },
     });
   }

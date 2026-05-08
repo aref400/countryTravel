@@ -4,18 +4,32 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class CountriesService {
   constructor(private prisma: PrismaService) {}
-  async findAll(page: number = 1, limit: number = 20) {
+  async findAll(
+    page: number = 1,
+    limit: number = 20,
+    filters: { continent?: string; currency?: string; search?: string } = {},
+  ) {
     const skip = (page - 1) * limit;
+    const where: Record<string, unknown> = { isPublished: true };
+
+    if (filters.continent) {
+      where.continent = filters.continent.toLowerCase();
+    }
+    if (filters.currency) {
+      where.currency = { contains: filters.currency, mode: 'insensitive' };
+    }
+    if (filters.search) {
+      where.name = { contains: filters.search, mode: 'insensitive' };
+    }
+
     const [data, total] = await Promise.all([
       this.prisma.country.findMany({
-        where: { isPublished: true },
+        where,
         skip,
         take: limit,
-        orderBy: {
-          name: 'asc',
-        },
+        orderBy: { name: 'asc' },
       }),
-      this.prisma.country.count({ where: { isPublished: true } }),
+      this.prisma.country.count({ where }),
     ]);
 
     return {
