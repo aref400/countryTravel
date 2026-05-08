@@ -9,8 +9,15 @@ export class CountriesController {
   async getAllCountries(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 20,
+    @Query('continent') continent?: string,
+    @Query('currency') currency?: string,
+    @Query('search') search?: string,
   ) {
-    return this.countriesService.findAll(page, limit);
+    return this.countriesService.findAll(page, limit, {
+      continent,
+      currency,
+      search,
+    });
   }
 
   @Get('map/all')
