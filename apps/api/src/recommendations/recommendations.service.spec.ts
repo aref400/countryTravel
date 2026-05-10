@@ -1,3 +1,4 @@
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { ScoringService } from '../scoring/scoring.service';
@@ -8,6 +9,12 @@ describe('RecommendationsService', () => {
 
   const mockPrisma = {
     country: { findMany: jest.fn() },
+    savedRecommendation: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      delete: jest.fn(),
+    },
   };
 
   const mockScoring = {
@@ -124,6 +131,104 @@ describe('RecommendationsService', () => {
       const result = await service.getRecommendations(baseForm);
 
       expect(result).toHaveLength(0);
+    });
+  });
+
+  describe('saveRecommendations', () => {
+    it('should create a saved recommendation with userId', async () => {
+      const dto = {
+        name: 'Mon voyage',
+        criteriaSnapshot: { budget: 3 },
+        resultsSnapshot: [{ rank: 1, score: 90 }],
+      };
+      const mockSaved = { id: 'reco-1', userId: 'user-1', ...dto };
+      mockPrisma.savedRecommendation.create.mockResolvedValue(mockSaved);
+
+      const result = await service.saveRecommendations('user-1', dto);
+
+      expect(result).toEqual(mockSaved);
+      expect(mockPrisma.savedRecommendation.create).toHaveBeenCalledWith({
+        data: {
+          userId: 'user-1',
+          name: dto.name,
+          criteriaSnapshot: dto.criteriaSnapshot,
+          resultsSnapshot: dto.resultsSnapshot,
+        },
+      });
+    });
+  });
+
+  describe('getSavedRecommendations', () => {
+    it('should return saved recommendations for a user', async () => {
+      const mockList = [{ id: 'reco-1', userId: 'user-1' }];
+      mockPrisma.savedRecommendation.findMany.mockResolvedValue(mockList);
+
+      const result = await service.getSavedRecommendations('user-1');
+
+      expect(result).toEqual(mockList);
+      expect(mockPrisma.savedRecommendation.findMany).toHaveBeenCalledWith({
+        where: { userId: 'user-1' },
+        orderBy: { createdAt: 'desc' },
+      });
+    });
+  });
+
+  describe('findSavedRecommendationById', () => {
+    it('should return the recommendation if owner', async () => {
+      const mockReco = { id: 'reco-1', userId: 'user-1' };
+      mockPrisma.savedRecommendation.findUnique.mockResolvedValue(mockReco);
+
+      const result = await service.findSavedRecommendationById(
+        'reco-1',
+        'user-1',
+      );
+
+      expect(result).toEqual(mockReco);
+    });
+
+    it('should throw NotFoundException if not found', async () => {
+      mockPrisma.savedRecommendation.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.findSavedRecommendationById('reco-1', 'user-1'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw ForbiddenException if not owner', async () => {
+      mockPrisma.savedRecommendation.findUnique.mockResolvedValue({
+        id: 'reco-1',
+        userId: 'other-user',
+      });
+
+      await expect(
+        service.findSavedRecommendationById('reco-1', 'user-1'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+  });
+
+  describe('removeRecommendation', () => {
+    it('should delete the recommendation if owner', async () => {
+      const mockReco = { id: 'reco-1', userId: 'user-1' };
+      mockPrisma.savedRecommendation.findUnique.mockResolvedValue(mockReco);
+      mockPrisma.savedRecommendation.delete.mockResolvedValue(mockReco);
+
+      const result = await service.removeRecommendation('reco-1', 'user-1');
+
+      expect(result).toEqual(mockReco);
+      expect(mockPrisma.savedRecommendation.delete).toHaveBeenCalledWith({
+        where: { id: 'reco-1' },
+      });
+    });
+
+    it('should throw ForbiddenException if not owner', async () => {
+      mockPrisma.savedRecommendation.findUnique.mockResolvedValue({
+        id: 'reco-1',
+        userId: 'other-user',
+      });
+
+      await expect(
+        service.removeRecommendation('reco-1', 'user-1'),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 });
