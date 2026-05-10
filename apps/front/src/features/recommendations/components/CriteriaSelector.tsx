@@ -26,7 +26,7 @@ export function CriteriaSelector({
         <p className="font-semibold text-gray-800 text-sm">{label}</p>
         <p className="text-xs text-gray-400 mt-0.5">{description}</p>
       </div>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}

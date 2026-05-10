@@ -29,7 +29,7 @@ export function Step2Climate({ values, onChange }: Props) {
         <p className="text-sm text-gray-400">{current.desc}</p>
       </div>
 
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}
