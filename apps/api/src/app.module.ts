@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CountriesModule } from './countries/countries.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
 import { ScoringModule } from './scoring/scoring.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { ScoringModule } from './scoring/scoring.module';
     AuthModule,
     CountriesModule,
     ScoringModule,
+    RecommendationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

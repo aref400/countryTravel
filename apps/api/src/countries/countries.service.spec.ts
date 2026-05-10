@@ -130,6 +130,30 @@ describe('CountriesService', () => {
     });
   });
 
+  describe('findRandom', () => {
+    it('should return a random country', async () => {
+      mockPrismaService.country.findMany.mockResolvedValueOnce([
+        { isoCode: 'FR' },
+        { isoCode: 'JP' },
+      ]);
+      const mockCountry = {
+        id: '1',
+        name: 'France',
+        isoCode: 'FR',
+        criteria: null,
+      };
+      mockPrismaService.country.findUnique.mockResolvedValue(mockCountry);
+      mockPrismaService.review.aggregate.mockResolvedValue({
+        _avg: { rating: null },
+        _count: { id: 0 },
+      });
+
+      const result = await service.findRandom();
+
+      expect(['FR', 'JP']).toContain(result.isoCode);
+    });
+  });
+
   describe('findMapData', () => {
     it('should return countries with calculated avgRating', async () => {
       // Arrange — pays avec 2 reviews
