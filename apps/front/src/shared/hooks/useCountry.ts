@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  getCountryByIsoCode,
-  type CountryDetail,
-} from "../services/countries.service";
+import { getCountryByIsoCode } from "../services/countries.service";
+import type { CountryDetail } from "../types/CountryType";
 
 export function useCountry(isoCode: string) {
   const [country, setCountry] = useState<CountryDetail | null>(null);
