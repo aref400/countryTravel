@@ -88,4 +88,16 @@ export class CountriesService {
       };
     });
   }
+
+  async findRandom() {
+    const countries = await this.prisma.country.findMany({
+      where: { isPublished: true },
+      select: { isoCode: true },
+    });
+
+    const randomIndex = Math.floor(Math.random() * countries.length);
+    const randomIsoCode = countries[randomIndex].isoCode;
+
+    return this.findByIsoCode(randomIsoCode);
+  }
 }
