@@ -1,7 +1,7 @@
 import { CountryCard } from "@/features/countries/components/CountryCard";
 import { CountryFilters } from "@/features/countries/components/CountryFilters";
 import { useCountries } from "@/shared/hooks/useCountries";
-import type { CountryFilters as CountryFiltersType } from "@/shared/services/countries.service";
+import type { CountryFilters as CountryFiltersType } from "@/shared/types/CountryType";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
 
