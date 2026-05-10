@@ -1208,14 +1208,14 @@
           "title": "API — Sauvegarde des recommandations",
           "type": "Feature",
           "priority": "Should Have",
-          "status": "locked",
+          "status": "done",
           "description": "CRUD SavedRecommendation : save, get, rename, delete. JwtAuthGuard requis. Snapshot JSONB des critères et résultats.",
           "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
               "id": "CT-015-AC-1",
               "description": "POST /recommendations/save crée une sauvegarde",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1225,8 +1225,8 @@
             },
             {
               "id": "CT-015-AC-2",
-              "description": "GET /recommendations/:id retourne 403 si non propriétaire",
-              "status": "pending",
+              "description": "GET /recommendations/saved/:id retourne 403 si non propriétaire",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1236,8 +1236,8 @@
             },
             {
               "id": "CT-015-AC-3",
-              "description": "DELETE /recommendations/:id supprime la reco",
-              "status": "pending",
+              "description": "DELETE /recommendations/saved/:id supprime la reco",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
