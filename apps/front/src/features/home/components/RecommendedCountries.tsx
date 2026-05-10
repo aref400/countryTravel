@@ -1,5 +1,5 @@
 import { useCountries } from "../../../shared/hooks/useCountries";
-import type { Country } from "../../../shared/services/countries.service";
+import type { Country } from "../../../shared/types/CountryType";
 import { CountryCard } from "./CountryCard";
 
 export function RecommendedCountries() {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useAuthStore } from "../store/auth.store";
 
 export function Navbar() {
@@ -17,6 +17,7 @@ export function Navbar() {
       setSearchOpen(false);
     }
   }
+  const { pathname } = useLocation();
 
   return (
     <nav className="w-full bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
@@ -25,9 +26,6 @@ export function Navbar() {
           to="/"
           className="flex items-center gap-1.5 font-bold text-gray-900 text-base"
         >
-          <span className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">
-            🌍
-          </span>
           <span>
             Country<span className="text-green-500">Travel</span>
           </span>
@@ -62,15 +60,21 @@ export function Navbar() {
 
         {/* Liens nav — desktop */}
         <div className="hidden sm:flex items-center gap-4">
-          <Link to="/" className="text-sm font-semibold text-green-600">
+          <Link
+            to="/"
+            className={`text-sm  ${pathname === "/" ? "text-green-600 font-semibold" : "text-gray-500"}`}
+          >
             Accueil
           </Link>
-          <Link to="#" className="text-sm text-gray-500 hover:text-gray-700">
-            Dashboard
+          <Link
+            to="/recommandation"
+            className={`text-sm ${pathname === "/recommandation" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-700`}
+          >
+            Recommandation
           </Link>
           <Link
             to="/pays"
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className={`text-sm ${pathname === "/pays" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-700`}
           >
             Page pays
           </Link>
@@ -78,7 +82,7 @@ export function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className={`text-sm ${pathname === "/dashboard" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-700`}
               >
                 <span>{user?.username}</span>
               </Link>
@@ -93,7 +97,7 @@ export function Navbar() {
             <>
               <Link
                 to="/auth/login"
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className={`text-sm font-medium ${pathname === "/auth/login" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-900`}
               >
                 Connexion
               </Link>
@@ -199,21 +203,21 @@ export function Navbar() {
         <div className="sm:hidden border-t border-gray-100 px-4 py-3 flex flex-col gap-3 bg-white">
           <Link
             to="/"
-            className="text-sm font-semibold text-green-600"
+            className={`text-sm ${pathname === "/" ? "text-green-600 font-semibold" : "text-gray-500"}`}
             onClick={() => setMenuOpen(false)}
           >
             Accueil
           </Link>
           <Link
-            to="#"
-            className="text-sm text-gray-600"
+            to="/recommandation"
+            className={`text-sm ${pathname === "/recommandation" ? "text-green-600 font-semibold" : "text-gray-500"}`}
             onClick={() => setMenuOpen(false)}
           >
-            Dashboard
+            Recommandation
           </Link>
           <Link
             to="/pays"
-            className="text-sm text-gray-600"
+            className={`text-sm ${pathname === "/pays" ? "text-green-600 font-semibold" : "text-gray-500"}`}
             onClick={() => setMenuOpen(false)}
           >
             Page pays
