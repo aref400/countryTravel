@@ -50,7 +50,7 @@ export function RecommendationPage() {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest text-green-600 uppercase mb-3">
-          ✦ Recommandations
+          Recommandations
         </span>
         <h1 className="text-2xl font-bold text-gray-900">
           Trouvez votre destination idéale
@@ -71,7 +71,7 @@ export function RecommendationPage() {
             />
           </div>
 
-          <div className="px-8 py-6">
+          <div className="px-4 sm:px-8 py-6">
             {/* Step header */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -85,7 +85,7 @@ export function RecommendationPage() {
                   {STEPS[step - 1].subtitle}
                 </p>
               </div>
-              <div className="flex gap-1">
+              <div className="hidden sm:flex gap-1">
                 {STEPS.map((_, i) => (
                   <div
                     key={i}

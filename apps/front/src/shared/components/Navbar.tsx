@@ -65,8 +65,11 @@ export function Navbar() {
           <Link to="/" className="text-sm font-semibold text-green-600">
             Accueil
           </Link>
-          <Link to="#" className="text-sm text-gray-500 hover:text-gray-700">
-            Dashboard
+          <Link
+            to="/recommandation"
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Recommandation
           </Link>
           <Link
             to="/pays"
@@ -205,11 +208,11 @@ export function Navbar() {
             Accueil
           </Link>
           <Link
-            to="#"
+            to="/recommandation"
             className="text-sm text-gray-600"
             onClick={() => setMenuOpen(false)}
           >
-            Dashboard
+            Recommandation
           </Link>
           <Link
             to="/pays"
