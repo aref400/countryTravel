@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
+import { SaveRecoDto } from './dto/save-recommendations.dto';
 import { RecommendationsController } from './recommendations.controller';
 import { RecommendationsService } from './recommendations.service';
 
@@ -13,7 +15,8 @@ describe('RecommendationsController', () => {
     removeRecommendation: jest.fn(),
   };
 
-  const mockReq = (id: string) => ({ user: { id } }) as any;
+  const mockReq = (id: string): Request & { user: { id: string } } =>
+    ({ user: { id } }) as Request & { user: { id: string } };
 
   const baseForm = {
     budget: 3,
@@ -113,7 +116,10 @@ describe('RecommendationsController', () => {
         mockSaved,
       );
 
-      const result = await controller.save(mockReq('user-1'), dto as any);
+      const result = await controller.save(
+        mockReq('user-1'),
+        dto as SaveRecoDto,
+      );
 
       expect(result).toEqual(mockSaved);
       expect(
