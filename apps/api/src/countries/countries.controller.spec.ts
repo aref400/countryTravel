@@ -11,6 +11,7 @@ describe('CountriesController', () => {
     findAll: jest.fn(),
     findByIsoCode: jest.fn(),
     findMapData: jest.fn(),
+    findRandom: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -40,7 +41,11 @@ describe('CountriesController', () => {
       const result = await controller.getAllCountries(1, 20);
 
       expect(result).toEqual(mockResult);
-      expect(mockCountriesService.findAll).toHaveBeenCalledWith(1, 20);
+      expect(mockCountriesService.findAll).toHaveBeenCalledWith(1, 20, {
+        continent: undefined,
+        currency: undefined,
+        search: undefined,
+      });
     });
   });
 
@@ -83,6 +88,24 @@ describe('CountriesController', () => {
       await expect(controller.getCountry('ZZ')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('getRandomCountry', () => {
+    it('should call findRandom and return result', async () => {
+      const mockCountry = {
+        id: '1',
+        name: 'France',
+        isoCode: 'FR',
+        avgRating: null,
+        nbReviews: 0,
+      };
+      mockCountriesService.findRandom.mockResolvedValue(mockCountry);
+
+      const result = await controller.getRandomCountry();
+
+      expect(result).toEqual(mockCountry);
+      expect(mockCountriesService.findRandom).toHaveBeenCalled();
     });
   });
 });

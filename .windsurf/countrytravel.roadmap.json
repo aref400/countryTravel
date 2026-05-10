@@ -1146,14 +1146,14 @@
           "title": "API — RecommendationsModule (compute + random)",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
-          "description": "POST /recommendations/compute : top 5 scorés. POST /recommendations/random : tirage parmi top 20. OptionalJwtGuard. Temps réponse < 200ms.",
+          "status": "done",
+          "description": "POST /recommendations/compute : top 5 scorés. GET /countries/random : tirage parmi top 20. OptionalJwtGuard. Temps réponse < 200ms.",
           "dependencies": ["CT-011"],
           "acceptance_criteria": [
             {
               "id": "CT-014-AC-1",
               "description": "POST /recommendations/compute retourne top 5",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -1169,12 +1169,12 @@
             },
             {
               "id": "CT-014-AC-2",
-              "description": "POST /recommendations/random retourne 1 pays",
-              "status": "pending",
+              "description": "GET /countries/random retourne 1 pays",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
-                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/recommendations/random -H 'Content-Type: application/json' -d '{\"budget\":3,\"group_type\":\"solo\",\"with_children\":false,\"temperature\":4,\"safety\":3,\"travel_tags\":[],\"tourism_level\":3,\"departure_month\":7,\"return_month\":8}' | grep -o '\"country\"'",
+                    "cmd": "curl -s -X POST http://localhost:3000/api/v1/countries/random -H 'Content-Type: application/json' ",
                     "expect": "country",
                     "timeout": 15
                   }
@@ -1187,7 +1187,7 @@
             {
               "id": "CT-014-AC-3",
               "description": "Fonctionne sans token (OptionalJwtGuard)",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {

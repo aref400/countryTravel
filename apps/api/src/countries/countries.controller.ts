@@ -25,6 +25,11 @@ export class CountriesController {
     return this.countriesService.findMapData();
   }
 
+  @Get('random')
+  async getRandomCountry() {
+    return this.countriesService.findRandom();
+  }
+
   @Get(':isoCode')
   async getCountry(@Param('isoCode') isoCode: string) {
     return this.countriesService.findByIsoCode(isoCode);
