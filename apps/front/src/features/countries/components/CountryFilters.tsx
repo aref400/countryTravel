@@ -1,4 +1,4 @@
-import type { CountryFilters } from "@/shared/services/countries.service";
+import type { CountryFilters } from "@/shared/types/CountryType";
 import { useEffect, useState } from "react";
 
 const CONTINENTS = [
