@@ -29,3 +29,9 @@ export interface RecommendationResponse {
     description: string | null;
   };
 }
+
+export interface SaveRecommendation {
+  name?: string;
+  criteriaSnapshot: RecoFormDto;
+  resultsSnapshot: RecommendationResponse[];
+}
