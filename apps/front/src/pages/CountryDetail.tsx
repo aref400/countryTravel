@@ -4,7 +4,7 @@ import {
   CRITERIA_LABELS,
 } from "@/shared/constants/countries.constants";
 import { useCountry } from "@/shared/hooks/useCountry";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 export function CountryDetail() {
   const { isoCode } = useParams<{ isoCode: string }>();
@@ -31,12 +31,12 @@ export function CountryDetail() {
           Le pays que vous recherchez n'existe pas ou n'est pas encore
           disponible.
         </p>
-        <a
-          href="/"
+        <Link
+          to="/"
           className="mt-2 text-sm font-semibold text-green-600 hover:underline"
         >
           ← Retour à l'accueil
-        </a>
+        </Link>
       </div>
     );
   }

@@ -9,6 +9,25 @@ export function RandomPage() {
   const [revealed, setRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    const loadRandom = async () => {
+      setCountry(null);
+      setRevealed(false);
+      setError(null);
+      try {
+        const data = await getRandomCountry();
+        if (!cancelled) setCountry(data);
+      } catch {
+        if (!cancelled) setError("Impossible de charger un pays aléatoire.");
+      }
+    };
+    loadRandom();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const fetchRandom = useCallback(async () => {
     setCountry(null);
     setRevealed(false);
@@ -19,27 +38,6 @@ export function RandomPage() {
     } catch {
       setError("Impossible de charger un pays aléatoire.");
     }
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setCountry(null);
-      setRevealed(false);
-      setError(null);
-      try {
-        const data = await getRandomCountry();
-        if (!cancelled) setCountry(data);
-      } catch {
-        if (!cancelled) setError("Impossible de charger un pays aléatoire.");
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   return (

@@ -1252,14 +1252,14 @@
           "title": "Front — Formulaire de recommandation multi-étapes",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Page /recommandation : 5 étapes (stepper), sliders, toggles, multi-select tags. Affichage top 5 résultats avec score %. Bouton Sauvegarder si connecté.",
           "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
               "id": "CT-016-AC-1",
               "description": "Stepper 5 étapes fonctionnel",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1270,7 +1270,7 @@
             {
               "id": "CT-016-AC-2",
               "description": "5 résultats affichés après soumission",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1281,7 +1281,7 @@
             {
               "id": "CT-016-AC-3",
               "description": "Bouton Sauvegarder visible si connecté",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1292,7 +1292,7 @@
             {
               "id": "CT-016-AC-4",
               "description": "État formulaire conservé entre étapes",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1307,14 +1307,14 @@
           "title": "Front — Page destination aléatoire",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Page /aleatoire : formulaire simplifié + bouton Surprends-moi + animation révélation + bouton Autre destination.",
           "dependencies": ["CT-014"],
           "acceptance_criteria": [
             {
               "id": "CT-017-AC-1",
               "description": "Bouton Surprends-moi retourne 1 pays avec animation",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1325,7 +1325,7 @@
             {
               "id": "CT-017-AC-2",
               "description": "Bouton Autre destination relance la requête",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
