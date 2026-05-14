@@ -30,7 +30,13 @@ export function useRecommendations() {
   };
   useEffect(() => {
     const cached = sessionStorage.getItem("reco_results");
-    if (cached) setRecommendations(JSON.parse(cached));
+    if (cached) {
+      try {
+        setRecommendations(JSON.parse(cached));
+      } catch {
+        sessionStorage.removeItem("reco_results");
+      }
+    }
   }, []);
 
   return {
