@@ -6,8 +6,7 @@ const CONTINENTS = [
   { value: "europe", label: "Europe" },
   { value: "asia", label: "Asie" },
   { value: "africa", label: "Afrique" },
-  { value: "north_america", label: "Amérique du Nord" },
-  { value: "south_america", label: "Amérique du Sud" },
+  { value: "americas", label: "Amériques" },
   { value: "oceania", label: "Océanie" },
 ];
 

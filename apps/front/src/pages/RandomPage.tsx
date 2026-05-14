@@ -22,25 +22,8 @@ export function RandomPage() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setCountry(null);
-      setRevealed(false);
-      setError(null);
-      try {
-        const data = await getRandomCountry();
-        if (!cancelled) setCountry(data);
-      } catch {
-        if (!cancelled) setError("Impossible de charger un pays aléatoire.");
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    fetchRandom();
+  }, [fetchRandom]);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">

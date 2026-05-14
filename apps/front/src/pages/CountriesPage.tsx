@@ -6,7 +6,7 @@ import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 export function CountriesPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") ?? "";
 
   const { countries, loading, error, hasMore, applyFilters, loadMore } =
@@ -20,8 +20,11 @@ export function CountriesPage() {
   const handleFiltersChange = useCallback(
     (filters: CountryFiltersType) => {
       applyFilters(filters);
+      const params = new URLSearchParams();
+      if (filters.search) params.set("search", filters.search);
+      setSearchParams(params, { replace: true });
     },
-    [applyFilters],
+    [applyFilters, setSearchParams],
   );
 
   return (

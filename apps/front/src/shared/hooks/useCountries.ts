@@ -11,7 +11,6 @@ export function useCountries(staticLimit?: number) {
   const [hasMore, setHasMore] = useState(false);
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<CountryFilters>({});
-  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,12 +41,12 @@ export function useCountries(staticLimit?: number) {
     return () => {
       cancelled = true;
     };
-  }, [page, filters, staticLimit, reset]);
+  }, [page, filters, staticLimit]);
 
   const applyFilters = useCallback((newFilters: CountryFilters) => {
+    setCountries([]);
     setFilters(newFilters);
     setPage(1);
-    setReset((r) => !r);
   }, []);
 
   const loadMore = useCallback(() => {
