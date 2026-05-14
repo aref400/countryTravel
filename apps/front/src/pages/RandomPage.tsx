@@ -9,6 +9,25 @@ export function RandomPage() {
   const [revealed, setRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    const loadRandom = async () => {
+      setCountry(null);
+      setRevealed(false);
+      setError(null);
+      try {
+        const data = await getRandomCountry();
+        if (!cancelled) setCountry(data);
+      } catch {
+        if (!cancelled) setError("Impossible de charger un pays aléatoire.");
+      }
+    };
+    loadRandom();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const fetchRandom = useCallback(async () => {
     setCountry(null);
     setRevealed(false);
@@ -20,10 +39,6 @@ export function RandomPage() {
       setError("Impossible de charger un pays aléatoire.");
     }
   }, []);
-
-  useEffect(() => {
-    fetchRandom();
-  }, [fetchRandom]);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
