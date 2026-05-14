@@ -2,6 +2,7 @@ import { useAuthStore } from "@/shared/store/auth.store";
 import { useState } from "react";
 import { Link } from "react-router";
 import { RecoCard } from "../features/recommendations/components/RecoCard";
+import { SaveRecoModal } from "../features/recommendations/components/SaveRecoModal";
 import {
   Step1Practical,
   Step2Climate,
@@ -11,11 +12,14 @@ import {
 } from "../features/recommendations/components/steps";
 import { DEFAULT_FORM, STEPS } from "../features/recommendations/constants";
 import { useRecommendations } from "../features/recommendations/hooks/useRecommendations";
+import { saveRecommendation } from "../features/recommendations/services/recommendations.service";
 import type { RecoFormDto } from "../features/recommendations/types";
 
 export function RecommendationPage() {
   const { user } = useAuthStore();
   const [step, setStep] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [formData, setFormData] = useState<RecoFormDto>(DEFAULT_FORM);
   const { recommendations, loading, error, computeRecommendations, reset } =
     useRecommendations();
@@ -36,6 +40,19 @@ export function RecommendationPage() {
 
   const handleSubmit = async () => {
     await computeRecommendations(formData);
+  };
+
+  const handleSave = async (name?: string) => {
+    try {
+      await saveRecommendation({
+        name: name || "Test",
+        criteriaSnapshot: formData,
+        resultsSnapshot: recommendations,
+      });
+      setIsModalOpen(false);
+    } catch {
+      setSaveError("Erreur lors de la sauvegarde");
+    }
   };
 
   const handleReset = () => {
@@ -176,24 +193,35 @@ export function RecommendationPage() {
               </div>
 
               {user && (
-                <button
-                  type="button"
-                  className="mt-4 w-full py-3 bg-gray-900 text-white text-sm font-semibold rounded-2xl hover:bg-gray-800 transition-colors"
-                >
-                  Sauvegarder ces recommandations
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="mt-4 w-full py-3 bg-green-500 text-white text-sm font-semibold rounded-2xl hover:bg-green-600 transition-colors"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    Sauvegarder ces recommandations
+                  </button>
+                  <SaveRecoModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSave}
+                    error={saveError}
+                  />
+                </>
               )}
 
               {!user && (
-                <p className="text-center text-xs text-gray-400 mt-2">
-                  <Link
-                    to="/login"
-                    className="text-green-600 underline underline-offset-2"
-                  >
-                    Connectez-vous
-                  </Link>{" "}
-                  pour sauvegarder vos résultats.
-                </p>
+                <>
+                  <p className="text-center text-xs text-gray-400 mt-2">
+                    <Link
+                      to="/auth/login"
+                      className="text-green-600 underline underline-offset-2"
+                    >
+                      Connectez-vous
+                    </Link>{" "}
+                    pour sauvegarder vos résultats.
+                  </p>
+                </>
               )}
             </>
           )}

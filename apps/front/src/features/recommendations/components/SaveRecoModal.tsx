@@ -1,0 +1,60 @@
+import { X } from "lucide-react";
+import { useState } from "react";
+
+interface Props {
+  isOpen: boolean;
+  error?: string | null;
+  onClose: () => void;
+  onSave: (name?: string) => void;
+}
+
+export function SaveRecoModal({ isOpen, error, onClose, onSave }: Props) {
+  const [name, setName] = useState("");
+  return (
+    <div
+      className={`fixed inset-0 bg-black/50 items-center justify-center ${isOpen ? "flex" : "hidden"}`}
+    >
+      <div className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            Sauvegarder les recommandations
+          </h2>
+          <button onClick={onClose}>
+            <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+          </button>
+        </div>
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Nom
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex: Voyage en Asie"
+            id="name"
+            className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+        {error && <p className="text-red-500 text-xs">{error}</p>}
+        <div className="flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 px-5 py-2.5 text-sm font-semibold text-gray-500 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={() => onSave(name)}
+            className="flex-1 px-6 py-2.5 bg-green-500 text-white text-sm font-semibold rounded-xl hover:bg-green-600 transition-colors"
+          >
+            Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
