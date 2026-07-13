@@ -115,7 +115,7 @@ export function RecommendationPage() {
             </div>
 
             {/* Step content */}
-            <div className="min-h-[260px]">
+            <div className="min-h-65">
               {step === 1 && (
                 <Step1Practical values={formData} onChange={handleChange} />
               )}
@@ -211,17 +211,15 @@ export function RecommendationPage() {
               )}
 
               {!user && (
-                <>
-                  <p className="text-center text-xs text-gray-400 mt-2">
-                    <Link
-                      to="/auth/login"
-                      className="text-green-600 underline underline-offset-2"
-                    >
-                      Connectez-vous
-                    </Link>{" "}
-                    pour sauvegarder vos résultats.
-                  </p>
-                </>
+                <p className="text-center text-xs text-gray-400 mt-2">
+                  <Link
+                    to="/auth/login"
+                    className="text-green-600 underline underline-offset-2"
+                  >
+                    Connectez-vous
+                  </Link>{" "}
+                  pour sauvegarder vos résultats.
+                </p>
               )}
             </>
           )}
