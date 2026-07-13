@@ -27,6 +27,9 @@ jobs:
       - name: Lint API
         run: npm run lint --workspace=apps/api
 
+      - name: Test API
+        run: npm run test --workspace=apps/api
+
       - name: Build API
         run: npm run build --workspace=apps/api
 
