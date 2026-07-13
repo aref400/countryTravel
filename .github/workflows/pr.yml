@@ -36,5 +36,8 @@ jobs:
       - name: Lint Front
         run: npm run lint --workspace=apps/front
 
+      - name: Test Front
+        run: npm run test --workspace=apps/front
+
       - name: Build Front
         run: npm run build --workspace=apps/front
