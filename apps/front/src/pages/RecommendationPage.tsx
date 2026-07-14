@@ -168,7 +168,9 @@ export function RecommendationPage() {
         /* Results */
         <div className="flex flex-col gap-4">
           {error && (
-            <div className="text-center py-8 text-red-400 text-sm">{error}</div>
+            <div role="alert" className="text-center py-8 text-red-400 text-sm">
+              {error}
+            </div>
           )}
 
           {recommendations.length > 0 && (
