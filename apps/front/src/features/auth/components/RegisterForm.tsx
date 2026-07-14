@@ -119,6 +119,11 @@ export const RegisterForm = () => {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                aria-label={
+                  showPassword
+                    ? "Masquer le mot de passe"
+                    : "Afficher le mot de passe"
+                }
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />
@@ -146,6 +151,11 @@ export const RegisterForm = () => {
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                aria-label={
+                  showConfirm
+                    ? "Masquer la confirmation du mot de passe"
+                    : "Afficher la confirmation du mot de passe"
+                }
               >
                 {showConfirm ? (
                   <EyeOff className="w-4 h-4" />

@@ -78,6 +78,12 @@ export function Navbar() {
           >
             Page pays
           </Link>
+          <Link
+            to="/carte"
+            className={`text-sm ${pathname === "/carte" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-700`}
+          >
+            Carte
+          </Link>
           {isAuthenticated() ? (
             <>
               <Link
@@ -116,6 +122,10 @@ export function Navbar() {
           <button
             onClick={() => setSearchOpen(!searchOpen)}
             className="p-1 text-gray-500"
+            aria-label={
+              searchOpen ? "Fermer la recherche" : "Ouvrir la recherche"
+            }
+            aria-expanded={searchOpen}
           >
             <svg
               className="w-5 h-5"
@@ -134,6 +144,8 @@ export function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-1 text-gray-500"
+            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? (
               <svg
@@ -221,6 +233,13 @@ export function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Page pays
+          </Link>
+          <Link
+            to="/carte"
+            className={`text-sm ${pathname === "/carte" ? "text-green-600 font-semibold" : "text-gray-500"}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Carte
           </Link>
           <div className="border-t border-gray-100 pt-3 flex gap-2">
             {isAuthenticated() ? (

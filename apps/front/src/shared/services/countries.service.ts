@@ -3,6 +3,7 @@ import type {
   CountriesResponse,
   CountryDetail,
   CountryFilters,
+  CountryMapData,
 } from "../types/CountryType";
 
 export const getCountries = (filters: CountryFilters = {}) => {
@@ -17,3 +18,6 @@ export const getCountries = (filters: CountryFilters = {}) => {
 
 export const getCountryByIsoCode = (isoCode: string) =>
   apiClient.get<CountryDetail>(`/v1/countries/${isoCode}`);
+
+export const getMapData = () =>
+  apiClient.get<CountryMapData[]>(`/v1/countries/map/all`);

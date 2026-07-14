@@ -38,7 +38,7 @@ describe('CountriesController', () => {
       const mockResult = { data: [], meta: { page: 1, limit: 20, total: 0 } };
       mockCountriesService.findAll.mockResolvedValue(mockResult);
 
-      const result = await controller.getAllCountries(1, 20);
+      const result = await controller.getAllCountries({ page: 1, limit: 20 });
 
       expect(result).toEqual(mockResult);
       expect(mockCountriesService.findAll).toHaveBeenCalledWith(1, 20, {
