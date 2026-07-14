@@ -77,6 +77,7 @@ export function CountryFilters({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un pays..."
+          aria-label="Rechercher un pays"
           className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-300 focus:border-transparent placeholder:text-gray-400"
         />
       </div>
@@ -85,6 +86,7 @@ export function CountryFilters({
         <select
           value={continent}
           onChange={(e) => setContinent(e.target.value)}
+          aria-label="Filtrer par continent"
           className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-300 text-gray-700"
         >
           {CONTINENTS.map((c) => (
@@ -97,6 +99,7 @@ export function CountryFilters({
         <select
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
+          aria-label="Filtrer par monnaie"
           className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-300 text-gray-700"
         >
           {CURRENCIES.map((c) => (

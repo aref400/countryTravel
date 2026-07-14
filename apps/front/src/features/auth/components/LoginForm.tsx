@@ -60,26 +60,31 @@ export const LoginForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-700">
+            <label htmlFor="email" className="text-sm font-semibold text-gray-700">
               Adresse Email
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="email"
                 className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 placeholder:text-gray-300"
                 type="email"
                 placeholder="vous@exemple.com"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 {...register("email")}
               />
             </div>
             {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email.message}</p>
+              <p id="email-error" role="alert" className="text-red-500 text-xs">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-gray-700">
+              <label htmlFor="password" className="text-sm font-semibold text-gray-700">
                 Mot de passe
               </label>
               <Link
@@ -92,8 +97,11 @@ export const LoginForm = () => {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="password"
                 className="w-full border border-gray-200 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                 type={showPassword ? "text" : "password"}
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? "password-error" : undefined}
                 {...register("password")}
               />
               <button
@@ -114,7 +122,9 @@ export const LoginForm = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password.message}</p>
+              <p id="password-error" role="alert" className="text-red-500 text-xs">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -127,7 +137,9 @@ export const LoginForm = () => {
           </label>
         </div>
         {apiError && (
-          <p className="text-red-500 text-xs text-center mt-2">{apiError}</p>
+          <p role="alert" className="text-red-500 text-xs text-center mt-2">
+            {apiError}
+          </p>
         )}
         <button
           className="w-full mt-5 bg-green-500 hover:bg-green-600 transition-colors text-white font-semibold py-2.5 rounded-lg text-sm"

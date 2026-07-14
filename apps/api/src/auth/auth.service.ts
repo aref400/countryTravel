@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -16,9 +17,11 @@ interface JwtPayload {
 }
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
   ) {}
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -64,6 +67,7 @@ export class AuthService {
       },
     });
     if (!user) {
+      this.logger.warn(`Login échoué (email inconnu) : ${dto.email}`);
       throw new UnauthorizedException('User not found');
     }
     if (!user.passwordHash) {
@@ -74,8 +78,10 @@ export class AuthService {
       user.passwordHash,
     );
     if (!isPasswordValid) {
+      this.logger.warn(`Login échoué (mot de passe invalide) : ${dto.email}`);
       throw new UnauthorizedException('Invalid password');
     }
+    this.logger.log(`Login réussi : ${dto.email}`);
     const tokens = await this.generateTokens(user.id, user.email);
     return {
       user: {
