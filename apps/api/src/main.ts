@@ -28,20 +28,25 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger — doc auto à /api/docs
-  const config = new DocumentBuilder()
-    .setTitle('Country Travel API')
-    .setDescription('API REST Country Travel — Documentation complète')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  // Swagger — doc auto à /api/docs, désactivée en production (A05 OWASP :
+  // ne pas exposer publiquement le détail des routes/DTOs de l'API)
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Country Travel API')
+      .setDescription('API REST Country Travel — Documentation complète')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
   console.log(`Country Travel API running on http://localhost:${port}`);
-  console.log(`Swagger docs: http://localhost:${port}/api/docs`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`Swagger docs: http://localhost:${port}/api/docs`);
+  }
 }
 
 bootstrap().catch((err) => {

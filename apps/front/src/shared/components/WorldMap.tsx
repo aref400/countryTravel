@@ -51,9 +51,10 @@ export function WorldMap({
   onCountryClick,
 }: Readonly<WorldMapProps>) {
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
+  const [focusedKey, setFocusedKey] = useState<string | null>(null);
 
   return (
-    <div className="relative w-full h-[70vh] max-h-[640px] min-h-[380px]">
+    <div className="relative w-full h-[70vh] max-h-160 min-h-95">
       <ComposableMap
         projection="geoEqualEarth"
         width={MAP_WIDTH}
@@ -73,13 +74,20 @@ export function WorldMap({
             {({ geographies }: { geographies: CountryGeography[] }) =>
               geographies.map((geo) => {
                 const alpha2 = getAlpha2FromNumericId(String(geo.id));
+                const isFocused = focusedKey === geo.rsmKey;
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
                     fill={getColor(alpha2)}
-                    stroke="#ffffff"
-                    strokeWidth={0.5}
+                    stroke={isFocused ? "#16a34a" : "#ffffff"}
+                    strokeWidth={isFocused ? 2 : 0.5}
+                    // Seuls les pays reconnus (alpha2 défini) sont interactifs :
+                    // on ne rend focusable/annoncé que ce qui répond réellement
+                    // au clic, comme pour la souris (cf. MAP-05).
+                    tabIndex={alpha2 ? 0 : -1}
+                    role={alpha2 ? "button" : undefined}
+                    aria-label={alpha2 ? geo.properties.name : undefined}
                     onMouseEnter={(event) => {
                       setTooltip({
                         content: getTooltipContent(alpha2),
@@ -95,6 +103,29 @@ export function WorldMap({
                       );
                     }}
                     onMouseLeave={() => setTooltip(null)}
+                    onFocus={(event) => {
+                      if (!alpha2) return;
+                      setFocusedKey(geo.rsmKey);
+                      const rect = (
+                        event.target as SVGPathElement
+                      ).getBoundingClientRect();
+                      setTooltip({
+                        content: getTooltipContent(alpha2),
+                        x: rect.left + rect.width / 2,
+                        y: rect.top,
+                      });
+                    }}
+                    onBlur={() => {
+                      setFocusedKey(null);
+                      setTooltip(null);
+                    }}
+                    onKeyDown={(event) => {
+                      if (!alpha2) return;
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        onCountryClick(alpha2);
+                      }
+                    }}
                     onClick={() => onCountryClick(alpha2)}
                     style={{
                       default: { outline: "none" },
