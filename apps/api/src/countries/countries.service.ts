@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CountriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
   async findAll(
     page: number = 1,
     limit: number = 20,
@@ -85,6 +85,7 @@ export class CountriesService {
         name: country.name,
         flagUrl: country.flagUrl,
         avgRating,
+        nbReviews: ratings.length,
       };
     });
   }

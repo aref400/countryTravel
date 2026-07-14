@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
+import { CountriesQueryDto } from './dto/countries-query.dto';
 import { CountriesService } from './countries.service';
 
 @Controller('countries')
@@ -6,13 +7,8 @@ export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
 
   @Get()
-  async getAllCountries(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 20,
-    @Query('continent') continent?: string,
-    @Query('currency') currency?: string,
-    @Query('search') search?: string,
-  ) {
+  async getAllCountries(@Query() query: CountriesQueryDto) {
+    const { page, limit, continent, currency, search } = query;
     return this.countriesService.findAll(page, limit, {
       continent,
       currency,

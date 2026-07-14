@@ -12,14 +12,17 @@ export function SaveRecoModal({ isOpen, error, onClose, onSave }: Props) {
   const [name, setName] = useState("");
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="save-reco-title"
       className={`fixed inset-0 bg-black/50 items-center justify-center ${isOpen ? "flex" : "hidden"}`}
     >
       <div className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">
+          <h2 id="save-reco-title" className="text-lg font-semibold">
             Sauvegarder les recommandations
           </h2>
-          <button onClick={onClose}>
+          <button onClick={onClose} aria-label="Fermer">
             <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
           </button>
         </div>
