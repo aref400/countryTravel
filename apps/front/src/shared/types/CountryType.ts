@@ -42,3 +42,11 @@ export interface CountryDetail extends Country {
   avgRating: number | null;
   nbReviews: number;
 }
+
+export interface CountryMapData {
+  isoCode: string;
+  name: string;
+  flagUrl: string | null;
+  avgRating: number | null;
+  nbReviews: number;
+}

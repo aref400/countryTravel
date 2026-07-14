@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getCountries, getCountryByIsoCode } from "./countries.service";
+import { getCountries, getCountryByIsoCode, getMapData } from "./countries.service";
 
 describe("countries.service", () => {
   beforeEach(() => {
@@ -74,5 +74,29 @@ describe("countries.service", () => {
     await expect(getCountryByIsoCode("ZZZ")).rejects.toMatchObject({
       status: 404,
     });
+  });
+
+  it("getMapData appelle /v1/countries/map/all et retourne la liste", async () => {
+    const mockMapData = [
+      {
+        isoCode: "FR",
+        name: "France",
+        flagUrl: "flag.svg",
+        avgRating: 4.5,
+        nbReviews: 2,
+      },
+    ];
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => mockMapData,
+    } as Response);
+
+    const result = await getMapData();
+
+    expect(fetch).toHaveBeenCalledWith(
+      "http://localhost:3000/api/v1/countries/map/all",
+      expect.objectContaining({ method: "GET" }),
+    );
+    expect(result).toEqual(mockMapData);
   });
 });
