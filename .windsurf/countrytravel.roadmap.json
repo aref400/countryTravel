@@ -184,7 +184,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Créer le projet React 18 + Vite 5 + TypeScript. Configurer TailwindCSS, shadcn/ui, React Router v7 (declarative), Axios + JWT, Zustand, React Query. Architecture feature-based.",
-          "dependencies": ["CT-001"],
+          "dependencies": [
+            "CT-001"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-002-AC-1",
@@ -331,7 +333,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Schéma Prisma complet (7 modèles), première migration, PrismaService singleton global.",
-          "dependencies": ["CT-001"],
+          "dependencies": [
+            "CT-001"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-003-AC-1",
@@ -421,7 +425,10 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Pipelines GitHub Actions : lint + tests sur PR, déploiement Railway (api) et Netlify (front) sur push main.",
-          "dependencies": ["CT-001", "CT-002"],
+          "dependencies": [
+            "CT-001",
+            "CT-002"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-004-AC-1",
@@ -500,7 +507,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "AuthModule : RegisterDto, LoginDto, bcrypt, JWT access (15min) + refresh (7j), HttpExceptionFilter global.",
-          "dependencies": ["CT-003"],
+          "dependencies": [
+            "CT-003"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-005-AC-1",
@@ -619,7 +628,9 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Passport.js stratégies Google OAuth2 et GitHub. Upsert user + oauth_account. Redirect frontend avec tokens.",
-          "dependencies": ["CT-005"],
+          "dependencies": [
+            "CT-005"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-006-AC-1",
@@ -687,7 +698,11 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Pages auth avec React Hook Form + Zod, boutons OAuth, gestion erreurs API, redirection post-auth, PrivateRoute.",
-          "dependencies": ["CT-002", "CT-005", "CT-006"],
+          "dependencies": [
+            "CT-002",
+            "CT-005",
+            "CT-006"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-007-AC-1",
@@ -768,7 +783,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Script prisma/seed.ts qui appelle REST Countries API, mappe les données et insère les 195 pays. Upsert idempotent sur isoCode.",
-          "dependencies": ["CT-003"],
+          "dependencies": [
+            "CT-003"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-008-AC-1",
@@ -841,7 +858,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Script prisma/seed-criteria.ts avec données manuelles : budget, safety, temperature, tourism_level, family_friendly, et les 8 niveaux (nature_level, party_level, etc.).",
-          "dependencies": ["CT-008"],
+          "dependencies": [
+            "CT-008"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-009-AC-1",
@@ -897,7 +916,10 @@
           "priority": "Must Have",
           "status": "done",
           "description": "CountriesController + CountriesService : liste paginée, détail par isoCode, données carte, reviews d'un pays, pays similaires.",
-          "dependencies": ["CT-008", "CT-009"],
+          "dependencies": [
+            "CT-008",
+            "CT-009"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-010-AC-1",
@@ -976,7 +998,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "ScoringService injectable : calcule score 0-100 par pays selon RecoFormDto. Filtres éliminatoires puis score pondéré. Tests unitaires Jest.",
-          "dependencies": ["CT-009"],
+          "dependencies": [
+            "CT-009"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-011-AC-1",
@@ -1032,7 +1056,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Page d'accueil publique accessible sans connexion. Présente le concept du site, un accès au formulaire de recommandation, la destination aléatoire, et des liens vers login/register.",
-          "dependencies": ["CT-002"],
+          "dependencies": [
+            "CT-002"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-012-AC-1",
@@ -1076,7 +1102,10 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Page /pays/:isoCode : infos géo, critères visuels (barres), 8 niveaux de voyage, reviews, note moyenne, boutons J'y suis allé et Écrire un avis (si connecté + visité).",
-          "dependencies": ["CT-007", "CT-010"],
+          "dependencies": [
+            "CT-007",
+            "CT-010"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-013-AC-1",
@@ -1148,7 +1177,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "POST /recommendations/compute : top 5 scorés. GET /countries/random : tirage parmi top 20. OptionalJwtGuard. Temps réponse < 200ms.",
-          "dependencies": ["CT-011"],
+          "dependencies": [
+            "CT-011"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-014-AC-1",
@@ -1210,7 +1241,9 @@
           "priority": "Should Have",
           "status": "done",
           "description": "CRUD SavedRecommendation : save, get, rename, delete. JwtAuthGuard requis. Snapshot JSONB des critères et résultats.",
-          "dependencies": ["CT-014"],
+          "dependencies": [
+            "CT-014"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-015-AC-1",
@@ -1254,7 +1287,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Page /recommandation : 5 étapes (stepper), sliders, toggles, multi-select tags. Affichage top 5 résultats avec score %. Bouton Sauvegarder si connecté.",
-          "dependencies": ["CT-014"],
+          "dependencies": [
+            "CT-014"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-016-AC-1",
@@ -1309,7 +1344,9 @@
           "priority": "Must Have",
           "status": "done",
           "description": "Page /aleatoire : formulaire simplifié + bouton Surprends-moi + animation révélation + bouton Autre destination.",
-          "dependencies": ["CT-014"],
+          "dependencies": [
+            "CT-014"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-017-AC-1",
@@ -1340,14 +1377,16 @@
           "title": "Front — Carte mondiale interactive",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "Page /carte : React Simple Maps + TopoJSON. Couleur selon avg_rating. Hover tooltip. Clic → fiche pays. Zoom + pan.",
-          "dependencies": ["CT-010"],
+          "dependencies": [
+            "CT-010"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-018-AC-1",
               "description": "Carte SVG mondiale s'affiche",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1358,7 +1397,7 @@
             {
               "id": "CT-018-AC-2",
               "description": "Hover affiche tooltip avec note",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1369,7 +1408,7 @@
             {
               "id": "CT-018-AC-3",
               "description": "Clic redirige vers fiche pays",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1392,7 +1431,10 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "POST/DELETE visites, GET liste visites user, GET données carte personnelle.",
-          "dependencies": ["CT-005", "CT-010"],
+          "dependencies": [
+            "CT-005",
+            "CT-010"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-019-AC-1",
@@ -1453,7 +1495,9 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "CRUD Review. UPSERT (1 max par user par pays). 422 si pays non visité.",
-          "dependencies": ["CT-019"],
+          "dependencies": [
+            "CT-019"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-020-AC-1",
@@ -1497,7 +1541,11 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /dashboard (route protégée) : stats, carte personnelle colorisée, pays visités, recommandations sauvegardées, reviews.",
-          "dependencies": ["CT-019", "CT-020", "CT-015"],
+          "dependencies": [
+            "CT-019",
+            "CT-020",
+            "CT-015"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-021-AC-1",
@@ -1552,7 +1600,10 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "StarRating (cliquable + lecture seule), ReviewForm (textarea 2000 chars), ReviewCard. Mise à jour optimiste. Message si pays non visité.",
-          "dependencies": ["CT-020", "CT-013"],
+          "dependencies": [
+            "CT-020",
+            "CT-013"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-022-AC-1",
@@ -1602,7 +1653,9 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "GET profil public, PATCH profil perso, DELETE compte (RGPD).",
-          "dependencies": ["CT-005"],
+          "dependencies": [
+            "CT-005"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-023-AC-1",
@@ -1652,7 +1705,9 @@
           "priority": "Should Have",
           "status": "locked",
           "description": "Envoyer/accepter/refuser/supprimer demande d'ami. Statuts pending/accepted/blocked.",
-          "dependencies": ["CT-023"],
+          "dependencies": [
+            "CT-023"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-024-AC-1",
@@ -1707,7 +1762,10 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Page /profil/:username : avatar, stats, carte pays visités, reviews, bouton ami avec gestion statut.",
-          "dependencies": ["CT-023", "CT-024"],
+          "dependencies": [
+            "CT-023",
+            "CT-024"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-025-AC-1",
@@ -1751,7 +1809,10 @@
           "priority": "Should Have",
           "status": "locked",
           "description": "Page /recherche : barre avec debounce 300ms, onglets Pays / Utilisateurs, résultats cliquables.",
-          "dependencies": ["CT-010", "CT-023"],
+          "dependencies": [
+            "CT-010",
+            "CT-023"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-026-AC-1",
@@ -1801,7 +1862,11 @@
           "priority": "Should Have",
           "status": "locked",
           "description": "Tous les endpoints /admin/* protégés JwtAuthGuard + RolesGuard('admin'). Gestion pays (éditorial + critères), modération reviews, gestion users, stats dashboard.",
-          "dependencies": ["CT-005", "CT-010", "CT-020"],
+          "dependencies": [
+            "CT-005",
+            "CT-010",
+            "CT-020"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-027-AC-1",
@@ -1856,7 +1921,10 @@
           "priority": "Should Have",
           "status": "locked",
           "description": "Pages /admin/* accessibles si role=admin : dashboard stats, gestion pays + critères, modération reviews, gestion users.",
-          "dependencies": ["CT-027", "CT-007"],
+          "dependencies": [
+            "CT-027",
+            "CT-007"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-028-AC-1",
@@ -1917,7 +1985,11 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Tests Jest pour AuthService, ScoringService, ReviewsService, FriendshipsService. Couverture > 70% sur les services.",
-          "dependencies": ["CT-011", "CT-020", "CT-024"],
+          "dependencies": [
+            "CT-011",
+            "CT-020",
+            "CT-024"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-029-AC-1",
@@ -1965,7 +2037,9 @@
                     "timeout": 30
                   }
                 ],
-                "questions": ["Est-ce que tous les tests AuthService passent ?"]
+                "questions": [
+                  "Est-ce que tous les tests AuthService passent ?"
+                ]
               }
             },
             {
@@ -1994,7 +2068,11 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Tests E2E Playwright : inscription, recommandation, ajout visite, review.",
-          "dependencies": ["CT-016", "CT-017", "CT-022"],
+          "dependencies": [
+            "CT-016",
+            "CT-017",
+            "CT-022"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-030-AC-1",
@@ -2008,7 +2086,9 @@
                     "timeout": 120
                   }
                 ],
-                "questions": ["Est-ce que le test E2E auth passe sans erreur ?"]
+                "questions": [
+                  "Est-ce que le test E2E auth passe sans erreur ?"
+                ]
               }
             },
             {
@@ -2071,7 +2151,10 @@
           "priority": "Must Have",
           "status": "locked",
           "description": "Déployer en production sur Railway (api + DB) et Netlify (front). Configurer Uptime Robot, variables d'env prod, DNS, HTTPS.",
-          "dependencies": ["CT-029", "CT-030"],
+          "dependencies": [
+            "CT-029",
+            "CT-030"
+          ],
           "acceptance_criteria": [
             {
               "id": "CT-031-AC-1",

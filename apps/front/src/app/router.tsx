@@ -2,6 +2,7 @@ import { About } from "@/pages/About";
 import { CountriesPage } from "@/pages/CountriesPage";
 import { CountryDetail } from "@/pages/CountryDetail";
 import { Home } from "@/pages/Home";
+import { MapPage } from "@/pages/MapPage";
 import { Route, Routes } from "react-router";
 import { authRoutes } from "../features/auth/auth.routes";
 import { RandomPage } from "../pages/RandomPage";
@@ -16,6 +17,7 @@ export function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/pays" element={<CountriesPage />} />
         <Route path="/pays/:isoCode" element={<CountryDetail />} />
+        <Route path="/carte" element={<MapPage />} />
         <Route path="/recommandation" element={<RecommendationPage />} />
         <Route path="/random" element={<RandomPage />} />
         <Route element={<PrivateRoute />}>

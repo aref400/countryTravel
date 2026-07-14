@@ -171,11 +171,17 @@ describe('CountriesService', () => {
 
       // Assert — avgRating calculé en JS : (4+5)/2 = 4.5
       expect(result).toEqual([
-        { isoCode: 'FR', name: 'France', flagUrl: 'flag.svg', avgRating: 4.5 },
+        {
+          isoCode: 'FR',
+          name: 'France',
+          flagUrl: 'flag.svg',
+          avgRating: 4.5,
+          nbReviews: 2,
+        },
       ]);
     });
 
-    it('should return null avgRating if no reviews', async () => {
+    it('should return null avgRating and nbReviews 0 if no reviews', async () => {
       mockPrismaService.country.findMany.mockResolvedValue([
         { isoCode: 'JP', name: 'Japan', flagUrl: null, reviews: [] },
       ]);
@@ -183,6 +189,7 @@ describe('CountriesService', () => {
       const result = await service.findMapData();
 
       expect(result[0].avgRating).toBeNull();
+      expect(result[0].nbReviews).toBe(0);
     });
   });
 });

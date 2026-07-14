@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations et page destination aléatoire.
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire et carte mondiale interactive.
 
 ## Méthodologie
 
@@ -127,7 +127,20 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 
 ---
 
-## 5. Navigation générale front
+## 5. Carte mondiale interactive (front — CT-018)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| MAP-01 | Affichage de la carte | Page `/carte` ouverte | Charger la page | Une carte SVG du monde s'affiche, chaque pays coloré selon sa note moyenne (gris si aucune review) | ⏳ |
+| MAP-02 | Tooltip au survol | Carte affichée | Survoler un pays (ex. la France) | Un tooltip affiche le nom du pays, sa note moyenne et son nombre de reviews | ⏳ |
+| MAP-03 | Navigation vers la fiche pays | Carte affichée | Cliquer sur un pays reconnu (ex. la France) | Redirection vers `/pays/FR` | ⏳ |
+| MAP-04 | Zoom et déplacement | Carte affichée | Utiliser la molette pour zoomer, glisser pour déplacer la carte | La carte zoome et se déplace sans erreur d'affichage | ⏳ |
+| MAP-05 | Clic sur une zone non reconnue | Carte affichée | Cliquer sur une zone du TopoJSON sans correspondance ISO (ex. territoire non souverain) | Aucune navigation ni erreur ; le clic est ignoré silencieusement | ⏳ |
+| MAP-06 | Accès à `/carte` sans connexion | Non connecté | Naviguer directement vers `/carte` | La page se charge normalement (route publique) | ⏳ |
+
+---
+
+## 6. Navigation générale front
 
 | ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
 |---|---|---|---|---|---|
