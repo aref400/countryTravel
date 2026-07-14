@@ -60,7 +60,9 @@ export function MapPage() {
 
       <div className="relative w-full px-4 pb-10">
         {error ? (
-          <div className="text-center py-16 text-red-400 text-sm">{error}</div>
+          <div role="alert" className="text-center py-16 text-red-400 text-sm">
+            {error}
+          </div>
         ) : loading ? (
           <div className="text-center py-16 text-gray-400 text-sm animate-pulse">
             Chargement de la carte...

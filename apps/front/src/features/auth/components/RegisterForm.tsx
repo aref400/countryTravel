@@ -71,48 +71,61 @@ export const RegisterForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-700">
+            <label htmlFor="username" className="text-sm font-semibold text-gray-700">
               Username
             </label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="username"
                 className={inputClass}
                 type="text"
                 placeholder="Username"
+                aria-invalid={!!errors.username}
+                aria-describedby={errors.username ? "username-error" : undefined}
                 {...register("username")}
               />
             </div>
             {errors.username && (
-              <p className="text-red-500 text-xs">{errors.username.message}</p>
+              <p id="username-error" role="alert" className="text-red-500 text-xs">
+                {errors.username.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-700">
+            <label htmlFor="email" className="text-sm font-semibold text-gray-700">
               Adresse Email
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="email"
                 className={inputClass}
                 type="email"
                 placeholder="vous@exemple.com"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 {...register("email")}
               />
             </div>
             {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email.message}</p>
+              <p id="email-error" role="alert" className="text-red-500 text-xs">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-700">
+            <label htmlFor="password" className="text-sm font-semibold text-gray-700">
               Mot de passe
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="password"
                 className="w-full border border-gray-200 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                 type={showPassword ? "text" : "password"}
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? "password-error" : undefined}
                 {...register("password")}
               />
               <button
@@ -133,18 +146,25 @@ export const RegisterForm = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password.message}</p>
+              <p id="password-error" role="alert" className="text-red-500 text-xs">
+                {errors.password.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-700">
+            <label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
               Confirmer le mot de passe
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="confirmPassword"
                 className="w-full border border-gray-200 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                 type={showConfirm ? "text" : "password"}
+                aria-invalid={!!errors.confirmPassword}
+                aria-describedby={
+                  errors.confirmPassword ? "confirmPassword-error" : undefined
+                }
                 {...register("confirmPassword")}
               />
               <button
@@ -165,7 +185,11 @@ export const RegisterForm = () => {
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-xs">
+              <p
+                id="confirmPassword-error"
+                role="alert"
+                className="text-red-500 text-xs"
+              >
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -174,6 +198,10 @@ export const RegisterForm = () => {
             <input
               type="checkbox"
               className="mt-0.5 w-4 h-4 accent-green-500"
+              aria-invalid={!!errors.acceptTerms}
+              aria-describedby={
+                errors.acceptTerms ? "acceptTerms-error" : undefined
+              }
               {...register("acceptTerms")}
             />
             <span className="text-xs text-gray-500">
@@ -185,14 +213,16 @@ export const RegisterForm = () => {
             </span>
           </label>
           {errors.acceptTerms && (
-            <p className="text-red-500 text-xs -mt-2">
+            <p id="acceptTerms-error" role="alert" className="text-red-500 text-xs -mt-2">
               {errors.acceptTerms.message}
             </p>
           )}
         </div>
 
         {apiError && (
-          <p className="text-red-500 text-xs text-center mt-2">{apiError}</p>
+          <p role="alert" className="text-red-500 text-xs text-center mt-2">
+            {apiError}
+          </p>
         )}
         <button
           type="submit"

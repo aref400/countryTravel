@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire et carte mondiale interactive.
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -147,6 +147,34 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | NAV-01 | Accès à une URL inconnue | — | Naviguer vers `/une-url-qui-nexiste-pas` | Page 404 gérée par le routeur, pas d'erreur blanche (régression corrigée) | ⏳ |
 | NAV-02 | Accès à une page protégée sans connexion | Non connecté | Naviguer vers une route nécessitant `PrivateRoute` | Redirection vers la page de login | ⏳ |
 | NAV-03 | Page d'accueil accessible sans connexion | Non connecté | Naviguer vers `/` | Page d'accueil affichée, liens vers login/register visibles | ⏳ |
+
+---
+
+## 7. Sécurité
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| SEC-01 | Démarrage sans `JWT_SECRET` | Variable `JWT_SECRET` absente de l'environnement | Démarrer l'API | L'API refuse de démarrer (erreur explicite), pas de démarrage avec un secret par défaut | ✅ |
+| SEC-02 | Rate limiting sur `/auth/login` | — | Envoyer 6 requêtes `POST /auth/login` en moins d'une minute depuis la même IP | Les 5 premières sont traitées normalement, la 6e renvoie 429 Too Many Requests | ✅ |
+| SEC-03 | Rate limiting sur `/auth/register` | — | Envoyer 6 requêtes `POST /auth/register` en moins d'une minute depuis la même IP | La 6e renvoie 429 Too Many Requests | ✅ |
+| SEC-04 | Logging d'une tentative de connexion échouée | — | Tenter une connexion avec un email valide et un mauvais mot de passe | Un log serveur de niveau warning est émis (email visible, mot de passe jamais loggé) | ✅ |
+| SEC-05 | Logging d'une connexion réussie | Compte existant | Se connecter avec des identifiants valides | Un log serveur de niveau info confirme la connexion | ✅ |
+| SEC-06 | Swagger désactivé en production | `NODE_ENV=production` | Appeler `GET /api/docs` | Code 404, la documentation d'API n'est pas exposée publiquement | ✅ |
+| SEC-07 | Swagger disponible en développement | `NODE_ENV` différent de `production` | Appeler `GET /api/docs` | Code 200, documentation accessible (comportement dev inchangé) | ✅ |
+
+---
+
+## 8. Accessibilité (RGAA)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| A11Y-01 | Navigation clavier sur la carte du monde | Page `/carte` ouverte | Naviguer avec `Tab` jusqu'à atteindre un pays reconnu, observer le focus, valider avec `Entrée` | Un contour vert identifie visuellement le pays actif au clavier ; le tooltip affiche les mêmes informations qu'au survol souris ; `Entrée`/`Espace` déclenche la navigation vers `/pays/:code` comme un clic | ✅ |
+| A11Y-02 | Fermeture de la modale de sauvegarde au clavier | Modale `SaveRecoModal` ouverte | Appuyer sur `Echap` | La modale se ferme, le focus revient sur l'élément qui l'a ouverte | ✅ |
+| A11Y-03 | Piège de focus dans la modale | Modale `SaveRecoModal` ouverte | Appuyer sur `Tab` de façon répétée | Le focus reste cantonné aux éléments interactifs de la modale, ne s'échappe pas vers la page en dessous | ✅ |
+| A11Y-04 | Association labels/champs — formulaires d'authentification | — | Naviguer au clavier ou avec un lecteur d'écran dans `LoginForm`/`RegisterForm` | Chaque champ est annoncé avec son label associé (email, mot de passe, username, confirmation) | ✅ |
+| A11Y-05 | Annonce des erreurs de validation | — | Soumettre un formulaire invalide (login, register, sauvegarde de reco, moteur de recommandation) | Le message d'erreur est annoncé automatiquement (zone `role="alert"`), sans action supplémentaire de l'utilisateur | ✅ |
+| A11Y-06 | Filtres de la liste des pays accessibles | Page `/pays` ouverte | Naviguer au clavier/lecteur d'écran dans `CountryFilters` | Chaque champ (recherche, continent, monnaie) possède un nom accessible (`aria-label`) | ✅ |
+| A11Y-07 | Langue déclarée de la page | — | Inspecter l'attribut `lang` de `<html>` | `lang="fr"` | ✅ |
 
 ---
 

@@ -21,9 +21,9 @@ export const AppLayouts = () => {
         }}
       />
       <Navbar />
-      <div className="relative z-10">
+      <main className="relative z-10">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };

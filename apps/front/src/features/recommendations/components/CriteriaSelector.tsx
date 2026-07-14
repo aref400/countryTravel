@@ -20,17 +20,26 @@ export function CriteriaSelector({
   value,
   onChange,
 }: CriteriaSelectorProps) {
+  const labelId = `criteria-${label.replace(/\s+/g, "-").toLowerCase()}`;
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <p className="font-semibold text-gray-800 text-sm">{label}</p>
+        <p id={labelId} className="font-semibold text-gray-800 text-sm">
+          {label}
+        </p>
         <p className="text-xs text-gray-400 mt-0.5">{description}</p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <div
+        role="radiogroup"
+        aria-labelledby={labelId}
+        className="grid grid-cols-2 sm:grid-cols-5 gap-2"
+      >
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}
             type="button"
+            role="radio"
+            aria-checked={value === n}
             onClick={() => onChange(n)}
             className={`flex-1 py-2.5 rounded-xl border-2 text-xs font-semibold transition-all duration-150 ${
               value === n

@@ -23,7 +23,7 @@ export function Step1Practical({ values, onChange }: Props) {
       />
       <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
         <div>
-          <p className="font-semibold text-gray-800 text-sm">
+          <p id="family-friendly-label" className="font-semibold text-gray-800 text-sm">
             Voyage en famille
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
@@ -32,6 +32,9 @@ export function Step1Practical({ values, onChange }: Props) {
         </div>
         <button
           type="button"
+          role="switch"
+          aria-checked={values.familyFriendly}
+          aria-labelledby="family-friendly-label"
           onClick={() => onChange("familyFriendly", !values.familyFriendly)}
           className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
             values.familyFriendly ? "bg-green-500" : "bg-gray-200"
