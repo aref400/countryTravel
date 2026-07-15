@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:front": "npm run dev --workspace=apps/front",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:front\"",
+    "db:setup": "npm run db:setup --workspace=apps/api",
     "build:api": "npm run build --workspace=apps/api",
     "build:front": "npm run build --workspace=apps/front",
     "start:api": "npm run start:prod --workspace=apps/api",

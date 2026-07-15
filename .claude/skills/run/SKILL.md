@@ -11,13 +11,15 @@ description: Launch the CountryTravel dev environment (NestJS API on :3000 + Rea
    - `FRONTEND_URL` (defaults to `http://localhost:5173` if unset — only needed if the front runs on a different port)
    - `PORT` (defaults to `3000` if unset)
 
-   If `apps/api/.env` is missing, tell the user which variables are required and stop — do not invent secrets or a database URL.
+   If `apps/api/.env` is missing, copy `apps/api/.env.example` as a starting point (its default `DATABASE_URL` targets the local Docker database below) and tell the user to fill in real JWT secrets — do not invent secrets.
 
-2. If this is the first run, or the user mentions schema/migration errors, run migrations from `apps/api`:
+2. If no PostgreSQL is reachable, `docker compose up -d` from the repo root starts a local one matching `.env.example` (requires Docker; Lucas develops against a hosted Railway DB, so his own `.env` won't need this).
+
+3. If this is the first run, or the user mentions schema/migration errors, or the database looks empty (e.g. `GET /countries` returns no results once the API is up), run from the repo root:
    ```
-   npx prisma migrate dev
+   npm run db:setup
    ```
-   If the database looks empty (e.g. `GET /countries` returns no results once the API is up), offer to run the seed scripts (`apps/api/prisma/seed.ts`, `seed-all.ts`, `seed-criteria.ts`) — ask before seeding, since it writes to the database.
+   (= `prisma migrate deploy && prisma db seed` in `apps/api`; the seed is `prisma/seed-all.ts`, which chains countries then criteria, and is idempotent). Ask before running it against a database that isn't a fresh local one, since it writes.
 
 ## Starting the servers
 

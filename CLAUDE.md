@@ -5,9 +5,8 @@ Site pour découvrir des pays à voyager avec un volet communautaire (avis, amis
 ## Structure du repo
 
 Monorepo npm workspaces :
-- `apps/api` — NestJS 10 + Prisma 5 + PostgreSQL, Swagger sur `/api/docs`
+- `apps/api` — NestJS 11 + Prisma 7 + PostgreSQL, Swagger sur `/api/docs` (dev uniquement)
 - `apps/front` — React + TypeScript + Vite, organisation par feature (`src/features/*`)
-- `packages/shared` — code partagé entre front et api
 
 ## Mode d'interaction — pédagogie
 
