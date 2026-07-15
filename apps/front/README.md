@@ -1,73 +1,38 @@
-# React + TypeScript + Vite
+# CountryTravel — Front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface React 18 + TypeScript + Vite, organisée par feature (`src/features/*`).
 
-Currently, two official plugins are available:
+## Démarrage rapide
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Depuis la racine du monorepo (l'API doit tourner — voir [manuel de déploiement](../../docs/manuel-deploiement.md)) :
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev:front     # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Variable d'environnement optionnelle : `VITE_API_URL` — URL de base de l'API avec le préfixe `/api` (défaut : `http://localhost:3000/api`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+├── app/           # routing, layouts
+├── features/      # un dossier par fonctionnalité (auth, countries, recommendations, countriesMap, random…)
+│   └── <feature>/ # components/, services/, hooks/, schemas/, types
+├── pages/         # pages liées aux routes
+└── shared/        # composants, hooks, store et utilitaires transverses
+```
+
+## Commandes
+
+```bash
+npm run dev          # développement (HMR)
+npm run build        # build de production (dist/)
+npm test             # tests unitaires (Vitest + React Testing Library)
+npm run lint         # ESLint
+```
+
+## Accessibilité
+
+Le front vise la conformité RGAA sur son périmètre fonctionnel : navigation clavier complète (y compris la carte SVG interactive), formulaires labellisés, erreurs annoncées (`role="alert"`), modales avec piège de focus. Détail : [sécurité et accessibilité](../../docs/securite-accessibilite.md).
