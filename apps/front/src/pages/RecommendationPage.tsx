@@ -1,3 +1,4 @@
+import { ErrorState } from "@/shared/components/ErrorState";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -167,11 +168,7 @@ export function RecommendationPage() {
       ) : (
         /* Results */
         <div className="flex flex-col gap-4">
-          {error && (
-            <div role="alert" className="text-center py-8 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
+          {error && <ErrorState message={error} onRetry={handleSubmit} />}
 
           {recommendations.length > 0 && (
             <>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getMapData } from "../services/countries.service";
 import type { CountryMapData } from "../types/CountryType";
 
@@ -8,22 +8,23 @@ export function useMapData() {
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
-    async function fetchMapData() {
-      setLoading(true);
-      setError(null);
-      setNotFound(false);
-      try {
-        const data = await getMapData();
-        setMapData(data);
-      } catch {
-        setError("Impossible de charger les données de la carte");
-      } finally {
-        setLoading(false);
-      }
+  const fetchMapData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setNotFound(false);
+    try {
+      const data = await getMapData();
+      setMapData(data);
+    } catch {
+      setError("Impossible de charger les données de la carte");
+    } finally {
+      setLoading(false);
     }
-    fetchMapData();
   }, []);
 
-  return { mapData, loading, error, notFound };
+  useEffect(() => {
+    fetchMapData();
+  }, [fetchMapData]);
+
+  return { mapData, loading, error, notFound, refetch: fetchMapData };
 }
