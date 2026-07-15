@@ -2,93 +2,49 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
 import { Pool } from 'pg';
 import { Continent, PrismaClient } from '../src/generated/prisma/client';
+import countriesData from './data/countries.json';
 import decriptionPays from './data/descriptions.json';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-const SELECTED_ISO = [
-  'FR',
-  'ES',
-  'US',
-  'CN',
-  'IT',
-  'TR',
-  'MX',
-  'TH',
-  'DE',
-  'GB',
-  'JP',
-  'AT',
-  'GR',
-  'MY',
-  'PT',
-  'CA',
-  'BR',
-  'NL',
-  'AU',
-  'MA',
-  'IN',
-  'CH',
-  'KR',
-  'HR',
-  'ID',
-  'AR',
-  'EG',
-  'VN',
-  'CZ',
-  'PE',
-];
-
-const continentMap: Record<string, Continent> = {
-  Europe: Continent.europe,
-  Asia: Continent.asia,
-  Americas: Continent.americas,
-  Africa: Continent.africa,
-  Oceania: Continent.oceania,
-  Antarctic: Continent.poles,
-};
-
-interface RestCountry {
-  cca2: string;
-  name: { common: string };
-  region: string;
-  capital?: string[];
-  flags?: { svg: string };
-  currencies?: Record<string, { name: string; symbol: string }>;
+// Les données pays sont embarquées dans le repo (prisma/data/countries.json,
+// snapshot de l'API Rest Countries) plutôt que récupérées par le réseau au
+// moment du seed : l'API restcountries.com v3.1 a été dépréciée et coupée,
+// et un seed reproductible ne doit pas dépendre d'un service externe.
+interface CountrySeed {
+  isoCode: string;
+  name: string;
+  continent: string;
+  capital: string | null;
+  flagUrl: string | null;
+  currency: string | null;
 }
 
 export async function seedCountries(client: PrismaClient = prisma) {
-  //fetch api Rest Countries
-  const response = await fetch(
-    'https://restcountries.com/v3.1/all?fields=cca2,name,region,capital,flags,currencies',
-  );
-  const all = (await response.json()) as RestCountry[];
-
-  const countries = all.filter((c) => SELECTED_ISO.includes(c.cca2));
+  const countries = countriesData as CountrySeed[];
 
   for (const country of countries) {
-    const descriptions = decriptionPays.find((d) => d.isoCode === country.cca2);
-    const currency = country.currencies
-      ? Object.keys(country.currencies)[0]
-      : null;
+    const descriptions = decriptionPays.find(
+      (d) => d.isoCode === country.isoCode,
+    );
 
     await client.country.upsert({
-      where: { isoCode: country.cca2 },
+      where: { isoCode: country.isoCode },
       update: {
-        continent: continentMap[country.region] ?? Continent.europe,
+        continent: country.continent as Continent,
         description: descriptions?.description ?? null,
-        currency,
+        currency: country.currency,
       },
       create: {
-        isoCode: country.cca2,
-        name: country.name.common,
-        continent: continentMap[country.region] ?? Continent.europe,
+        isoCode: country.isoCode,
+        name: country.name,
+        continent: country.continent as Continent,
         description: descriptions?.description ?? null,
-        capital: country.capital?.[0] ?? null,
-        flagUrl: country.flags?.svg ?? null,
-        currency,
+        capital: country.capital,
+        flagUrl: country.flagUrl,
+        currency: country.currency,
       },
     });
   }
