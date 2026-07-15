@@ -1,5 +1,6 @@
 import { MapLegend } from "@/features/countriesMap/components/MapLegend";
 import { getColorForRating, MAP_COLORS } from "@/features/countriesMap/utils/colorScale";
+import { ErrorState } from "@/shared/components/ErrorState";
 import { WorldMap } from "@/shared/components/WorldMap";
 import { useMapData } from "@/shared/hooks/useMapData";
 import type { CountryMapData } from "@/shared/types/CountryType";
@@ -7,7 +8,7 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router";
 
 export function MapPage() {
-  const { mapData, loading, error } = useMapData();
+  const { mapData, loading, error, refetch } = useMapData();
   const navigate = useNavigate();
 
   const countryByIsoCode = useMemo(() => {
@@ -60,9 +61,7 @@ export function MapPage() {
 
       <div className="relative w-full px-4 pb-10">
         {error ? (
-          <div role="alert" className="text-center py-16 text-red-400 text-sm">
-            {error}
-          </div>
+          <ErrorState message={error} onRetry={refetch} />
         ) : loading ? (
           <div className="text-center py-16 text-gray-400 text-sm animate-pulse">
             Chargement de la carte...
