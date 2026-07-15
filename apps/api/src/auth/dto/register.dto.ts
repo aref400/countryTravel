@@ -10,6 +10,6 @@ export class RegisterDto {
   username!: string;
   @IsString({ message: 'Password doit être une chaine de caractères' })
   @IsNotEmpty({ message: 'Password est requis' })
-  @MinLength(8, { message: 'Password doit avoir au moins 6 caractères' })
+  @MinLength(8, { message: 'Password doit avoir au moins 8 caractères' })
   password!: string;
 }
