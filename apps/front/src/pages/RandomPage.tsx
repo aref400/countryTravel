@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CountryResult } from "../features/random/components/CountryResult";
 import { SlotReveal } from "../features/random/components/SlotReveal";
 import { getRandomCountry } from "../features/random/services/random.service";
+import { ErrorState } from "../shared/components/ErrorState";
 import type { CountryDetail } from "../shared/types/CountryType";
 
 export function RandomPage() {
@@ -56,7 +57,7 @@ export function RandomPage() {
 
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         {error ? (
-          <div className="text-center py-16 text-red-400 text-sm">{error}</div>
+          <ErrorState message={error} onRetry={fetchRandom} />
         ) : !revealed ? (
           <SlotReveal
             targetName={country?.name ?? null}

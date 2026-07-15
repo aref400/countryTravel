@@ -3,6 +3,7 @@ import { CountriesPage } from "@/pages/CountriesPage";
 import { CountryDetail } from "@/pages/CountryDetail";
 import { Home } from "@/pages/Home";
 import { MapPage } from "@/pages/MapPage";
+import { NotFound } from "@/pages/NotFound";
 import { Route, Routes } from "react-router";
 import { authRoutes } from "../features/auth/auth.routes";
 import { RandomPage } from "../pages/RandomPage";
@@ -26,6 +27,7 @@ export function AppRoutes() {
         {authRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
