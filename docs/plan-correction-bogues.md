@@ -82,6 +82,42 @@ Ce document consigne les anomalies détectées au cours du développement (via l
 
 ---
 
+## BUG-06 — Page blanche sur les URLs inconnues (absence de route 404)
+
+- **Gravité** : 🟠 Majeur
+- **Scénario de recette associé** : NAV-01
+- **Contexte / symptôme** : L'accès à une URL non définie côté client (ex. `/une-url-qui-nexiste-pas`, ou `/dashboard` dont la page n'est pas encore développée) affichait une **page entièrement blanche** au lieu d'une page d'erreur. Détecté lors de l'exécution de la campagne de recette (scénario NAV-01).
+- **Analyse (cause racine)** : `apps/front/src/app/router.tsx` ne définissait aucune route « attrape-tout » (`path="*"`). En l'absence de correspondance, `react-router` ne rend aucun élément, d'où l'écran blanc — sans erreur console, ce qui rendait l'anomalie silencieuse.
+- **Correctif** : création d'un composant `apps/front/src/pages/NotFound.tsx` (message explicite, barre de navigation conservée, lien de retour à l'accueil) et ajout d'une route `<Route path="*" element={<NotFound />} />` en fin de configuration, à l'intérieur du layout applicatif.
+- **Vérification** : rejeu de NAV-01 — l'URL inconnue affiche désormais la page 404 dédiée (titre « Cette destination n'existe pas », lien de retour fonctionnel vers `/`). `tsc --noEmit` et `eslint` au vert.
+- **Commit** : _(à renseigner à la livraison)_
+
+---
+
+## BUG-07 — Message de validation erroné sur la longueur du mot de passe
+
+- **Gravité** : 🟡 Mineur
+- **Scénario de recette associé** : AUTH-06
+- **Contexte / symptôme** : À l'inscription avec un mot de passe trop court, l'API renvoyait le message « Password doit avoir au moins **6** caractères », alors que la règle réellement appliquée impose **8** caractères (`@MinLength(8)`). Message trompeur pour l'utilisateur. Détecté lors du rejeu de AUTH-06.
+- **Analyse (cause racine)** : incohérence entre le décorateur `@MinLength(8)` et le texte du message d'erreur dans `apps/api/src/auth/dto/register.dto.ts` (le message n'avait pas été mis à jour lors d'un changement de la contrainte).
+- **Correctif** : alignement du message sur la contrainte réelle — « Password doit avoir au moins 8 caractères ».
+- **Vérification** : rejeu de AUTH-06 — un mot de passe de 6 caractères est bien rejeté (code 400) avec un message cohérent.
+- **Commit** : _(à renseigner à la livraison)_
+
+---
+
+## BUG-08 — Seed inopérant : dépendance à une API externe dépréciée
+
+- **Gravité** : 🔴 Bloquant (pour toute nouvelle installation)
+- **Scénario de recette associé** : installation à froid (voir [manuel de déploiement](./manuel-deploiement.md)) — préalable à l'ensemble des scénarios nécessitant des données
+- **Contexte / symptôme** : Sur une base de données vierge, la commande de seed échouait (`TypeError: all.filter is not a function`), laissant la base sans aucun pays. Détecté lors du test de lancement à froid du projet sur une base PostgreSQL neuve.
+- **Analyse (cause racine)** : `apps/api/prisma/seed.ts` récupérait la liste des pays via un appel réseau à l'API `restcountries.com/v3.1` **au moment du seed**. Cette version de l'API ayant été dépréciée et coupée, la réponse n'était plus un tableau JSON mais un objet d'erreur, d'où l'échec. La base de production existante n'était pas affectée (seedée avant la coupure), ce qui masquait l'anomalie.
+- **Correctif** : suppression de la dépendance réseau. Les données des pays ont été exportées (depuis la base existante) vers un fichier versionné `apps/api/prisma/data/countries.json`, et `seed.ts` réécrit pour le lire — même approche que les fichiers `descriptions.json` et `criteria.json` déjà présents. Le seed est désormais **déterministe, reproductible et hors-ligne**.
+- **Vérification** : `npm run db:setup` sur une base Docker vierge insère les 30 pays + 30 fiches critères ; l'application (liste, carte, moteur de recommandation) est fonctionnelle sur cette base fraîche.
+- **Commit** : _(à renseigner à la livraison)_
+
+---
+
 ## Synthèse
 
 | ID | Titre | Gravité | Module | Statut |
@@ -91,5 +127,8 @@ Ce document consigne les anomalies détectées au cours du développement (via l
 | BUG-03 | Perte de contexte au retour arrière | 🟠 | Front — recommendations | ✅ Corrigé |
 | BUG-04 | 404 sur URLs directes (Netlify SPA) | 🔴 | Front — déploiement | ✅ Corrigé |
 | BUG-05 | Échec de lint CI sur RandomPage | 🟡 | Front — CI/CD | ✅ Corrigé |
+| BUG-06 | Page blanche sur URLs inconnues (route 404) | 🟠 | Front — routing | ✅ Corrigé |
+| BUG-07 | Message erroné sur la longueur du mot de passe | 🟡 | API — validation | ✅ Corrigé |
+| BUG-08 | Seed inopérant (API externe dépréciée) | 🔴 | API — données | ✅ Corrigé |
 
 Ce document doit être complété à chaque nouvelle anomalie détectée, au même titre que le [cahier de recettes](./cahier-recettes.md) doit être mis à jour à chaque nouvelle fonctionnalité.
