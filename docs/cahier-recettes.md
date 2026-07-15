@@ -61,7 +61,7 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 
 | ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
 |---|---|---|---|---|---|
-| CTY-01 | Liste par défaut | Base seedée (195 pays) | `GET /countries` sans paramètre | Code 200, page 1, 20 résultats (limite par défaut), total cohérent | ⏳ |
+| CTY-01 | Liste par défaut | Base seedée (30 pays via `npm run db:setup`) | `GET /countries` sans paramètre | Code 200, page 1, 20 résultats (limite par défaut), total cohérent | ⏳ |
 | CTY-02 | Pagination | — | `GET /countries?page=2&limit=10` | Code 200, 10 résultats correspondant à la page 2 | ⏳ |
 | CTY-03 | Filtre par continent | — | `GET /countries?continent=Europe` | Code 200, uniquement des pays du continent demandé | ⏳ |
 | CTY-04 | Filtre par devise | — | `GET /countries?currency=EUR` | Code 200, uniquement des pays utilisant cette devise | ⏳ |
@@ -77,7 +77,7 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | CTY-09 | Détail d'un pays existant | — | `GET /countries/FRA` | Code 200, détail complet du pays + note moyenne des reviews | ⏳ |
 | CTY-10 | Détail d'un pays inexistant | — | `GET /countries/ZZZ` | Code 404 (pays non trouvé), pas de crash serveur | ⏳ |
 | CTY-11 | Détail avec code ISO invalide | — | `GET /countries/123` ou `GET /countries/` | Réponse gérée proprement (400 ou 404), pas d'exception non catchée | ⏳ |
-| CTY-12 | Données pour la carte | — | `GET /countries/map/all` | Code 200, données allégées pour les 195 pays | ⏳ |
+| CTY-12 | Données pour la carte | — | `GET /countries/map/all` | Code 200, données allégées pour l'ensemble des pays en base (30 après seed) | ⏳ |
 | CTY-13 | Pays aléatoire | — | `GET /countries/random` | Code 200, un pays différent à chaque appel (probabiliste) | ⏳ |
 | CTY-14 | Front — clic sur un pays depuis le formulaire de reco | Résultats de recommandation affichés | Cliquer sur un pays du top 5, puis revenir en arrière | Retour à l'état précédent du formulaire, sans perte de contexte (régression corrigée) | ⏳ |
 

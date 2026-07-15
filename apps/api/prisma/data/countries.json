@@ -1,0 +1,242 @@
+[
+  {
+    "isoCode": "AR",
+    "name": "Argentina",
+    "continent": "americas",
+    "capital": "Buenos Aires",
+    "flagUrl": "https://flagcdn.com/ar.svg",
+    "currency": "ARS"
+  },
+  {
+    "isoCode": "AT",
+    "name": "Austria",
+    "continent": "europe",
+    "capital": "Vienna",
+    "flagUrl": "https://flagcdn.com/at.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "AU",
+    "name": "Australia",
+    "continent": "oceania",
+    "capital": "Canberra",
+    "flagUrl": "https://flagcdn.com/au.svg",
+    "currency": "AUD"
+  },
+  {
+    "isoCode": "BR",
+    "name": "Brazil",
+    "continent": "americas",
+    "capital": "Brasília",
+    "flagUrl": "https://flagcdn.com/br.svg",
+    "currency": "BRL"
+  },
+  {
+    "isoCode": "CA",
+    "name": "Canada",
+    "continent": "americas",
+    "capital": "Ottawa",
+    "flagUrl": "https://flagcdn.com/ca.svg",
+    "currency": "CAD"
+  },
+  {
+    "isoCode": "CH",
+    "name": "Switzerland",
+    "continent": "europe",
+    "capital": "Bern",
+    "flagUrl": "https://flagcdn.com/ch.svg",
+    "currency": "CHF"
+  },
+  {
+    "isoCode": "CN",
+    "name": "China",
+    "continent": "asia",
+    "capital": "Beijing",
+    "flagUrl": "https://flagcdn.com/cn.svg",
+    "currency": "CNY"
+  },
+  {
+    "isoCode": "CZ",
+    "name": "Czechia",
+    "continent": "europe",
+    "capital": "Prague",
+    "flagUrl": "https://flagcdn.com/cz.svg",
+    "currency": "CZK"
+  },
+  {
+    "isoCode": "DE",
+    "name": "Germany",
+    "continent": "europe",
+    "capital": "Berlin",
+    "flagUrl": "https://flagcdn.com/de.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "EG",
+    "name": "Egypt",
+    "continent": "africa",
+    "capital": "Cairo",
+    "flagUrl": "https://flagcdn.com/eg.svg",
+    "currency": "EGP"
+  },
+  {
+    "isoCode": "ES",
+    "name": "Spain",
+    "continent": "europe",
+    "capital": "Madrid",
+    "flagUrl": "https://flagcdn.com/es.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "FR",
+    "name": "France",
+    "continent": "europe",
+    "capital": "Paris",
+    "flagUrl": "https://flagcdn.com/fr.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "GB",
+    "name": "United Kingdom",
+    "continent": "europe",
+    "capital": "London",
+    "flagUrl": "https://flagcdn.com/gb.svg",
+    "currency": "GBP"
+  },
+  {
+    "isoCode": "GR",
+    "name": "Greece",
+    "continent": "europe",
+    "capital": "Athens",
+    "flagUrl": "https://flagcdn.com/gr.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "HR",
+    "name": "Croatia",
+    "continent": "europe",
+    "capital": "Zagreb",
+    "flagUrl": "https://flagcdn.com/hr.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "ID",
+    "name": "Indonesia",
+    "continent": "asia",
+    "capital": "Jakarta",
+    "flagUrl": "https://flagcdn.com/id.svg",
+    "currency": "IDR"
+  },
+  {
+    "isoCode": "IN",
+    "name": "India",
+    "continent": "asia",
+    "capital": "New Delhi",
+    "flagUrl": "https://flagcdn.com/in.svg",
+    "currency": "INR"
+  },
+  {
+    "isoCode": "IT",
+    "name": "Italy",
+    "continent": "europe",
+    "capital": "Rome",
+    "flagUrl": "https://flagcdn.com/it.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "JP",
+    "name": "Japan",
+    "continent": "asia",
+    "capital": "Tokyo",
+    "flagUrl": "https://flagcdn.com/jp.svg",
+    "currency": "JPY"
+  },
+  {
+    "isoCode": "KR",
+    "name": "South Korea",
+    "continent": "asia",
+    "capital": "Seoul",
+    "flagUrl": "https://flagcdn.com/kr.svg",
+    "currency": "KRW"
+  },
+  {
+    "isoCode": "MA",
+    "name": "Morocco",
+    "continent": "africa",
+    "capital": "Rabat",
+    "flagUrl": "https://flagcdn.com/ma.svg",
+    "currency": "MAD"
+  },
+  {
+    "isoCode": "MX",
+    "name": "Mexico",
+    "continent": "americas",
+    "capital": "Mexico City",
+    "flagUrl": "https://flagcdn.com/mx.svg",
+    "currency": "MXN"
+  },
+  {
+    "isoCode": "MY",
+    "name": "Malaysia",
+    "continent": "asia",
+    "capital": "Kuala Lumpur",
+    "flagUrl": "https://flagcdn.com/my.svg",
+    "currency": "MYR"
+  },
+  {
+    "isoCode": "NL",
+    "name": "Netherlands",
+    "continent": "europe",
+    "capital": "Amsterdam",
+    "flagUrl": "https://flagcdn.com/nl.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "PE",
+    "name": "Peru",
+    "continent": "americas",
+    "capital": "Lima",
+    "flagUrl": "https://flagcdn.com/pe.svg",
+    "currency": "PEN"
+  },
+  {
+    "isoCode": "PT",
+    "name": "Portugal",
+    "continent": "europe",
+    "capital": "Lisbon",
+    "flagUrl": "https://flagcdn.com/pt.svg",
+    "currency": "EUR"
+  },
+  {
+    "isoCode": "TH",
+    "name": "Thailand",
+    "continent": "asia",
+    "capital": "Bangkok",
+    "flagUrl": "https://flagcdn.com/th.svg",
+    "currency": "THB"
+  },
+  {
+    "isoCode": "TR",
+    "name": "Turkey",
+    "continent": "asia",
+    "capital": "Ankara",
+    "flagUrl": "https://flagcdn.com/tr.svg",
+    "currency": "TRY"
+  },
+  {
+    "isoCode": "US",
+    "name": "United States",
+    "continent": "americas",
+    "capital": "Washington, D.C.",
+    "flagUrl": "https://flagcdn.com/us.svg",
+    "currency": "USD"
+  },
+  {
+    "isoCode": "VN",
+    "name": "Vietnam",
+    "continent": "asia",
+    "capital": "Hanoi",
+    "flagUrl": "https://flagcdn.com/vn.svg",
+    "currency": "VND"
+  }
+]

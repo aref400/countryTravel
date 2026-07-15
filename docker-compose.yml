@@ -1,0 +1,28 @@
+# Base de données PostgreSQL locale pour le développement.
+#
+#   docker compose up -d
+#
+# suffit ensuite à fournir la base attendue par apps/api/.env.example.
+# Optionnel : si vous disposez déjà d'un serveur PostgreSQL, renseignez
+# simplement DATABASE_URL dans apps/api/.env et ignorez ce fichier.
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: countrytravel-db
+    environment:
+      POSTGRES_USER: countrytravel
+      POSTGRES_PASSWORD: countrytravel
+      POSTGRES_DB: countrytravel
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U countrytravel -d countrytravel"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db_data:
