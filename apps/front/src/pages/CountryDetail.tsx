@@ -1,4 +1,5 @@
 import { CriteriaBar } from "@/features/countries/components/CriteriaBar";
+import { ReviewsSection } from "@/features/reviews/components/ReviewsSection";
 import {
   CONTINENT_LABELS,
   CRITERIA_LABELS,
@@ -25,7 +26,6 @@ export function CountryDetail() {
   if (notFound) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-24 flex flex-col items-center gap-4 text-center">
-        <span className="text-6xl">🌍</span>
         <h1 className="text-2xl font-bold text-gray-900">Pays introuvable</h1>
         <p className="text-gray-500 text-sm max-w-sm">
           Le pays que vous recherchez n'existe pas ou n'est pas encore
@@ -198,20 +198,11 @@ export function CountryDetail() {
         )}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 mt-6">
-        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">
-          Avis voyageurs
-        </h2>
-        {country.nbReviews === 0 ? (
-          <p className="text-gray-400 text-sm">
-            Aucun avis pour ce pays pour l'instant.
-          </p>
-        ) : (
-          <p className="text-gray-400 text-sm">
-            {country.nbReviews} avis · fonctionnalité bientôt disponible.
-          </p>
-        )}
-      </div>
+      <ReviewsSection
+        countryId={country.id}
+        isoCode={country.isoCode}
+        countryName={country.name}
+      />
     </div>
   );
 }
