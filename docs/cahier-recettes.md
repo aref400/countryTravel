@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -200,6 +200,32 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | VIS-09 | Liste sans authentification | — | `GET /users/me/visits` sans token | Code 401 (Unauthorized) | ✅ |
 | VIS-10 | Carte personnelle publique | Utilisateur `testuser` existant avec ≥1 visite | `GET /visits/map/testuser` sans token | Code 200, tableau `[{isoCode, name}]` des pays visités | ✅ |
 | VIS-11 | Carte d'un utilisateur inconnu | — | `GET /visits/map/utilisateur_inconnu` | Code 404 — "User not found" | ✅ |
+
+---
+
+## 10. Avis sur les pays (API — CT-020)
+
+### 10.1 Création / mise à jour (`POST /reviews`, upsert)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| REV-01 | Création d'un avis | Utilisateur connecté ayant visité le pays | `POST /reviews` avec `{countryId, rating: 4, content}` | Code 201, review créée avec les infos du user (username, avatarUrl) | ✅ |
+| REV-02 | Mise à jour via le même endpoint (upsert) | Une review existe déjà pour ce user + pays | Renvoyer `POST /reviews` avec `rating: 5` | Code 201, **même id de review**, rating et contenu mis à jour — jamais de doublon (contrainte unique `userId+countryId`) | ✅ |
+| REV-03 | Avis sur un pays non visité | Le pays n'est pas dans les visites de l'utilisateur | `POST /reviews` avec ce `countryId` | Code 422 — "You must have visited this country to review it" | ✅ |
+| REV-04 | Avis sans authentification | — | `POST /reviews` sans token | Code 401 (Unauthorized) | ✅ |
+| REV-05 | Rating hors bornes | — | `POST /reviews` avec `rating: 6` (ou 0) | Code 400, erreur de validation (`Min`/`Max`) | ✅ |
+| REV-06 | Pays inexistant | — | `POST /reviews` avec un UUID ne correspondant à aucun pays | Code 404 — "Country not found" | ✅ |
+
+### 10.2 Suppression et consultation (`DELETE /reviews/:id`, `GET /reviews/country/:isoCode`, `GET /reviews/me`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| REV-07 | Suppression par le propriétaire | Review existante appartenant à l'utilisateur | `DELETE /reviews/:id` | Code 200, review supprimée | ✅ |
+| REV-08 | Suppression par un autre utilisateur | Review appartenant à un autre compte | `DELETE /reviews/:id` avec le token d'un autre user | Code 403 (Forbidden) — pas de suppression | ✅ |
+| REV-09 | Suppression d'une review inexistante | — | `DELETE /reviews/id-inconnu` | Code 404, pas de crash serveur | ✅ |
+| REV-10 | Avis d'un pays (public) | ≥1 review visible sur le pays | `GET /reviews/country/FR` sans token | Code 200, liste des reviews (`isVisible: true` uniquement) avec username de l'auteur | ✅ |
+| REV-11 | Avis d'un pays inexistant | — | `GET /reviews/country/ZZ` | Code 404 | ✅ |
+| REV-12 | Mes avis | Utilisateur connecté avec ≥1 review | `GET /reviews/me` | Code 200, liste de ses reviews avec les infos pays incluses | ✅ |
 
 ---
 
