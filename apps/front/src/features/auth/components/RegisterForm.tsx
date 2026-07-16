@@ -30,7 +30,7 @@ export const RegisterForm = () => {
     setApiError(null);
     try {
       const result = await registerUser(data);
-      setAuth(result.user, result.accessToken);
+      setAuth(result.user, result.accessToken, result.refreshToken);
       navigate("/");
     } catch (err: unknown) {
       const error = err as { status: number; data: { message: string } };
