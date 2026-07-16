@@ -1451,14 +1451,14 @@
           "title": "API — ReviewsModule",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "current",
+          "status": "done",
           "description": "CRUD Review. UPSERT (1 max par user par pays). 422 si pays non visité.",
           "dependencies": ["CT-019"],
           "acceptance_criteria": [
             {
               "id": "CT-020-AC-1",
               "description": "POST /reviews crée/met à jour une review",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1469,7 +1469,7 @@
             {
               "id": "CT-020-AC-2",
               "description": "422 si pays non visité",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1480,7 +1480,7 @@
             {
               "id": "CT-020-AC-3",
               "description": "DELETE /reviews/:id — propriétaire uniquement",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1495,7 +1495,7 @@
           "title": "Front — Dashboard utilisateur",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "current",
           "description": "Page /dashboard (route protégée) : stats, carte personnelle colorisée, pays visités, recommandations sauvegardées, reviews.",
           "dependencies": ["CT-019", "CT-020", "CT-015"],
           "acceptance_criteria": [
