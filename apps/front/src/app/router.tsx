@@ -1,6 +1,7 @@
 import { About } from "@/pages/About";
 import { CountriesPage } from "@/pages/CountriesPage";
 import { CountryDetail } from "@/pages/CountryDetail";
+import { DashboardPage } from "@/pages/DashboardPage";
 import { Home } from "@/pages/Home";
 import { MapPage } from "@/pages/MapPage";
 import { NotFound } from "@/pages/NotFound";
@@ -23,6 +24,7 @@ export function AppRoutes() {
         <Route path="/random" element={<RandomPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/about" element={<About />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
         {authRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
