@@ -1390,14 +1390,14 @@
           "title": "API — VisitsModule",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "done",
           "description": "POST/DELETE visites, GET liste visites user, GET données carte personnelle.",
           "dependencies": ["CT-005", "CT-010"],
           "acceptance_criteria": [
             {
               "id": "CT-019-AC-1",
               "description": "POST /visits ajoute un pays visité",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1408,7 +1408,7 @@
             {
               "id": "CT-019-AC-2",
               "description": "409 si pays déjà visité",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1419,7 +1419,7 @@
             {
               "id": "CT-019-AC-3",
               "description": "DELETE /visits/:country_id supprime la visite",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1430,7 +1430,7 @@
             {
               "id": "CT-019-AC-4",
               "description": "GET /visits/map/:username retourne données carte",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [
                   {
@@ -1451,7 +1451,7 @@
           "title": "API — ReviewsModule",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "locked",
+          "status": "current",
           "description": "CRUD Review. UPSERT (1 max par user par pays). 422 si pays non visité.",
           "dependencies": ["CT-019"],
           "acceptance_criteria": [
