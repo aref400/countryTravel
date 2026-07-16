@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import type { LoginFormData } from "../schemas/auth.schemas";
 import { loginSchema } from "../schemas/auth.schemas";
 import { loginUser } from "../services/auth.service";
@@ -13,6 +13,9 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
   const [apiError, setApiError] = useState<string | null>(null);
+  // ?expired=1 : l'utilisateur a été redirigé ici suite à une session expirée
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get("expired") === "1";
 
   const {
     register,
@@ -25,7 +28,7 @@ export const LoginForm = () => {
     setApiError(null);
     try {
       const result = await loginUser(data);
-      setAuth(result.user, result.accessToken);
+      setAuth(result.user, result.accessToken, result.refreshToken);
       navigate("/");
     } catch (err: unknown) {
       const error = err as { status: number; data: { message: string } };
@@ -56,6 +59,15 @@ export const LoginForm = () => {
           <span className="text-green-500 font-medium">CountryTravel</span>.
         </p>
       </div>
+
+      {sessionExpired && (
+        <p
+          role="alert"
+          className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 mb-4"
+        >
+          Votre session a expiré, veuillez vous reconnecter.
+        </p>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-4">
