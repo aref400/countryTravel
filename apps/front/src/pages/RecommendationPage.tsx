@@ -3,7 +3,10 @@ import { useAuthStore } from "@/shared/store/auth.store";
 import { useState } from "react";
 import { Link } from "react-router";
 import { RecoCard } from "../features/recommendations/components/RecoCard";
-import { SaveRecoModal } from "../features/recommendations/components/SaveRecoModal";
+import {
+  SaveRecoModal,
+  type SaveRecoStatus,
+} from "../features/recommendations/components/SaveRecoModal";
 import {
   Step1Practical,
   Step2Climate,
@@ -20,7 +23,7 @@ export function RecommendationPage() {
   const { user } = useAuthStore();
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveRecoStatus>("inactive");
   const [formData, setFormData] = useState<RecoFormDto>(DEFAULT_FORM);
   const { recommendations, loading, error, computeRecommendations, reset } =
     useRecommendations();
@@ -43,16 +46,24 @@ export function RecommendationPage() {
     await computeRecommendations(formData);
   };
 
+  // Repart d'un état neuf à chaque ouverture (pas d'erreur fantôme d'un
+  // précédent essai)
+  const handleOpenModal = () => {
+    setSaveStatus("inactive");
+    setIsModalOpen(true);
+  };
+
   const handleSave = async (name?: string) => {
+    setSaveStatus("saving");
     try {
       await saveRecommendation({
-        name: name || "Test",
+        name: name?.trim() || undefined,
         criteriaSnapshot: formData,
         resultsSnapshot: recommendations,
       });
-      setIsModalOpen(false);
+      setSaveStatus("success");
     } catch {
-      setSaveError("Erreur lors de la sauvegarde");
+      setSaveStatus("error");
     }
   };
 
@@ -196,7 +207,7 @@ export function RecommendationPage() {
                   <button
                     type="button"
                     className="mt-4 w-full py-3 bg-green-500 text-white text-sm font-semibold rounded-2xl hover:bg-green-600 transition-colors"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={handleOpenModal}
                   >
                     Sauvegarder ces recommandations
                   </button>
@@ -204,7 +215,7 @@ export function RecommendationPage() {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     onSave={handleSave}
-                    error={saveError}
+                    status={saveStatus}
                   />
                 </>
               )}
