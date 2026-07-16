@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -175,6 +175,31 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | A11Y-05 | Annonce des erreurs de validation | — | Soumettre un formulaire invalide (login, register, sauvegarde de reco, moteur de recommandation) | Le message d'erreur est annoncé automatiquement (zone `role="alert"`), sans action supplémentaire de l'utilisateur | ✅ |
 | A11Y-06 | Filtres de la liste des pays accessibles | Page `/pays` ouverte | Naviguer au clavier/lecteur d'écran dans `CountryFilters` | Chaque champ (recherche, continent, monnaie) possède un nom accessible (`aria-label`) | ✅ |
 | A11Y-07 | Langue déclarée de la page | — | Inspecter l'attribut `lang` de `<html>` | `lang="fr"` | ✅ |
+
+---
+
+## 9. Pays visités (API — CT-019)
+
+### 9.1 Ajout et suppression de visites (`POST /visits`, `DELETE /visits/:countryId`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| VIS-01 | Ajout d'un pays visité | Utilisateur connecté, pays existant | `POST /visits` avec `{countryId}` valide | Code 201, visite créée avec les infos du pays (isoCode, name, flagUrl) | ✅ |
+| VIS-02 | Ajout en doublon | Le pays est déjà dans les visites de l'utilisateur | Renvoyer le même `POST /visits` | Code 409 — "Country already marked as visited" | ✅ |
+| VIS-03 | Ajout sans authentification | — | `POST /visits` sans header `Authorization` | Code 401 (Unauthorized) | ✅ |
+| VIS-04 | Pays inexistant | — | `POST /visits` avec un UUID ne correspondant à aucun pays | Code 404 — "Country not found" | ✅ |
+| VIS-05 | `countryId` invalide | — | `POST /visits` avec `countryId: "pas-un-uuid"` | Code 400, erreur de validation (`IsUUID`) | ✅ |
+| VIS-06 | Suppression d'une visite | Visite existante | `DELETE /visits/:countryId` | Code 200, le pays disparaît de `GET /users/me/visits` | ✅ |
+| VIS-07 | Suppression d'une visite inexistante | Le pays n'est pas dans les visites | `DELETE /visits/:countryId` | Code 404 — "Visit not found", pas de crash serveur | ✅ |
+
+### 9.2 Consultation (`GET /users/me/visits`, `GET /visits/map/:username`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| VIS-08 | Liste de mes visites | Utilisateur connecté avec ≥1 visite | `GET /users/me/visits` | Code 200, liste des visites avec les infos pays incluses | ✅ |
+| VIS-09 | Liste sans authentification | — | `GET /users/me/visits` sans token | Code 401 (Unauthorized) | ✅ |
+| VIS-10 | Carte personnelle publique | Utilisateur `testuser` existant avec ≥1 visite | `GET /visits/map/testuser` sans token | Code 200, tableau `[{isoCode, name}]` des pays visités | ✅ |
+| VIS-11 | Carte d'un utilisateur inconnu | — | `GET /visits/map/utilisateur_inconnu` | Code 404 — "User not found" | ✅ |
 
 ---
 

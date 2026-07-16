@@ -9,6 +9,7 @@ import { CountriesModule } from './countries/countries.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { ScoringModule } from './scoring/scoring.module';
+import { VisitsModule } from './visits/visits.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ScoringModule } from './scoring/scoring.module';
     CountriesModule,
     ScoringModule,
     RecommendationsModule,
+    VisitsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
