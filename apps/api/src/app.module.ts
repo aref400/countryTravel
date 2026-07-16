@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { CountriesModule } from './countries/countries.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
+import { ReviewsModule } from './reviews/reviews.module';
 import { ScoringModule } from './scoring/scoring.module';
 import { VisitsModule } from './visits/visits.module';
 
@@ -23,6 +24,7 @@ import { VisitsModule } from './visits/visits.module';
     ScoringModule,
     RecommendationsModule,
     VisitsModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
