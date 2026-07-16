@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays, tableau de bord utilisateur, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -52,6 +52,8 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | AUTH-16 | Accès à `/auth/me` sans token | — | Appeler `GET /auth/me` sans header `Authorization` | Code 401 (Unauthorized) | ✅ |
 | AUTH-17 | Accès à `/auth/me` avec token valide | Utilisateur connecté | Appeler `GET /auth/me` avec `Authorization: Bearer <accessToken>` | Code 200, retourne les infos de l'utilisateur courant | ✅ |
 | AUTH-18 | Persistance de session côté front | Utilisateur vient de se connecter | Recharger la page front (F5) | L'utilisateur reste connecté (token bien présent en `localStorage`, régression corrigée) | ✅ |
+| AUTH-19 | Refresh silencieux côté front | Utilisateur connecté, `accessToken` expiré (15 min), `refreshToken` encore valide | Effectuer une action authentifiée (ex. charger `/dashboard`) | L'action aboutit normalement : le front rafraîchit les tokens en coulisse via `POST /auth/refresh` et rejoue la requête — aucune interruption visible (régression BUG-10, couverte par `fetch.instance.test.ts`) | ✅ |
+| AUTH-20 | Session totalement expirée | `accessToken` et `refreshToken` tous deux invalides/expirés | Effectuer une action authentifiée | Déconnexion propre : redirection vers `/auth/login?expired=1` avec le message « Votre session a expiré, veuillez vous reconnecter. » (`role="alert"`) | ✅ |
 
 ---
 
@@ -111,8 +113,9 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | SAV-07 | Récupération d'une reco d'un autre utilisateur | Recommandation appartenant à un autre compte | `GET /recommendations/saved/:id` avec l'id d'un autre utilisateur | Code 403/404 — accès refusé, pas de fuite de données | ✅ |
 | SAV-08 | Suppression d'une reco | Recommandation existante | `DELETE /recommendations/saved/:id` | Code 200/204, recommandation supprimée | ✅ |
 | SAV-09 | Suppression d'une reco inexistante | — | `DELETE /recommendations/saved/id-inconnu` | Code 404, pas de crash serveur | ✅ |
-| SAV-10 | Front — modale de sauvegarde (`SaveRecoModal`) | Résultats de recommandation affichés, utilisateur connecté | Ouvrir la modale, saisir un nom, valider | `POST /recommendations/save` renvoie 201, la modale se ferme (confirmation visuelle) et la reco est persistée en base. NB : la consultation des recos sauvegardées via un tableau de bord fait l'objet d'un ticket dédié en cours (lien `/dashboard` présent, page à venir) | ✅ |
+| SAV-10 | Front — modale de sauvegarde (`SaveRecoModal`) | Résultats de recommandation affichés, utilisateur connecté | Ouvrir la modale, saisir un nom, valider | `POST /recommendations/save` renvoie 201, un message de confirmation explicite s'affiche dans la modale (`role="status"`, lien vers le tableau de bord), le bouton est désactivé pendant la requête. Les recos sauvegardées sont consultables sur `/dashboard` (voir section 11, CT-021) | ✅ |
 | SAV-11 | Front — sauvegarde de données JSON invalides | Cas limite déjà rencontré en production | Simuler une réponse API malformée pour les recommandations sauvegardées | Le front affiche un état d'erreur/vide au lieu de crasher (régression BUG-01, couverte par test unitaire `useRecommendations`) | ✅ |
+| SAV-12 | Front — échec de la sauvegarde (modale) | Sauvegarde vouée à l'échec (ex. token expiré → 401) | Valider la modale de sauvegarde | Message d'erreur affiché dans la modale (`role="alert"`), bouton « Réessayer » proposé, l'erreur d'un essai précédent n'apparaît plus à la réouverture (régression BUG-09, couverte par `SaveRecoModal.test.tsx`) | ✅ |
 
 ---
 
@@ -226,6 +229,21 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | REV-10 | Avis d'un pays (public) | ≥1 review visible sur le pays | `GET /reviews/country/FR` sans token | Code 200, liste des reviews (`isVisible: true` uniquement) avec username de l'auteur | ✅ |
 | REV-11 | Avis d'un pays inexistant | — | `GET /reviews/country/ZZ` | Code 404 | ✅ |
 | REV-12 | Mes avis | Utilisateur connecté avec ≥1 review | `GET /reviews/me` | Code 200, liste de ses reviews avec les infos pays incluses | ✅ |
+
+---
+
+## 11. Tableau de bord utilisateur (front — CT-021)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| DASH-01 | Accès sans connexion | Non connecté (pas de token) | Naviguer vers `/dashboard` | Redirection vers `/auth/login` (`PrivateRoute`) | ✅ |
+| DASH-02 | Affichage des statistiques | Utilisateur connecté avec ≥1 visite et ≥1 avis | Ouvrir `/dashboard` | Les compteurs "Pays visités", "Avis publiés" et "Recos sauvegardées" reflètent les données réelles de l'utilisateur | ✅ |
+| DASH-03 | Carte personnelle colorisée | ≥1 pays visité | Observer la carte "Ma carte du monde" | Les pays visités apparaissent en bleu, les autres en gris ; le tooltip au survol indique "✓ Visité" ou "Pas encore visité" | ✅ |
+| DASH-04 | Suppression d'une visite | ≥1 pays dans "Mes pays visités" | Cliquer sur "Retirer" à côté d'un pays | Le pays disparaît immédiatement de la liste **et** de la carte **et** du compteur, sans rechargement de page | ✅ |
+| DASH-05 | Échec de suppression | API indisponible (simulation) | Cliquer sur "Retirer" | La liste reste intacte, un message d'erreur s'affiche (couvert par test unitaire `useMyVisits`) | ✅ |
+| DASH-06 | Listes vides | Nouvel utilisateur sans donnée | Ouvrir `/dashboard` | Chaque section affiche un état vide explicite avec un texte d'invite (pas de zone blanche) | ✅ |
+| DASH-07 | Navigation vers une fiche pays | ≥1 pays visité | Cliquer sur le nom d'un pays (liste) ou sur un pays bleu (carte) | Redirection vers `/pays/:isoCode` | ✅ |
+| DASH-08 | Suppression d'une recommandation sauvegardée | ≥1 reco dans "Mes recommandations sauvegardées" | Cliquer sur "Supprimer" à côté d'une reco | `DELETE /recommendations/saved/:id` renvoie 200 ; la reco disparaît immédiatement de la liste et le compteur se met à jour, sans rechargement (échec réseau : liste intacte + message d'erreur, couvert par test unitaire `useSavedRecos`) | ✅ |
 
 ---
 
