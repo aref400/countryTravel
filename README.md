@@ -34,6 +34,7 @@ Détail complet et alternatives (sans Docker, application déployée) : [manuel 
 - [Cahier de recettes](docs/cahier-recettes.md) — scénarios de tests fonctionnels
 - [Plan de correction des bogues](docs/plan-correction-bogues.md) — anomalies analysées et corrigées
 - [Sécurité et accessibilité](docs/securite-accessibilite.md) — mapping OWASP Top 10 et démarche RGAA
+- [Critères de qualité et de performance](docs/qualite-performance.md) — outillage, seuils, portails de vérification
 
 ## Qualité
 
