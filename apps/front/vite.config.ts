@@ -19,5 +19,20 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      // Le périmètre mesuré exclut le point d'entrée, les types et les
+      // fichiers de test eux-mêmes : on mesure le code applicatif, pas la
+      // tuyauterie.
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/main.tsx",
+        "src/test/**",
+        "src/**/*.d.ts",
+        "src/**/types.ts",
+        "src/**/types/**",
+      ],
+    },
   },
 });
