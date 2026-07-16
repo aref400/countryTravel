@@ -1550,14 +1550,14 @@
           "title": "Front — Composants review (écrire + afficher)",
           "type": "Feature",
           "priority": "Must Have",
-          "status": "current",
+          "status": "done",
           "description": "StarRating (cliquable + lecture seule), ReviewForm (textarea 2000 chars), ReviewCard. Mise à jour optimiste. Message si pays non visité.",
           "dependencies": ["CT-020", "CT-013"],
           "acceptance_criteria": [
             {
               "id": "CT-022-AC-1",
               "description": "ReviewForm visible sur fiche pays si connecté + visité",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1568,7 +1568,7 @@
             {
               "id": "CT-022-AC-2",
               "description": "Message si pays non visité",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [
@@ -1579,7 +1579,7 @@
             {
               "id": "CT-022-AC-3",
               "description": "Mise à jour optimiste après soumission",
-              "status": "pending",
+              "status": "done",
               "checks": {
                 "commands": [],
                 "questions": [

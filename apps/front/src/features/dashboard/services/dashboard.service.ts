@@ -1,13 +1,12 @@
 import { apiClient } from "@/shared/lib/fetch.instance";
-import type { MyReview, SavedReco, Visit } from "../types";
+import type { MyReview, SavedReco } from "../types";
 
-export const getMyVisits = () => {
-  return apiClient.get<Visit[]>("/v1/users/me/visits");
-};
-
-export const deleteVisit = (countryId: string) => {
-  return apiClient.delete<Visit>(`/v1/visits/${countryId}`);
-};
+// Les appels visites appartiennent à la feature visits (partagés avec la
+// fiche pays) — le dashboard les ré-expose pour ses propres hooks
+export {
+  deleteVisit,
+  getMyVisits,
+} from "@/features/visits/services/visits.service";
 
 export const getMyReviews = () => {
   return apiClient.get<MyReview[]>("/v1/reviews/me");
