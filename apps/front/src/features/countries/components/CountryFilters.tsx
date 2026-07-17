@@ -78,7 +78,7 @@ export function CountryFilters({
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un pays..."
           aria-label="Rechercher un pays"
-          className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-300 focus:border-transparent placeholder:text-gray-400"
+          className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-300 focus:border-transparent placeholder:text-gray-500"
         />
       </div>
 
@@ -112,7 +112,7 @@ export function CountryFilters({
         {hasActiveFilters && (
           <button
             onClick={handleReset}
-            className="text-sm text-gray-400 hover:text-red-500 transition-colors px-2 whitespace-nowrap"
+            className="text-sm text-gray-500 hover:text-red-600 transition-colors px-2 whitespace-nowrap"
           >
             Réinitialiser
           </button>

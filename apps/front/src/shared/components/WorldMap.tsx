@@ -144,7 +144,7 @@ export function WorldMap({
         </ZoomableGroup>
       </ComposableMap>
 
-      <div className="pointer-events-none absolute top-3 right-3 z-10 rounded-lg bg-white/80 backdrop-blur-sm px-2.5 py-1 text-[11px] text-gray-400">
+      <div className="pointer-events-none absolute top-3 right-3 z-10 rounded-lg bg-white/80 backdrop-blur-sm px-2.5 py-1 text-[11px] text-gray-600">
         Ctrl + molette pour zoomer
       </div>
 

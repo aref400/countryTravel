@@ -1,4 +1,5 @@
 import { ErrorState } from "@/shared/components/ErrorState";
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -20,6 +21,7 @@ import { saveRecommendation } from "../features/recommendations/services/recomme
 import type { RecoFormDto } from "../features/recommendations/types";
 
 export function RecommendationPage() {
+  usePageTitle("Recommandations");
   const { user } = useAuthStore();
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,13 +106,13 @@ export function RecommendationPage() {
             {/* Step header */}
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-xs text-gray-400 font-medium mb-0.5">
+                <p className="text-xs text-gray-600 font-medium mb-0.5">
                   Étape {step} sur 5
                 </p>
                 <h2 className="text-lg font-bold text-gray-900">
                   {STEPS[step - 1].title}
                 </h2>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-500">
                   {STEPS[step - 1].subtitle}
                 </p>
               </div>
@@ -190,7 +192,7 @@ export function RecommendationPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2"
+                  className="text-xs text-gray-500 hover:text-gray-700 underline underline-offset-2"
                 >
                   Recommencer
                 </button>
@@ -221,7 +223,7 @@ export function RecommendationPage() {
               )}
 
               {!user && (
-                <p className="text-center text-xs text-gray-400 mt-2">
+                <p className="text-center text-xs text-gray-500 mt-2">
                   <Link
                     to="/auth/login"
                     className="text-green-600 underline underline-offset-2"
