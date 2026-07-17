@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays, tableau de bord utilisateur, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays (API et fiche pays), tableau de bord utilisateur, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -124,9 +124,9 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
 |---|---|---|---|---|---|
 | RND-01 | Tirage aléatoire | Page `/random` ouverte | La page effectue un tirage au chargement | Un pays s'affiche avec ses informations principales | ✅ |
-| RND-02 | Nouveau tirage successif | Un pays déjà affiché | Cliquer sur "Rejouer 🎲" | Un nouveau pays s'affiche (potentiellement différent), sans erreur d'affichage | ✅ |
+| RND-02 | Nouveau tirage successif | Un pays déjà affiché | Cliquer sur "Rejouer" | Un nouveau pays s'affiche (potentiellement différent), sans erreur d'affichage | ✅ |
 | RND-03 | Accès direct à l'URL `/random` | Non connecté | Naviguer directement vers `/random` | La page se charge sans erreur 404 (régression sur les routes non-homepage corrigée) | ✅ |
-| RND-04 | Erreur réseau lors du tirage | API indisponible (simulation) | Cliquer sur "Rejouer 🎲" | Message d'erreur affiché dans un composant `ErrorState` (`role="alert"`) avec un bouton « Réessayer » fonctionnel, pas de page blanche | ✅ |
+| RND-04 | Erreur réseau lors du tirage | API indisponible (simulation) | Cliquer sur "Rejouer" | Message d'erreur affiché dans un composant `ErrorState` (`role="alert"`) avec un bouton « Réessayer » fonctionnel, pas de page blanche | ✅ |
 
 ---
 
@@ -244,6 +244,22 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | DASH-06 | Listes vides | Nouvel utilisateur sans donnée | Ouvrir `/dashboard` | Chaque section affiche un état vide explicite avec un texte d'invite (pas de zone blanche) | ✅ |
 | DASH-07 | Navigation vers une fiche pays | ≥1 pays visité | Cliquer sur le nom d'un pays (liste) ou sur un pays bleu (carte) | Redirection vers `/pays/:isoCode` | ✅ |
 | DASH-08 | Suppression d'une recommandation sauvegardée | ≥1 reco dans "Mes recommandations sauvegardées" | Cliquer sur "Supprimer" à côté d'une reco | `DELETE /recommendations/saved/:id` renvoie 200 ; la reco disparaît immédiatement de la liste et le compteur se met à jour, sans rechargement (échec réseau : liste intacte + message d'erreur, couvert par test unitaire `useSavedRecos`) | ✅ |
+
+---
+
+## 12. Avis sur la fiche pays (front — CT-022)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| AVI-01 | Visiteur non connecté | Aucun token | Ouvrir `/pays/DE`, section "Avis voyageurs" | Lien « Connectez-vous pour donner votre avis », pas de formulaire ; la liste des avis reste consultable (endpoint public) | ✅ |
+| AVI-02 | Connecté, pays non visité | Utilisateur connecté, pays absent de ses visites | Ouvrir la fiche du pays | Message « Vous devez avoir visité ce pays pour donner votre avis. » + bouton « J'y suis allé » (pas de formulaire) | ✅ |
+| AVI-03 | Marquer le pays visité depuis la fiche | État AVI-02 | Cliquer « J'y suis allé » | `POST /visits` renvoie 201 ; le formulaire d'avis apparaît immédiatement, sans rechargement | ✅ |
+| AVI-04 | Publication d'un avis | Connecté + pays visité | Choisir une note (étoiles), saisir un texte, « Publier mon avis » | `POST /reviews` renvoie 201 ; l'avis apparaît immédiatement en tête de liste avec la mention « (vous) », le compteur du titre s'incrémente, sans rechargement | ✅ |
+| AVI-05 | Modification de mon avis (upsert) | Un avis existant sur ce pays | Le formulaire est pré-rempli (« Mettre à jour mon avis ») ; changer la note, soumettre | L'avis est mis à jour dans la liste **sans doublon** (même id) | ✅ |
+| AVI-06 | Soumission sans note | Formulaire vierge | Cliquer « Publier mon avis » sans choisir d'étoile | Message « Choisissez une note avant de publier votre avis. » (`role="alert"`), aucun appel API | ✅ |
+| AVI-07 | Suppression de mon avis | Mon avis affiché dans la liste | Cliquer « Supprimer » (visible uniquement sur mon avis) | L'avis disparaît de la liste, le formulaire repasse en mode création ; le bouton n'apparaît pas sur les avis des autres utilisateurs | ✅ |
+| AVI-08 | Accessibilité de la notation | — | Naviguer au clavier jusqu'aux étoiles | Le groupe est un `radiogroup` (une seule tabulation), les flèches changent la note, chaque étoile est annoncée « x sur 5 » (couvert par `StarRating.test.tsx`) | ✅ |
+| AVI-09 | Limite de longueur de l'avis | Formulaire affiché | Saisir un texte | Compteur `x/2000` visible, saisie bloquée à 2000 caractères (`maxLength`, aligné sur le `MaxLength` API) | ✅ |
 
 ---
 
