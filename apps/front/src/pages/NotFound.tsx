@@ -1,6 +1,8 @@
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { Link } from "react-router";
 
 export function NotFound() {
+  usePageTitle("Page introuvable");
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
       <div
@@ -18,8 +20,8 @@ export function NotFound() {
         Cette destination n'existe pas
       </h1>
       <p className="text-sm text-gray-500 max-w-md mb-6">
-        La page que vous cherchez est introuvable. Elle a peut-être été déplacée,
-        ou l'adresse est incorrecte.
+        La page que vous cherchez est introuvable. Elle a peut-être été
+        déplacée, ou l'adresse est incorrecte.
       </p>
       <Link
         to="/"

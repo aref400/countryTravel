@@ -12,7 +12,7 @@ export function RecommendedCountries() {
           <h2 className="text-lg font-bold text-gray-900">
             Destinations Recommandées
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             Basé sur vos préférences d'aventure.
           </p>
         </div>

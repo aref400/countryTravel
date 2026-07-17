@@ -1,3 +1,4 @@
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useCallback, useEffect, useState } from "react";
 import { CountryResult } from "../features/random/components/CountryResult";
 import { SlotReveal } from "../features/random/components/SlotReveal";
@@ -6,6 +7,7 @@ import { ErrorState } from "../shared/components/ErrorState";
 import type { CountryDetail } from "../shared/types/CountryType";
 
 export function RandomPage() {
+  usePageTitle("Destination aléatoire");
   const [country, setCountry] = useState<CountryDetail | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);

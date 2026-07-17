@@ -81,7 +81,7 @@ export function SaveRecoModal({
             Sauvegarder les recommandations
           </h2>
           <button onClick={onClose} aria-label="Fermer">
-            <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+            <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
           </button>
         </div>
 

@@ -5,6 +5,7 @@ import {
   CRITERIA_LABELS,
 } from "@/shared/constants/countries.constants";
 import { useCountry } from "@/shared/hooks/useCountry";
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { Link, useNavigate, useParams } from "react-router";
 
 export function CountryDetail() {
@@ -12,10 +13,12 @@ export function CountryDetail() {
   const { country, loading, error, notFound } = useCountry(isoCode ?? "");
   const navigate = useNavigate();
 
+  usePageTitle(country?.name ?? "Détails du pays");
+
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-16 flex justify-center">
-        <div className="flex flex-col items-center gap-3 text-gray-400">
+        <div className="flex flex-col items-center gap-3 text-gray-500">
           <div className="w-8 h-8 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
           <span className="text-sm">Chargement...</span>
         </div>
@@ -112,13 +115,13 @@ export function CountryDetail() {
                 <span className="text-2xl font-bold text-yellow-500">
                   ★ {country.avgRating.toFixed(1)}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-500">
                   {country.nbReviews} avis
                 </span>
               </div>
             ) : (
               <div className="flex flex-col items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-2">
-                <span className="text-sm text-gray-400">Pas encore noté</span>
+                <span className="text-sm text-gray-600">Pas encore noté</span>
               </div>
             )}
           </div>

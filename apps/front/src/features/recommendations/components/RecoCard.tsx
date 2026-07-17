@@ -19,7 +19,7 @@ export function RecoCard({ reco }: Props) {
         <p className="font-semibold text-gray-900 text-sm group-hover:text-green-600 transition-colors">
           {reco.country.name}
         </p>
-        <p className="text-xs text-gray-400 truncate mt-0.5">
+        <p className="text-xs text-gray-500 truncate mt-0.5">
           {reco.country.continent ?? ""}
           {reco.country.description
             ? ` · ${reco.country.description.slice(0, 60)}…`

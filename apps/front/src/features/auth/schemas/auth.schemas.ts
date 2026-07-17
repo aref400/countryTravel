@@ -15,7 +15,9 @@ export const registerSchema = z
     email: z.string().email("Email invalide"),
     password: z
       .string()
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+      .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+      .regex(/\d/, "Le mot de passe doit contenir au moins un chiffre")
+      .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule"),
     confirmPassword: z.string(),
     acceptTerms: z.boolean().refine((val) => val === true, {
       message: "Vous devez accepter les conditions",

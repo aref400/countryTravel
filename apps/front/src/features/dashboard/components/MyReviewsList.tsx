@@ -8,7 +8,7 @@ interface MyReviewsListProps {
 export function MyReviewsList({ reviews }: Readonly<MyReviewsListProps>) {
   if (reviews.length === 0) {
     return (
-      <p className="text-sm text-gray-400 py-6 text-center">
+      <p className="text-sm text-gray-500 py-6 text-center">
         Aucun avis publié pour le moment.
       </p>
     );
