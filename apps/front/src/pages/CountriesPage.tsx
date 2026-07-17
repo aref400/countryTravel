@@ -1,11 +1,13 @@
 import { CountryCard } from "@/features/countries/components/CountryCard";
 import { CountryFilters } from "@/features/countries/components/CountryFilters";
 import { useCountries } from "@/shared/hooks/useCountries";
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import type { CountryFilters as CountryFiltersType } from "@/shared/types/CountryType";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 export function CountriesPage() {
+  usePageTitle("Explorer les pays");
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") ?? "";
 

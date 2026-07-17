@@ -53,7 +53,7 @@ export function Navbar() {
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
               placeholder="Où voulez-vous aller ?"
-              className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-400"
+              className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-500"
             />
           </div>
         </div>
@@ -204,7 +204,7 @@ export function Navbar() {
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
               placeholder="Où voulez-vous aller ?"
-              className="w-full pl-8 pr-3 py-2 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-400"
+              className="w-full pl-8 pr-3 py-2 text-sm bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-300 placeholder:text-gray-500"
             />
           </div>
         </div>

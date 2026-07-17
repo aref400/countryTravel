@@ -1,13 +1,18 @@
 import { MapLegend } from "@/features/countriesMap/components/MapLegend";
-import { getColorForRating, MAP_COLORS } from "@/features/countriesMap/utils/colorScale";
+import {
+  getColorForRating,
+  MAP_COLORS,
+} from "@/features/countriesMap/utils/colorScale";
 import { ErrorState } from "@/shared/components/ErrorState";
 import { WorldMap } from "@/shared/components/WorldMap";
 import { useMapData } from "@/shared/hooks/useMapData";
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import type { CountryMapData } from "@/shared/types/CountryType";
 import { useMemo } from "react";
 import { useNavigate } from "react-router";
 
 export function MapPage() {
+  usePageTitle("Carte du monde");
   const { mapData, loading, error, refetch } = useMapData();
   const navigate = useNavigate();
 
@@ -63,7 +68,7 @@ export function MapPage() {
         {error ? (
           <ErrorState message={error} onRetry={refetch} />
         ) : loading ? (
-          <div className="text-center py-16 text-gray-400 text-sm animate-pulse">
+          <div className="text-center py-16 text-gray-500 text-sm animate-pulse">
             Chargement de la carte...
           </div>
         ) : (

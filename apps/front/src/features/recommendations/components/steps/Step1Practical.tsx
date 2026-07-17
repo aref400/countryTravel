@@ -26,7 +26,7 @@ export function Step1Practical({ values, onChange }: Props) {
           <p id="family-friendly-label" className="font-semibold text-gray-800 text-sm">
             Voyage en famille
           </p>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             Filtrer les destinations adaptées aux enfants
           </p>
         </div>
