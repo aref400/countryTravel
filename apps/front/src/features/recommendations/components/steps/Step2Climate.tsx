@@ -26,7 +26,7 @@ export function Step2Climate({ values, onChange }: Props) {
           {current.emoji}
         </span>
         <p className="text-xl font-bold text-gray-800">{current.label}</p>
-        <p className="text-sm text-gray-400">{current.desc}</p>
+        <p className="text-sm text-gray-500">{current.desc}</p>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
@@ -42,7 +42,7 @@ export function Step2Climate({ values, onChange }: Props) {
             }`}
           >
             <span
-              className={`text-[10px] font-semibold ${values.temperature === n ? "text-green-700" : "text-gray-400"}`}
+              className={`text-[10px] font-semibold ${values.temperature === n ? "text-green-700" : "text-gray-500"}`}
             >
               {TEMP_LABELS[n].label}
             </span>

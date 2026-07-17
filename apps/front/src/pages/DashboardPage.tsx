@@ -7,6 +7,7 @@ import { useMyReviews } from "@/features/dashboard/hooks/useMyReviews";
 import { useMyVisits } from "@/features/dashboard/hooks/useMyVisits";
 import { useSavedRecos } from "@/features/dashboard/hooks/useSavedRecos";
 import { ErrorState } from "@/shared/components/ErrorState";
+import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useAuthStore } from "@/shared/store/auth.store";
 
 function SectionCard({
@@ -22,6 +23,7 @@ function SectionCard({
 }
 
 export function DashboardPage() {
+  usePageTitle("Mon tableau de bord");
   const { user } = useAuthStore();
   const visitsState = useMyVisits();
   const reviewsState = useMyReviews();
@@ -45,7 +47,7 @@ export function DashboardPage() {
       </header>
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400 text-sm animate-pulse">
+        <div className="text-center py-16 text-gray-500 text-sm animate-pulse">
           Chargement de votre tableau de bord...
         </div>
       ) : (

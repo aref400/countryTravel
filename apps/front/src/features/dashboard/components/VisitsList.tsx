@@ -14,7 +14,7 @@ export function VisitsList({
 }: Readonly<VisitsListProps>) {
   if (visits.length === 0) {
     return (
-      <p className="text-sm text-gray-400 py-6 text-center">
+      <p className="text-sm text-gray-500 py-6 text-center">
         Aucun pays visité pour le moment. Marquez vos voyages depuis la fiche
         d'un pays !
       </p>
@@ -43,7 +43,7 @@ export function VisitsList({
               {visit.country.name}
             </Link>
             {visit.visitedAt && (
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-500">
                 Visité en{" "}
                 {new Date(visit.visitedAt).toLocaleDateString("fr-FR", {
                   month: "long",

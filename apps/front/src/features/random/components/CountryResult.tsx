@@ -21,7 +21,7 @@ export function CountryResult({
       <div>
         <h2 className="text-3xl font-bold text-gray-900">{country.name}</h2>
         {country.continent && (
-          <p className="text-sm text-gray-400 mt-1">{country.continent}</p>
+          <p className="text-sm text-gray-500 mt-1">{country.continent}</p>
         )}
       </div>
 

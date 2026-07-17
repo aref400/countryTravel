@@ -32,6 +32,8 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | AUTH-06 | Password trop court | — | Envoyer `password: "abc123"` (6 caractères) | Code 400, message "Password doit avoir au moins 8 caractères" | ✅ |
 | AUTH-07 | Champ requis manquant | — | Envoyer un body sans `email` | Code 400 — "Email est requis" | ✅ |
 | AUTH-08 | Body JSON malformé | — | Envoyer un body non-JSON / vide sur `POST /auth/register` | Code 400, l'API ne plante pas | ✅ |
+| AUTH-21 | Mot de passe sans chiffre | — | Envoyer `password: "abccddcsA"` | Code 400, message "Le mot de passe doit contenir au moins un chiffre" | ✅ |
+| AUTH-22 | Mot de passe sans majuscule | — | Envoyer `password: "abccd123"` | Code 400, message "Le mot de passe doit contenir au moins une majuscule" | ✅ |
 
 ### 1.2 Connexion (`POST /auth/login`)
 
@@ -148,7 +150,7 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
 |---|---|---|---|---|---|
 | NAV-01 | Accès à une URL inconnue | — | Naviguer vers `/une-url-qui-nexiste-pas` | Page 404 dédiée affichée par la route catch-all `*` (composant `NotFound`), avec la barre de navigation et un lien de retour ; pas de page blanche (anomalie BUG-06 corrigée) | ✅ |
-| NAV-02 | Accès à une page protégée sans connexion | Non connecté | Naviguer vers une route nécessitant `PrivateRoute` (ex. `/about`) | Redirection vers `/auth/login` | ✅ |
+| NAV-02 | Accès à une page protégée sans connexion | Non connecté | Naviguer vers une route nécessitant `PrivateRoute` (ex. `/dashboard`) | Redirection vers `/auth/login` | ✅ |
 | NAV-03 | Page d'accueil accessible sans connexion | Non connecté | Naviguer vers `/` | Page d'accueil affichée, liens vers login/register visibles | ✅ |
 
 ---
@@ -178,6 +180,8 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | A11Y-05 | Annonce des erreurs de validation | — | Soumettre un formulaire invalide (login, register, sauvegarde de reco, moteur de recommandation) | Le message d'erreur est annoncé automatiquement (zone `role="alert"`), sans action supplémentaire de l'utilisateur | ✅ |
 | A11Y-06 | Filtres de la liste des pays accessibles | Page `/pays` ouverte | Naviguer au clavier/lecteur d'écran dans `CountryFilters` | Chaque champ (recherche, continent, monnaie) possède un nom accessible (`aria-label`) | ✅ |
 | A11Y-07 | Langue déclarée de la page | — | Inspecter l'attribut `lang` de `<html>` | `lang="fr"` | ✅ |
+| A11Y-08 | Titre de page unique par route | — | Naviguer entre `/`, `/carte`, `/pays/FR`, `/dashboard`, `/auth/login` et observer l'onglet du navigateur | Chaque page affiche « <Nom de la page> — CountryTravel » ; la fiche pays affiche le nom du pays chargé (ex. « France — CountryTravel ») | ✅ |
+| A11Y-09 | Contraste des textes informatifs | — | Inspecter les textes secondaires sur fond clair (sous-titres, dates, états vides, placeholders, compteur d'avis) | Couleur `gray-500` ou `gray-600` (ratio ≥ 4,5:1, conforme AA) ; `gray-400` réservé aux icônes décoratives de champs déjà labellisés | ✅ |
 
 ---
 

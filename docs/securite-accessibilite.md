@@ -50,14 +50,15 @@ Justification : le RGAA est le référentiel officiel français dédié spécifi
 | 11 — Formulaires (groupes de sélection) | Sélecteurs de critère (1 à 5) et interrupteur "voyage en famille" sans sémantique de groupe/état | Ajout `role="radiogroup"`/`role="radio"`/`aria-checked` et `role="switch"`/`aria-checked` | `CriteriaSelector.tsx`, `Step1Practical.tsx` |
 | 13 — Cadres / boîtes de dialogue | Modale de sauvegarde sans piège de focus, sans fermeture au clavier, sans restitution du focus | Ajout d'un piège de focus (Tab cantonné à la modale), fermeture par `Echap`, focus déplacé à l'ouverture et restitué à la fermeture | `SaveRecoModal.tsx` |
 | 7 — Scripts / composants riches | La carte interactive du monde (composant SVG, ~195 tracés de pays) n'était accessible qu'à la souris : aucun `tabIndex`, aucune gestion clavier | Chaque pays reconnu devient focusable (`tabIndex=0`, `role="button"`, `aria-label` avec le nom du pays), un contour visible identifie l'élément actif au clavier (équivalent du survol souris), le même tooltip s'affiche via `onFocus`, et `Entrée`/`Espace` déclenchent la navigation comme un clic | `apps/front/src/shared/components/WorldMap.tsx` |
+| 8.5/8.6 — Titre de page | Titre statique ("CountryTravel") sur toute l'application : impossible d'identifier la page courante depuis l'onglet ou un lecteur d'écran | Hook `usePageTitle` : titre unique par route (« Accueil — CountryTravel », « Connexion — CountryTravel »…), y compris dynamique sur la fiche pays (« France — CountryTravel ») | `shared/hooks/usePageTitle.ts` + toutes les pages |
+| 3.2 — Contrastes | Textes informatifs en `text-gray-400` (ratio ~2,5:1 sur fond clair, sous le seuil AA de 4,5:1) — 46 occurrences dans 21 fichiers | 37 occurrences corrigées en `gray-500`/`gray-600` selon l'importance du texte et le fond ; les icônes interactives (afficher le mot de passe, fermer la modale) relevées aussi ; les 9 occurrences conservées sont des icônes décoratives accompagnant des champs déjà labellisés | 19 fichiers front (formulaires, listes du dashboard, étapes de recommandation, navbar…) |
 
 ### Vérification
 
-Le correctif clavier sur la carte interactive a été testé de bout en bout dans un navigateur réel : navigation par `Tab` jusqu'au Vietnam, tooltip identique au contenu affiché au survol souris, activation par `Entrée` menant correctement à `/pays/VN`.
+Le correctif clavier sur la carte interactive a été testé de bout en bout dans un navigateur réel : navigation par `Tab` jusqu'au Vietnam, tooltip identique au contenu affiché au survol souris, activation par `Entrée` menant correctement à `/pays/VN`. Les titres de page dynamiques ont été vérifiés de la même façon (onglet « France — CountryTravel » sur `/pays/FR`, mise à jour au chargement des données), ainsi que le rendu des nouveaux contrastes (scénarios A11Y-08 et A11Y-09 du cahier de recettes).
 
 ### Limites connues
 
-- Le titre de la page (`<title>`) est statique ("CountryTravel") pour toute l'application — une conformité complète au critère RGAA 8.5 (titre de page pertinent) nécessiterait des titres dynamiques par route, non implémenté à ce stade.
 - Le périmètre de correction couvre les parcours du cahier de recettes ; il ne s'agit pas d'un audit RGAA exhaustif des 106 critères sur l'ensemble de l'application.
 
 ---

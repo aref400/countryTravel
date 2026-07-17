@@ -1,4 +1,3 @@
-import { About } from "@/pages/About";
 import { CountriesPage } from "@/pages/CountriesPage";
 import { CountryDetail } from "@/pages/CountryDetail";
 import { DashboardPage } from "@/pages/DashboardPage";
@@ -23,7 +22,6 @@ export function AppRoutes() {
         <Route path="/recommandation" element={<RecommendationPage />} />
         <Route path="/random" element={<RandomPage />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/about" element={<About />} />
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
         {authRoutes.map((route) => (

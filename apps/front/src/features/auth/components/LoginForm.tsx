@@ -53,7 +53,7 @@ export const LoginForm = () => {
 
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-heading">Bienvenue</h2>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-gray-500 mt-1">
           Connectez-vous pour continuer votre{" "}
           <span className="text-green-500 font-medium">aventure</span> avec{" "}
           <span className="text-green-500 font-medium">CountryTravel</span>.
@@ -95,17 +95,9 @@ export const LoginForm = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-semibold text-gray-700">
-                Mot de passe
-              </label>
-              <Link
-                to="/auth/forgot-password"
-                className="text-xs text-green-500 hover:underline"
-              >
-                Mot de passe oublié ?
-              </Link>
-            </div>
+            <label htmlFor="password" className="text-sm font-semibold text-gray-700">
+              Mot de passe
+            </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -119,7 +111,7 @@ export const LoginForm = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 aria-label={
                   showPassword
                     ? "Masquer le mot de passe"
@@ -140,13 +132,6 @@ export const LoginForm = () => {
             )}
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              className="w-4 h-4 accent-green-500 rounded"
-            />
-            <span className="text-sm text-gray-500">Se souvenir de moi</span>
-          </label>
         </div>
         {apiError && (
           <p role="alert" className="text-red-500 text-xs text-center mt-2">
@@ -161,7 +146,7 @@ export const LoginForm = () => {
         </button>
       </form>
 
-      <p className="text-center text-xs text-gray-400 mt-6">
+      <p className="text-center text-xs text-gray-500 mt-6">
         Vous n'avez pas de compte ?{" "}
         <Link
           to="/auth/register"
