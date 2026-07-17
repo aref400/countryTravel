@@ -4,13 +4,8 @@ import type {
 } from "@/features/recommendations/types";
 import type { Country } from "@/shared/types/CountryType";
 
-export interface Visit {
-  id: string;
-  countryId: string;
-  visitedAt: string | null;
-  createdAt: string;
-  country: Pick<Country, "id" | "isoCode" | "name" | "flagUrl" | "continent">;
-}
+// Le type Visit vit dans la feature visits (partagé avec la fiche pays)
+export type { Visit } from "@/features/visits/types";
 
 export interface MyReview {
   id: string;

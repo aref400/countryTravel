@@ -43,7 +43,7 @@ export function CountryResult({
           onClick={onReplay}
           className="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-200 transition-colors"
         >
-          Rejouer 🎲
+          Rejouer
         </button>
       </div>
     </div>
