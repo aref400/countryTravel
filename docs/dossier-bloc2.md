@@ -68,7 +68,7 @@ Fonctionnalités en production à la date de remise :
 | Front (Netlify) | https://grand-stardust-e3ca80.netlify.app/ |
 | API (Railway) | https://disciplined-art-production-4eaa.up.railway.app/api/v1 |
 
-<!-- ✍️ TODO Lucas : 1 capture d'écran de la page d'accueil en prod -->
+![Page d'accueil](images/page-accueil.png)
 
 ---
 
@@ -132,8 +132,7 @@ cœur métier du produit (C2.2.1).
 
 ### 3.1 Parcours utilisateur
 
-<!-- ✍️ TODO Lucas : 3-4 captures d'écran : étapes du formulaire, page de résultats,
-     modale de sauvegarde, fiche pays atteinte depuis un résultat -->
+![Formulaire de recommandation](images/form-reco.png) -> ![Recommandation proposées](images/reco-propose.png) -> ![Modale de sauvegarde](images/modale-sauvegarde-reco.png) -> ![page pays](images/page-pays.png)
 
 ### 3.2 Fonctionnement du scoring
 
@@ -181,7 +180,7 @@ Particularité documentée : les migrations de base de données ne sont **pas** 
 par le pipeline — procédure manuelle décrite dans le manuel de mise à jour (complet : `docs/manuel-mise-a-jour.md`),
 avec l'axe d'amélioration identifié (ajout d'une étape `prisma migrate deploy`).
 
-<!-- ✍️ TODO Lucas : 1 capture de l'onglet Actions montrant un run vert PR + deploy -->
+![CI github](images/CI-github.png)
 
 ---
 
@@ -378,9 +377,6 @@ pour toute nouvelle installation)
 Cette fiche illustre l'intérêt du processus : une anomalie invisible en production,
 révélée uniquement parce que le manuel de déploiement a été testé en conditions réelles.
 
-<!-- ✍️ TODO Lucas : vérifier que les commits « à renseigner à la livraison »
-     des fiches BUG-06/07/08 sont maintenant remplis -->
-
 ---
 
 ## 11. Historique des versions
@@ -391,15 +387,12 @@ CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **110 com
 
 | Jalon | Contenu livré | PRs |
 |---|---|---|
-| Sprint 1 | Socle technique (NestJS, React, Prisma, CI/CD), authentification | #1–… |
-| Sprint 2 | Catalogue pays, seed, moteur de scoring, fiches pays | … |
-| Sprint 3 | Recommandation multi-étapes, sauvegarde, aléatoire, carte mondiale | … |
+| Sprint 1 | Socle technique (NestJS, React, Prisma, CI/CD), authentification | #1–#3 |
+| Sprint 2 | Catalogue pays, seed, moteur de scoring, fiches pays | #3–#8 |
+| Sprint 3 | Recommandation multi-étapes, sauvegarde, aléatoire, carte mondiale | #9–#19 |
 | Qualité | Tests front, sécurité/accessibilité (C2.2.3), docs, qualité/perf (C2.1.1) | #17–#23 |
 | Sprint 4 | Pays visités, avis, tableau de bord | #24–#26 |
-| Corrections | BUG-09, BUG-10 | #27–#28 |
-
-<!-- ✍️ TODO Lucas : compléter les numéros de PR des premiers jalons
-     (git log --oneline --merges les liste tous) -->
+| Corrections | BUG-09, BUG-10, BUG-11 | #27–#32 |
 
 ---
 
