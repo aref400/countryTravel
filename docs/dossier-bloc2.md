@@ -1,9 +1,9 @@
 # Dossier Bloc 2 — Concevoir et développer des applications logicielles
 
 **Certification** : Expert(e) en Développement Logiciel (RNCP39583) — Ynov Campus
-**Candidat** : Lucas <!-- ✍️ TODO Lucas : nom complet, promotion, date de remise -->
+**Candidat** : Lucas Lafourcade
 **Projet support** : CountryTravel — plateforme de découverte de destinations de voyage
-**Code source** : <!-- ✍️ TODO Lucas : URL du repo GitHub --> (remis avec ce dossier)
+**Code source** : https://github.com/aref400/countryTravel (remis avec ce dossier)
 
 > ⚠️ **Document de travail** : les blocs `TODO Lucas` sont à compléter, les blocs `[EXTRAIT]`
 > signalent du contenu à recopier/condenser depuis le document source indiqué.
