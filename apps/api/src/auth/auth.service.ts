@@ -18,11 +18,24 @@ interface JwtPayload {
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
+  private readonly jwtSecret: string;
+  private readonly jwtRefreshSecret: string;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    const jwtSecret = process.env.JWT_SECRET;
+    const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
+    if (!jwtSecret) {
+      throw new Error('JWT_SECRET must be defined in the environment');
+    }
+    if (!jwtRefreshSecret) {
+      throw new Error('JWT_REFRESH_SECRET must be defined in the environment');
+    }
+    this.jwtSecret = jwtSecret;
+    this.jwtRefreshSecret = jwtRefreshSecret;
+  }
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -98,7 +111,7 @@ export class AuthService {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(
         dto.refreshToken,
         {
-          secret: process.env.JWT_REFRESH_SECRET,
+          secret: this.jwtRefreshSecret,
         },
       );
       const user = await this.prisma.user.findUnique({
@@ -120,12 +133,12 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       // Access token : 15 minutes
       this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_SECRET,
+        secret: this.jwtSecret,
         expiresIn: '15m',
       }),
       // Refresh token : 7 jours
       this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: this.jwtRefreshSecret,
         expiresIn: '7d',
       }),
     ]);
