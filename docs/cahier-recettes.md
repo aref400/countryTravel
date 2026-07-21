@@ -159,7 +159,7 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 
 | ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
 |---|---|---|---|---|---|
-| SEC-01 | Démarrage sans `JWT_SECRET` | Variable `JWT_SECRET` absente de l'environnement | Démarrer l'API | L'API refuse de démarrer (erreur explicite), pas de démarrage avec un secret par défaut | ✅ |
+| SEC-01 | Démarrage sans secret JWT (`JWT_SECRET` ou `JWT_REFRESH_SECRET`) | L'une des deux variables `JWT_SECRET` / `JWT_REFRESH_SECRET` absente de l'environnement | Démarrer l'API | L'API refuse de démarrer (erreur explicite nommant la variable manquante), pas de démarrage avec un secret par défaut ni d'échec différé à la première requête d'authentification | ✅ |
 | SEC-02 | Rate limiting sur `/auth/login` | — | Envoyer 6 requêtes `POST /auth/login` en moins d'une minute depuis la même IP | Les 5 premières sont traitées normalement, la 6e renvoie 429 Too Many Requests | ✅ |
 | SEC-03 | Rate limiting sur `/auth/register` | — | Envoyer 6 requêtes `POST /auth/register` en moins d'une minute depuis la même IP | La 6e renvoie 429 Too Many Requests | ✅ |
 | SEC-04 | Logging d'une tentative de connexion échouée | — | Tenter une connexion avec un email valide et un mauvais mot de passe | Un log serveur de niveau warning est émis (email visible, mot de passe jamais loggé) | ✅ |
