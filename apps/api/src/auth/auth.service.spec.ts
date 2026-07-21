@@ -23,6 +23,12 @@ describe('AuthService', () => {
     signAsync: jest.fn(),
   };
 
+  // Le constructeur d'AuthService exige ces deux secrets au démarrage.
+  beforeAll(() => {
+    process.env.JWT_SECRET = 'test-secret';
+    process.env.JWT_REFRESH_SECRET = 'test-refresh-secret';
+  });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -37,6 +43,34 @@ describe('AuthService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  // Validation de la configuration au démarrage (BUG-11) : une variable de secret
+  // manquante doit faire échouer l'instanciation du service, pas planter plus tard
+  // à la première requête d'authentification.
+  describe('validation des secrets au démarrage', () => {
+    const buildModule = () =>
+      Test.createTestingModule({
+        providers: [
+          AuthService,
+          { provide: PrismaService, useValue: mockPrismaService },
+          { provide: JwtService, useValue: mockJwtService },
+        ],
+      }).compile();
+
+    it('should throw if JWT_SECRET is missing', async () => {
+      const saved = process.env.JWT_SECRET;
+      delete process.env.JWT_SECRET;
+      await expect(buildModule()).rejects.toThrow('JWT_SECRET');
+      process.env.JWT_SECRET = saved;
+    });
+
+    it('should throw if JWT_REFRESH_SECRET is missing', async () => {
+      const saved = process.env.JWT_REFRESH_SECRET;
+      delete process.env.JWT_REFRESH_SECRET;
+      await expect(buildModule()).rejects.toThrow('JWT_REFRESH_SECRET');
+      process.env.JWT_REFRESH_SECRET = saved;
+    });
   });
 
   describe('register', () => {

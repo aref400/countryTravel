@@ -16,7 +16,7 @@ Production : API hébergée sur **Railway** (avec sa base PostgreSQL), front hé
 ## 2. Prérequis
 
 - **Node.js ≥ 20** et npm ≥ 10 (seul prérequis indispensable)
-- **Docker Desktop** (optionnel — uniquement pour la base de données locale du parcours B)
+- **[Docker Desktop](https://www.docker.com/products/docker-desktop/)** (optionnel — uniquement pour la base de données locale du parcours B)
 - Un compte sur l'application n'exige rien d'autre qu'un navigateur récent
 
 ## 3. Installation locale
@@ -33,12 +33,27 @@ L'application de production est accessible en ligne (front Netlify + API Railway
 git clone <url-du-repo> && cd countryTravel
 docker compose up -d                      # démarre PostgreSQL 17 en local
 cp apps/api/.env.example apps/api/.env    # la DATABASE_URL par défaut pointe déjà sur cette base
-# → éditer apps/api/.env : renseigner JWT_SECRET et JWT_REFRESH_SECRET
-#   (générer des secrets forts : openssl rand -base64 64)
+# → éditer apps/api/.env : renseigner JWT_SECRET et JWT_REFRESH_SECRET (voir ci-dessous)
 npm install                               # installe les workspaces + génère le client Prisma
 npm run db:setup                          # applique les migrations + seed (30 pays, 30 fiches critères)
 npm run dev                               # démarre API (:3000) et front (:5173) en parallèle
 ```
+
+> **Générer les deux secrets JWT.** `JWT_SECRET` et `JWT_REFRESH_SECRET` doivent être
+> **deux valeurs distinctes** (le refresh token vit 7 jours : une clé compromise ne doit
+> pas suffire à forger les deux types de jetons). L'API **refuse de démarrer** si l'un des
+> deux est absent. Lancez donc la commande **deux fois** — une valeur par variable :
+>
+> ```bash
+> openssl rand -base64 64      # à exécuter 2 fois : copier chaque sortie dans une variable
+> ```
+>
+> Si votre terminal ne dispose pas d'`openssl` (fréquent sous Windows/PowerShell), utilisez
+> Node, forcément présent puisque requis par le projet :
+>
+> ```bash
+> node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"   # idem, 2 fois
+> ```
 
 ### Parcours C — local sans Docker
 
@@ -64,7 +79,7 @@ Fichier `apps/api/.env` (modèle complet dans `apps/api/.env.example`) :
 | ------------------------------------------- | ----------------------------- | -------------------------------------------- |
 | `DATABASE_URL`                              | Connexion PostgreSQL          | Par défaut : base Docker locale              |
 | `JWT_SECRET`                                | Signature des access tokens   | **L'API refuse de démarrer s'il est absent** |
-| `JWT_REFRESH_SECRET`                        | Signature des refresh tokens  | Distinct de `JWT_SECRET`                     |
+| `JWT_REFRESH_SECRET`                        | Signature des refresh tokens  | **Distinct de `JWT_SECRET` ; l'API refuse aussi de démarrer s'il est absent** |
 | `JWT_EXPIRES_IN` / `JWT_REFRESH_EXPIRES_IN` | Durées de vie                 | 15 min / 7 jours                             |
 | `PORT`                                      | Port de l'API                 | 3000 par défaut                              |
 | `NODE_ENV`                                  | Environnement                 | `production` désactive Swagger               |
