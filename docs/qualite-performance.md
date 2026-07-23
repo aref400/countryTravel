@@ -12,7 +12,7 @@ Il décrit l'environnement de développement et les outils mobilisés, définit 
 
 | Composant | Outil retenu | Rôle |
 |---|---|---|
-| Éditeur de code | VS Code / Windsurf (configurations versionnées : `.vscode/`, `.windsurf/`) | Développement, extensions ESLint/Prettier |
+| Éditeur de code | VS Code  (configurations versionnées : `.vscode/`) | Développement, extensions ESLint/Prettier |
 | Langage | TypeScript 5.7 (mode `strict`) | Typage statique sur l'ensemble du code |
 | Compilateur | `tsc` (API, via `nest build`) et Vite/esbuild (front) | Compilation et vérification de types |
 | Serveur d'application | NestJS 11 sur Node.js 24 (Node 20 en CI et en production) | Exécution de l'API REST |
