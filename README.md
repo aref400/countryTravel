@@ -8,6 +8,17 @@ une carte mondiale interactive, des fiches pays détaillées et un volet communa
 Projet support de la certification **« Expert(e) en Développement Logiciel »**
 (RNCP39583, Ynov Campus).
 
+> ### 📄 Dossier de certification — Bloc 2
+>
+> **➡️ [LL-CountryTravel-Bloc2Doc.pdf](docs/LL-CountryTravel-Bloc2Doc.pdf)** — le dossier écrit
+> remis avec ce code source.
+>
+> **Application en ligne** (aucune installation requise) :
+> [interface](https://grand-stardust-e3ca80.netlify.app/) ·
+> [API](https://disciplined-art-production-4eaa.up.railway.app/api/v1)
+>
+> Pour installer le projet en local, voir [Démarrage rapide](#démarrage-rapide-docker) ci-dessous.
+
 ![Page d'accueil de CountryTravel](docs/images/page-accueil.png)
 
 ## À propos
@@ -152,6 +163,7 @@ Autres méthodes d'installation (sans Docker, ou utiliser l'application déjà d
 
 ## Documentation
 
+- 📄 **[Dossier de certification Bloc 2 (PDF)](docs/LL-CountryTravel-Bloc2Doc.pdf)** — le document remis au jury
 - [Manuel de déploiement](docs/manuel-deploiement.md) — installation, environnements, CI/CD
 - [Manuel d'utilisation](docs/manuel-utilisation.md) — fonctionnalités côté utilisateur
 - [Manuel de mise à jour](docs/manuel-mise-a-jour.md) — dépendances, migrations, données, rollback
