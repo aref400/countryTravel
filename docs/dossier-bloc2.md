@@ -258,9 +258,11 @@ Synthèse du mapping complet dans `docs/securite-accessibilite.md`. Points saill
   `/auth/login` et `/auth/register` (5/min)
 - **A05 Configuration** : Helmet, CORS, Swagger désactivé en production,
   démarrage refusé si `JWT_SECRET` absent et `JWT_REFRESH_SECRET` absent
-- **A06 Composants vulnérables** : audit npm triagé et documenté — 5 vulnérabilités high,
-  liées à d3-color/react-simple-maps mais non exploitables et downgrade impossible,
-  décision argumentée dans `docs/securite-accessibilite.md`
+- **A06 Composants vulnérables** : audit npm triagé et documenté — 12 alertes résiduelles
+  (9 *high*, 3 *moderate*) réparties en deux chaînes transitives : ReDoS `d3-color` via
+  `react-simple-maps` (la carte), et la CLI `prisma dev` / `shadcn`, jamais exécutées par
+  l'API en production. Aucune n'est atteignable à l'exécution, et leur correction imposerait
+  une régression de version majeure : décision argumentée dans `docs/securite-accessibilite.md`
 - **A07 Authentification** : JWT courts (15 min) + refresh (7 j), politique de mot de
   passe (8 caractères min, au moins un chiffre et une majuscule — validée front **et** API)
 - **A08 Intégrité logicielle** : lockfile commité, installation reproductible en CI (`npm ci`)
@@ -419,7 +421,7 @@ révélée uniquement parce que le manuel de déploiement a été testé en cond
 ## 11. Historique des versions
 
 Flux de travail : une branche par ticket ou bug (`CT-xxx`, `BUG-xx`), pull request,
-CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **119 commits,
+CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **118 commits,
 32 pull requests** à la date de rédaction.
 
 | Jalon | Contenu livré | PRs |
