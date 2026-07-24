@@ -80,7 +80,7 @@ Fichier `apps/api/.env` (modèle complet dans `apps/api/.env.example`) :
 | `DATABASE_URL`                              | Connexion PostgreSQL          | Par défaut : base Docker locale              |
 | `JWT_SECRET`                                | Signature des access tokens   | **L'API refuse de démarrer s'il est absent** |
 | `JWT_REFRESH_SECRET`                        | Signature des refresh tokens  | **Distinct de `JWT_SECRET` ; l'API refuse aussi de démarrer s'il est absent** |
-| `JWT_EXPIRES_IN` / `JWT_REFRESH_EXPIRES_IN` | Durées de vie                 | 15 min / 7 jours                             |
+| _(durées de vie des jetons)_                | 15 min (access) / 7 jours (refresh) | Fixées dans le code (`auth.service.ts`), non configurables par variable |
 | `PORT`                                      | Port de l'API                 | 3000 par défaut                              |
 | `NODE_ENV`                                  | Environnement                 | `production` désactive Swagger               |
 | `FRONTEND_URL`                              | Origine autorisée par le CORS | `http://localhost:5173` par défaut           |

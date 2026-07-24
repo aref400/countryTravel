@@ -5,18 +5,6 @@
 **Projet support** : CountryTravel — plateforme de découverte de destinations de voyage
 **Code source** : https://github.com/aref400/countryTravel (remis avec ce dossier)
 
-> ⚠️ **Document de travail** : les blocs `TODO Lucas` sont à compléter, les blocs `[EXTRAIT]`
-> signalent du contenu à recopier/condenser depuis le document source indiqué.
-> **Limite : 30 pages maximum, TOUT compris** (règlement vérifié le 17/07) — chaque élément
-> figure ici en version condensée ; les documents complets restent dans `docs/` du repo,
-> remis avec le code source.
->
-> Budget de pages indicatif (total ≈ 29) :
-> garde + sommaire 2 · §1 1,5 · §2 3 · §3 2 · §4 2 · §5 2 · §6 2 · §7 2,5 · §8 2 ·
-> §9 recettes 3 · §10 bogues 2,5 · §11 versions 1,5 · §12 manuels 4,5 · conclusion 1
-
----
-
 ## Table de correspondance avec le référentiel
 
 | Élément exigé par le référentiel | Section | Version complète (repo remis avec le dossier) |
@@ -50,7 +38,8 @@ destination aléatoire, carte mondiale interactive colorée par les notes de la
 communauté, fiches pays détaillées, et un volet communautaire (pays visités,
 avis notés, tableau de bord personnel).
 
-<!-- ✍️ TODO Lucas : 3-4 lignes avec tes mots sur l'origine de l'idée et le public visé -->
+Le but de CountryTravel est de proposer une liste de pays adaptée aux préférences des utilisateurs,
+tout en gardant un aspect communautaire (via les notes et les avis des voyageurs…).
 
 ### 1.2 Périmètre livré
 
@@ -68,7 +57,7 @@ Fonctionnalités en production à la date de remise :
 | Front (Netlify) | https://grand-stardust-e3ca80.netlify.app/ |
 | API (Railway) | https://disciplined-art-production-4eaa.up.railway.app/api/v1 |
 
-<!-- ✍️ TODO Lucas : 1 capture d'écran de la page d'accueil en prod -->
+![Page d'accueil](images/page-accueil.png)
 
 ---
 
@@ -115,15 +104,9 @@ flowchart LR
 | Formulaires | React Hook Form + Zod | Validation déclarative par schéma, typage inféré |
 | Styles | TailwindCSS + shadcn/ui | Utility-first, composants accessibles |
 
-<!-- ✍️ TODO Lucas : ajouter 2-3 lignes d'argumentaire ÉCRIT sur un choix structurant —
-     le Bloc 2 est évalué sur dossier seul, sans oral : tout ce qui n'est pas écrit ici
-     n'existe pas pour le jury. Bon candidat : le module auth encapsule ses propres pages
-     et routes (features/auth/pages + auth.routes.tsx) alors que les autres pages vivent
-     dans src/pages — choix de colocalisation assumé pour le module le plus sensible,
-     harmonisation identifiée comme axe d'amélioration. Autres options : Zustand plutôt
-     que Redux, découpage par feature. -->
+Côté API, NestJS impose un découpage en **modules métier** (`auth`, `countries`, `recommendations`…), chacun encapsulant son contrôleur (HTTP), son service (métier) et ses DTO validés, l'accès aux données restant isolé derrière Prisma. Un module se teste et évolue seul : c'est le pendant back du découpage par feature du front, la même logique de maintenabilité appliquée aux deux applications.
 
----
+Côté front, le découpage est **par fonctionnalité** (`src/features/*`) plutôt que par type technique : chaque feature embarque ses composants, hooks, services et schémas, et se modifie sans risquer d'en casser une autre. Compromis assumé : le module `auth`, le plus sensible, colocalise ses pages *et* ses routes là où les autres pages vivent dans `src/pages` — choix délibéré, harmonisation identifiée comme axe d'amélioration.
 
 ## 3. Présentation d'un prototype : le moteur de recommandation
 
@@ -132,8 +115,7 @@ cœur métier du produit (C2.2.1).
 
 ### 3.1 Parcours utilisateur
 
-<!-- ✍️ TODO Lucas : 3-4 captures d'écran : étapes du formulaire, page de résultats,
-     modale de sauvegarde, fiche pays atteinte depuis un résultat -->
+![Formulaire de recommandation](images/form-reco.png) -> ![Recommandation proposées](images/reco-propose.png) -> ![Modale de sauvegarde](images/modale-sauvegarde-reco.png) -> ![page pays](images/page-pays.png)
 
 ### 3.2 Fonctionnement du scoring
 
@@ -181,7 +163,7 @@ Particularité documentée : les migrations de base de données ne sont **pas** 
 par le pipeline — procédure manuelle décrite dans le manuel de mise à jour (complet : `docs/manuel-mise-a-jour.md`),
 avec l'axe d'amélioration identifié (ajout d'une étape `prisma migrate deploy`).
 
-<!-- ✍️ TODO Lucas : 1 capture de l'onglet Actions montrant un run vert PR + deploy -->
+![CI github](images/CI-github.png)
 
 ---
 
@@ -201,7 +183,7 @@ TypeScript strict, ESLint, Prettier, tests Jest (API) et Vitest + React Testing 
   en CI : 80/65/75/80.
 - **Front : stratégie assumée** — tests unitaires ciblés sur la couche logique
   (`shared/services` 94 %, `shared/lib` 81 %, store, hooks) ; les composants de
-  présentation sont couverts par la recette manuelle (108 scénarios, `docs/cahier-recettes.md`).
+  présentation sont couverts par la recette manuelle (125 scénarios, `docs/cahier-recettes.md`).
   La couverture globale front (14 %) n'est volontairement pas seuillée : ce chiffre
   et cette décision sont documentés et justifiés dans `docs/qualite-performance.md`.
 
@@ -254,10 +236,10 @@ it('should return 75 if all activity levels are half distance apart', () => {
 Les autres cas couvrent les bornes (0 et 100), l'exigence « adapté aux familles »
 (éliminatoire dans un sens, neutre dans l'autre), et la garantie d'un score entier.
 
-Harnais anti-régression complet : **84 tests API** (12 fichiers de spec — dont
+Harnais anti-régression complet : **86 tests API** (12 fichiers de spec — dont
 AuthService : doublon à l'inscription, mauvais mot de passe ; ReviewsService : upsert
 et rejet 422 pays non visité) et **53 tests front** (12 fichiers — Vitest + React
-Testing Library), soit **137 tests**, tous verts, exécutés à chaque PR (§4.1).
+Testing Library), soit **139 tests**, tous verts, exécutés à chaque PR (§4.1).
 
 ---
 
@@ -275,13 +257,17 @@ Synthèse du mapping complet dans `docs/securite-accessibilite.md`. Points saill
 - **A04 Conception** : rate limiting global (100 req/min/IP) + strict sur
   `/auth/login` et `/auth/register` (5/min)
 - **A05 Configuration** : Helmet, CORS, Swagger désactivé en production,
-  démarrage refusé si `JWT_SECRET` absent
+  démarrage refusé si `JWT_SECRET` absent et `JWT_REFRESH_SECRET` absent
+- **A06 Composants vulnérables** : audit npm triagé et documenté — 12 alertes résiduelles
+  (9 *high*, 3 *moderate*) réparties en deux chaînes transitives : ReDoS `d3-color` via
+  `react-simple-maps` (la carte), et la CLI `prisma dev` / `shadcn`, jamais exécutées par
+  l'API en production. Aucune n'est atteignable à l'exécution, et leur correction imposerait
+  une régression de version majeure : décision argumentée dans `docs/securite-accessibilite.md`
 - **A07 Authentification** : JWT courts (15 min) + refresh (7 j), politique de mot de
   passe (8 caractères min, au moins un chiffre et une majuscule — validée front **et** API)
+- **A08 Intégrité logicielle** : lockfile commité, installation reproductible en CI (`npm ci`)
 - **A09 Journalisation** : tentatives de connexion journalisées, jamais les mots de passe
-- **Dépendances (A06)** : audit npm triagé et documenté — 3 vulnérabilités modérées
-  résiduelles analysées comme non exploitables (sous-commande Prisma jamais invoquée),
-  décision argumentée dans `docs/securite-accessibilite.md`
+- **A10 SSRF** : non applicable — l'API n'effectue aucune requête sortante pilotée par une entrée utilisateur
 
 ---
 
@@ -313,11 +299,11 @@ pas un audit exhaustif des 106 critères du référentiel.
 
 ## 9. Cahier de recettes
 
-Le cahier complet — **108 scénarios** répartis en 12 sections (authentification, pays,
+Le cahier complet — **125 scénarios** répartis en 12 sections (authentification, pays,
 recommandation, sauvegarde, aléatoire, carte, navigation, sécurité, accessibilité,
 visites, avis, tableau de bord) — est remis avec le code source
-(`docs/cahier-recettes.md`). Le dossier en présente la méthodologie, le bilan
-d'exécution et un extrait représentatif.
+(`docs/cahier-recettes.md`). Le dossier en présente la méthodologie, le bilan par
+section et un extrait représentatif.
 
 ### 9.1 Méthodologie
 
@@ -331,23 +317,56 @@ Campagne complète rejouée le 15/07/2026 puis complétée à la livraison du sp
 la campagne a révélé de vrais défauts (BUG-06, BUG-07, BUG-08 — voir §10),
 démontrant que la recette est un outil de détection, pas une formalité.
 
-### 9.3 Extrait représentatif
+Les scénarios couvrent trois natures de tests : **fonctionnels** (parcours métier —
+inscription, recommandation, visites, avis, tableau de bord), **structurels / de
+robustesse** (validation des bornes, codes ISO invalides, JSON malformé, doublons) et
+**de sécurité** (contrôles d'accès 401/403, rate limiting, refus de démarrage sans secret
+— section 7). La dernière campagne affiche **125 scénarios au vert (100 %)**.
 
-| ID | Scénario | Étapes | Résultat attendu | Statut |
-|---|---|---|---|---|
-| AUTH-01 | Inscription réussie | Envoyer `{email, username, password}` valides | 201, réponse avec `user` + `accessToken` + `refreshToken` | ✅ |
-| AUTH-21 | Mot de passe sans chiffre | Envoyer `password: "abccddcsA"` | 400, « Le mot de passe doit contenir au moins un chiffre » | ✅ |
-| SEC-02 | Rate limiting sur `/auth/login` | 6 requêtes en moins d'une minute, même IP | Les 5 premières traitées, la 6ᵉ renvoie 429 Too Many Requests | ✅ |
-| A11Y-01 | Navigation clavier sur la carte | `Tab` jusqu'à un pays, valider avec `Entrée` | Contour de focus visible, tooltip identique au survol, navigation vers `/pays/:code` | ✅ |
+### 9.3 Bilan par section
+
+| # | Section | Scénarios | Réussite |
+|---|---|---|---|
+| 1 | Authentification | 22 | 100 % |
+| 2 | Consultation des pays | 14 | 100 % |
+| 3 | Moteur de recommandation (calcul + sauvegarde) | 20 | 100 % |
+| 4 | Destination aléatoire | 4 | 100 % |
+| 5 | Carte mondiale interactive | 6 | 100 % |
+| 6 | Navigation générale | 3 | 100 % |
+| 7 | Sécurité | 7 | 100 % |
+| 8 | Accessibilité (RGAA) | 9 | 100 % |
+| 9 | Pays visités | 11 | 100 % |
+| 10 | Avis sur les pays (API) | 12 | 100 % |
+| 11 | Tableau de bord utilisateur | 8 | 100 % |
+| 12 | Avis sur la fiche pays (front) | 9 | 100 % |
+| | **Total** | **125** | **100 %** |
+
+### 9.4 Extrait représentatif (un scénario par section)
+
+| ID | Scénario | Résultat attendu | Statut |
+|---|---|---|---|
+| AUTH-11 | Mot de passe incorrect à la connexion | 401 « Invalid password » | ✅ |
+| CTY-10 | Détail d'un pays inexistant (`GET /countries/ZZ`) | 404, pas de crash serveur | ✅ |
+| REC-01 | Calcul de recommandation nominal | 200, top 5 classé par score décroissant | ✅ |
+| SAV-02 | Sauvegarde d'une reco sans authentification | 401 (Unauthorized) | ✅ |
+| RND-04 | Erreur réseau lors du tirage aléatoire | Message `role="alert"` + « Réessayer », pas de page blanche | ✅ |
+| MAP-03 | Clic sur un pays de la carte (Vietnam) | Redirection vers `/pays/VN` | ✅ |
+| NAV-01 | Accès à une URL inconnue | Page 404 dédiée (anomalie BUG-06 corrigée) | ✅ |
+| SEC-01 | Démarrage de l'API sans secret JWT | L'API refuse de démarrer, message explicite | ✅ |
+| A11Y-01 | Navigation clavier sur la carte | Focus visible, tooltip, `Entrée` navigue vers la fiche | ✅ |
+| VIS-02 | Ajout d'un pays déjà visité (doublon) | 409 « Country already marked as visited » | ✅ |
+| REV-03 | Avis sur un pays non visité | 422 « You must have visited this country to review it » | ✅ |
+| DASH-04 | Suppression d'une visite (tableau de bord) | Retrait immédiat de la liste, de la carte et du compteur, sans rechargement | ✅ |
+| AVI-05 | Modification de mon avis (upsert) | Avis mis à jour sans doublon (même id) | ✅ |
 
 ---
 
 ## 10. Plan de correction des bogues
 
-Le plan complet — **10 fiches** (BUG-01 à BUG-10), chacune avec symptôme, analyse de
+Le plan complet — **11 fiches** (BUG-01 à BUG-11), chacune avec symptôme, analyse de
 cause, correction, commit de référence et test de non-régression — est remis avec le
 code source (`docs/plan-correction-bogues.md`). Le dossier en présente le processus,
-un tableau de synthèse des 10 fiches et une fiche complète en exemple.
+un tableau de synthèse des 11 fiches et une fiche complète en exemple.
 
 ### 10.1 Processus de traitement
 
@@ -359,7 +378,26 @@ un tableau de synthèse des 10 fiches et une fiche complète en exemple.
 5. **Vérification** — rejeu du scénario de recette concerné + CI verte avant merge,
    test de non-régression ajouté quand c'est pertinent
 
-### 10.2 Exemple de fiche
+### 10.2 Synthèse des anomalies traitées
+
+Gravité : 🔴 bloquant · 🟠 majeur · 🟡 mineur. Les 11 sont corrigées et couvertes par un
+rejeu de recette (et, quand pertinent, un test de non-régression).
+
+| ID | Titre | Gravité | Origine |
+|---|---|---|---|
+| BUG-01 | Crash sur JSON invalide en cache | 🔴 | Front — recommandation |
+| BUG-02 | Token non persisté en `localStorage` | 🟠 | Front — auth |
+| BUG-03 | Perte de contexte au retour arrière | 🟠 | Front — recommandation |
+| BUG-04 | 404 sur URLs directes (SPA Netlify) | 🔴 | Front — déploiement |
+| BUG-05 | Échec de lint en CI | 🟡 | Front — CI/CD |
+| BUG-06 | Page blanche sur URLs inconnues | 🟠 | Front — routing |
+| BUG-07 | Message erroné sur la longueur du mot de passe | 🟡 | API — validation |
+| BUG-08 | Seed inopérant (API externe dépréciée) | 🔴 | API — données |
+| BUG-09 | Sauvegarde de reco sans retour utilisateur | 🟠 | Front — recommandation |
+| BUG-10 | Expiration de session silencieuse (401 muets) | 🟠 | Front — auth |
+| BUG-11 | Secret de refresh non validé au démarrage | 🟡 | API — auth/config |
+
+### 10.3 Exemple de fiche
 
 **BUG-08 — Seed inopérant : dépendance à une API externe dépréciée** (🔴 bloquant
 pour toute nouvelle installation)
@@ -378,28 +416,22 @@ pour toute nouvelle installation)
 Cette fiche illustre l'intérêt du processus : une anomalie invisible en production,
 révélée uniquement parce que le manuel de déploiement a été testé en conditions réelles.
 
-<!-- ✍️ TODO Lucas : vérifier que les commits « à renseigner à la livraison »
-     des fiches BUG-06/07/08 sont maintenant remplis -->
-
 ---
 
 ## 11. Historique des versions
 
 Flux de travail : une branche par ticket ou bug (`CT-xxx`, `BUG-xx`), pull request,
-CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **110 commits,
-28 pull requests** à la date de rédaction.
+CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **118 commits,
+32 pull requests** à la date de rédaction.
 
 | Jalon | Contenu livré | PRs |
 |---|---|---|
-| Sprint 1 | Socle technique (NestJS, React, Prisma, CI/CD), authentification | #1–… |
-| Sprint 2 | Catalogue pays, seed, moteur de scoring, fiches pays | … |
-| Sprint 3 | Recommandation multi-étapes, sauvegarde, aléatoire, carte mondiale | … |
+| Sprint 1 | Socle technique (NestJS, React, Prisma, CI/CD), authentification | #1–#3 |
+| Sprint 2 | Catalogue pays, seed, moteur de scoring, fiches pays | #3–#8 |
+| Sprint 3 | Recommandation multi-étapes, sauvegarde, aléatoire, carte mondiale | #9–#19 |
 | Qualité | Tests front, sécurité/accessibilité (C2.2.3), docs, qualité/perf (C2.1.1) | #17–#23 |
 | Sprint 4 | Pays visités, avis, tableau de bord | #24–#26 |
-| Corrections | BUG-09, BUG-10 | #27–#28 |
-
-<!-- ✍️ TODO Lucas : compléter les numéros de PR des premiers jalons
-     (git log --oneline --merges les liste tous) -->
+| Corrections | BUG-09, BUG-10, BUG-11 | #27–#32 |
 
 ---
 
@@ -408,31 +440,86 @@ CI verte obligatoire, merge sur `main` qui déclenche le déploiement. **110 com
 Les trois manuels figurent ici en version condensée (~1,5 page chacun dans la version
 finale) ; les versions complètes sont remises avec le code source (`docs/manuel-*.md`).
 
-<!-- ✍️ TODO : transformer les trois résumés ci-dessous en vraies versions condensées
-     des manuels (commandes essentielles incluses), pas de simples descriptions -->
-
 ### 12.1 Manuel de déploiement (complet : `docs/manuel-deploiement.md`)
-Trois parcours d'installation (production hébergée / local Docker recommandé / local
-sans Docker), variables d'environnement, build production, pipeline CI/CD, checklist
-post-déploiement. **Testé par une installation à froid sur base vierge** (Docker +
-`npm run db:setup`), test qui a lui-même révélé et fait corriger BUG-08.
+
+Prérequis : Node ≥ 20. Installation locale recommandée (base PostgreSQL via Docker) :
+
+```bash
+git clone <url-du-repo> && cd countryTravel
+docker compose up -d                      # PostgreSQL 17 en local
+cp apps/api/.env.example apps/api/.env    # puis renseigner JWT_SECRET et JWT_REFRESH_SECRET
+npm install                               # workspaces + client Prisma
+npm run db:setup                          # migrations + seed (30 pays, 30 fiches critères)
+npm run dev                               # API :3000 + front :5173
+```
+
+`JWT_SECRET` et `JWT_REFRESH_SECRET` doivent être **deux valeurs distinctes** (l'API refuse
+de démarrer si l'une manque) — les générer avec `openssl rand -base64 64` (ou
+`node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"` sous Windows),
+lancé deux fois. Deux autres parcours sont documentés (application déjà déployée ; base
+PostgreSQL sans Docker).
+
+Production : `npm run build:api && npm run build:front`, `NODE_ENV=production` (désactive
+Swagger). **Déploiement continu** par GitHub Actions à chaque merge sur `main`
+(`deploy-api.yml` → Railway, `deploy-front.yml` → Netlify). **Point de vigilance** : les
+migrations de base ne sont **pas** appliquées par le pipeline (étape manuelle, voir §12.3).
+Le manuel se termine par une checklist post-déploiement. **Testé par une installation à froid
+sur base vierge**, test qui a lui-même révélé et fait corriger BUG-08.
 
 ### 12.2 Manuel d'utilisation (complet : `docs/manuel-utilisation.md`)
-Parcours utilisateur complet (compte, exploration, recommandation, carte, avis),
-fonctionnalités d'accessibilité, tableau de résolution des problèmes courants.
+
+L'application est utilisable **sans compte** pour toute la consultation et la
+recommandation ; un compte n'est requis que pour **sauvegarder** ses recommandations et
+accéder au **tableau de bord**.
+
+- **Explorer** : liste des pays (recherche, filtres continent/monnaie), fiche pays détaillée.
+- **Recommandation** : questionnaire multi-étapes (chaque critère de « Pas du tout » à
+  « Énormément » + interrupteur famille) → **top 5** avec score de compatibilité.
+- **Carte mondiale** : pays colorés par note moyenne ; survol pour le détail, clic pour la
+  fiche, zoom `Ctrl` + molette. Entièrement **navigable au clavier** (`Tab` / `Entrée`).
+- **Sécurité perçue** : après 5 tentatives de connexion en moins d'une minute, blocage
+  temporaire (« Too Many Requests ») ; session expirée après 15 min (reconnexion demandée).
+
+Le manuel détaille aussi les fonctions d'accessibilité (clavier, lecteurs d'écran) et un
+tableau de résolution des problèmes courants.
 
 ### 12.3 Manuel de mise à jour (complet : `docs/manuel-mise-a-jour.md`)
-Livraison d'une modification (branche → PR → CI → merge → déploiement), politique de
-mise à jour des dépendances, évolutions de schéma de base (migrations Prisma, procédure
-production), retour arrière, journal des versions.
+
+**Livrer une modification** : branche depuis `main` → pull request (la CI `pr.yml` exécute
+lint + tests + build, fusion seulement si tout est vert) → merge → déploiement automatique.
+
+**Dépendances** : `npm audit` / `npm audit fix` ; **jamais `--force` sans analyse** (montées
+majeures non maîtrisées). Après mise à jour : `npx tsc --noEmit` + suite de tests avant commit.
+
+**Évolution de schéma** : `npx prisma migrate dev --name <desc>` en local (commit du dossier
+de migration généré) ; en production, étape **manuelle** car hors pipeline :
+
+```bash
+cd apps/api
+DATABASE_URL="<url-railway>" npx prisma migrate deploy
+```
+
+**Retour arrière** : `git revert` (jamais `push --force`) ; rollback en un clic depuis les
+dashboards Railway et Netlify. L'historique des versions est porté par les merge commits de
+`main` (une PR = une évolution) et les fiches du plan de correction des bogues.
 
 ---
 
-## Conclusion
+## Améliorations et suite
 
-<!-- ✍️ TODO Lucas : 10-15 lignes avec tes mots : ce que le projet démontre par rapport
-     aux compétences du bloc, ce que tu ferais différemment, les évolutions prévues
-     (module profil utilisateur/RGPD CT-023, OAuth, volet social) -->
+**Axes d'amélioration technique identifiés**
+
+- Automatiser l'application des migrations Prisma dans le pipeline `deploy-api.yml` (aujourd'hui étape manuelle en production)
+- Renforcer la couverture de tests des composants d'interface côté front (actuellement couverts par la recette manuelle)
+- Alléger le bundle de la carte mondiale par un chargement différé de la route `/carte` (react-simple-maps + world-atlas)
+- Harmoniser l'organisation des pages sur le découpage par feature adopté partout ailleurs
+
+**Roadmap produit**
+
+- Module de profil utilisateur et gestion RGPD (CT-023)
+- Ouverture complète du volet communautaire (avis, amis) pour donner toute sa valeur à la carte notée
+- Authentification via fournisseurs externes (OAuth)
+- Supervision et alerting en production (relève du Bloc 4 « maintien en condition opérationnelle »)
 
 ---
 
@@ -441,8 +528,8 @@ production), retour arrière, journal des versions.
 Le dossier ci-dessus condense chaque élément ; les versions intégrales sont dans le
 dépôt (`docs/`), remis avec le dossier :
 
-- Cahier de recettes — `docs/cahier-recettes.md` (108 scénarios)
-- Plan de correction des bogues — `docs/plan-correction-bogues.md` (10 fiches)
+- Cahier de recettes — `docs/cahier-recettes.md` (125 scénarios)
+- Plan de correction des bogues — `docs/plan-correction-bogues.md` (11 fiches)
 - Sécurité et accessibilité — `docs/securite-accessibilite.md`
 - Critères de qualité et de performance — `docs/qualite-performance.md`
 - Manuels de déploiement / utilisation / mise à jour — `docs/manuel-*.md`
