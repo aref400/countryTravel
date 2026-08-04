@@ -6,8 +6,8 @@ Ce document consigne les anomalies détectées au cours du développement (via l
 
 ## Processus de traitement d'une anomalie
 
-1. **Détection** — via un scénario du [cahier de recettes](./cahier-recettes.md) en échec, un retour utilisateur, ou un échec de la CI (`pr.yml`).
-2. **Consignation** — création d'une fiche dans ce document : contexte, comportement observé vs attendu, gravité.
+1. **Détection** — via un scénario du [cahier de recettes](./cahier-recettes.md) en échec, un retour utilisateur, un signalement de la [supervision](./supervision.md) (Sentry, moniteur d'uptime), ou un échec de la CI (`pr.yml`).
+2. **Consignation** — ouverture d'une issue GitHub via le gabarit [`bug_report.yml`](../.github/ISSUE_TEMPLATE/bug_report.yml), qui impose les informations nécessaires à la reproduction (étapes, comportement attendu vs observé, gravité, périmètre, environnement). L'anomalie confirmée est ensuite reportée en fiche dans le présent document, qui fait office de registre consolidé. Un exemple de fiche renseignée figure dans [exemple-fiche-consignation.md](./exemple-fiche-consignation.md).
 3. **Analyse** — identification de la cause racine dans le code.
 4. **Correction** — développement du correctif sur une branche dédiée (convention `fix/CT-XXX/n` déjà en place sur le projet).
 5. **Vérification** — rejeu du scénario de recette concerné + revue de la CI avant merge.

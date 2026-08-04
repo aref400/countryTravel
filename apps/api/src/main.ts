@@ -1,3 +1,5 @@
+// Doit rester le tout premier import : Sentry instrumente les libs au chargement.
+import './instrument';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
