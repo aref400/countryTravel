@@ -77,4 +77,4 @@ Après modification : `npm run db:setup` (local) — le seed est idempotent (ups
 
 ## 6. Journal des versions
 
-Les évolutions notables sont tracées par les merge commits de `main` (une PR = une évolution) et les fiches du [plan de correction des bogues](./plan-correction-bogues.md) pour les correctifs. Un fichier `CHANGELOG.md` pourra être introduit si le rythme de livraison le justifie.
+Les évolutions notables sont consignées dans le [journal des versions](../CHANGELOG.md) (`CHANGELOG.md`, format _Keep a Changelog_), qui regroupe les livraisons par version en s'appuyant sur les merge commits de `main` (une PR = une évolution) et les fiches du [plan de correction des bogues](./plan-correction-bogues.md) pour les correctifs. À chaque nouvelle version livrée, ajouter une entrée en tête sous une section datée.
