@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { getMapData } from "../services/countries.service";
-import type { CountryMapData } from "../types/CountryType";
+import { getMapData } from "@/features/countries";
+import type { CountryMapData } from "@/features/countries";
 
 export function useMapData() {
   const [mapData, setMapData] = useState<CountryMapData[] | null>(null);

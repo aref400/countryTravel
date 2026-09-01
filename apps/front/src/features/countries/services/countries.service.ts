@@ -4,7 +4,7 @@ import type {
   CountryDetail,
   CountryFilters,
   CountryMapData,
-} from "../types/CountryType";
+} from "../types";
 
 export const getCountries = (filters: CountryFilters = {}) => {
   const params = new URLSearchParams();

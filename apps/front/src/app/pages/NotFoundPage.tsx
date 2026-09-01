@@ -1,7 +1,7 @@
 import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { Link } from "react-router";
 
-export function NotFound() {
+export function NotFoundPage() {
   usePageTitle("Page introuvable");
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">

@@ -1,14 +1,14 @@
 import { CriteriaBar } from "@/features/countries/components/CriteriaBar";
-import { ReviewsSection } from "@/features/reviews/components/ReviewsSection";
+import { ReviewsSection } from "@/features/reviews";
 import {
   CONTINENT_LABELS,
   CRITERIA_LABELS,
-} from "@/shared/constants/countries.constants";
-import { useCountry } from "@/shared/hooks/useCountry";
+} from "@/features/countries/constants";
+import { useCountry } from "@/features/countries/hooks/useCountry";
 import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { Link, useNavigate, useParams } from "react-router";
 
-export function CountryDetail() {
+export function CountryDetailPage() {
   const { isoCode } = useParams<{ isoCode: string }>();
   const { country, loading, error, notFound } = useCountry(isoCode ?? "");
   const navigate = useNavigate();

@@ -1,6 +1,5 @@
-import { useCountries } from "../../../shared/hooks/useCountries";
-import type { Country } from "../../../shared/types/CountryType";
-import { CountryCard } from "./CountryCard";
+import { CountryCard, useCountries } from "@/features/countries";
+import type { Country } from "@/features/countries";
 
 export function RecommendedCountries() {
   const { countries: countryList, loading, error } = useCountries(4);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCountries } from "../services/countries.service";
-import type { Country, CountryFilters } from "../types/CountryType";
+import type { Country, CountryFilters } from "../types";
 
 const PAGE_SIZE = 20;
 

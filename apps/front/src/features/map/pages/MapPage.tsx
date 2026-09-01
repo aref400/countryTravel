@@ -1,13 +1,13 @@
-import { MapLegend } from "@/features/countriesMap/components/MapLegend";
+import { MapLegend } from "@/features/map/components/MapLegend";
 import {
   getColorForRating,
   MAP_COLORS,
-} from "@/features/countriesMap/utils/colorScale";
+} from "@/features/map/utils/colorScale";
 import { ErrorState } from "@/shared/components/ErrorState";
-import { WorldMap } from "@/shared/components/WorldMap";
-import { useMapData } from "@/shared/hooks/useMapData";
+import { WorldMap } from "@/features/map/components/WorldMap";
+import { useMapData } from "@/features/map/hooks/useMapData";
 import { usePageTitle } from "@/shared/hooks/usePageTitle";
-import type { CountryMapData } from "@/shared/types/CountryType";
+import type { CountryMapData } from "@/features/countries";
 import { useMemo } from "react";
 import { useNavigate } from "react-router";
 

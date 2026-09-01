@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAuthStore } from "./auth.store";
 
 const mockUser = {
@@ -18,6 +18,8 @@ describe("auth.store", () => {
       configurable: true,
       value: { ...originalLocation, href: "" },
     });
+    // logout() notifie le serveur (POST /auth/logout) avant le nettoyage local
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
   });
 
   afterEach(() => {
@@ -25,6 +27,7 @@ describe("auth.store", () => {
       configurable: true,
       value: originalLocation,
     });
+    vi.unstubAllGlobals();
   });
 
   it("setAuth stocke le token en localStorage et met à jour le state (régression BUG-02)", () => {
@@ -61,12 +64,12 @@ describe("auth.store", () => {
     expect(useAuthStore.getState().user).toEqual(mockUser);
   });
 
-  it("logout supprime le token du localStorage et réinitialise le state", () => {
+  it("logout supprime le token du localStorage et réinitialise le state", async () => {
     useAuthStore
       .getState()
       .setAuth(mockUser, "access-token-123", "refresh-token-123");
 
-    useAuthStore.getState().logout();
+    await useAuthStore.getState().logout();
 
     expect(localStorage.getItem("token")).toBeNull();
     expect(useAuthStore.getState().user).toBeNull();
@@ -74,12 +77,42 @@ describe("auth.store", () => {
     expect(useAuthStore.getState().refreshToken).toBeNull();
   });
 
-  it("logout redirige vers la page d'accueil", () => {
+  it("logout appelle POST /auth/logout avec le token avant de nettoyer", async () => {
     useAuthStore
       .getState()
       .setAuth(mockUser, "access-token-123", "refresh-token-123");
 
-    useAuthStore.getState().logout();
+    await useAuthStore.getState().logout();
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/v1/auth/logout"),
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({
+          Authorization: "Bearer access-token-123",
+        }),
+      }),
+    );
+  });
+
+  it("logout déconnecte en local même si l'appel serveur échoue", async () => {
+    useAuthStore
+      .getState()
+      .setAuth(mockUser, "access-token-123", "refresh-token-123");
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("network")));
+
+    await useAuthStore.getState().logout();
+
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(useAuthStore.getState().isAuthenticated()).toBe(false);
+  });
+
+  it("logout redirige vers la page d'accueil", async () => {
+    useAuthStore
+      .getState()
+      .setAuth(mockUser, "access-token-123", "refresh-token-123");
+
+    await useAuthStore.getState().logout();
 
     expect(window.location.href).toBe("/");
   });

@@ -4,7 +4,7 @@ import { RecommendedCountries } from "@/features/home/components/RecommendedCoun
 import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useAuthStore } from "@/shared/store/auth.store";
 
-export function Home() {
+export function HomePage() {
   const { isAuthenticated } = useAuthStore();
   usePageTitle("Accueil");
   return (

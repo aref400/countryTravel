@@ -1,4 +1,4 @@
-import type { Country } from "@/shared/types/CountryType";
+import type { Country } from "@/features/countries";
 
 export interface Visit {
   id: string;

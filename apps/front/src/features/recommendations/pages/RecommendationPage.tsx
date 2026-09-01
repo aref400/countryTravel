@@ -3,22 +3,22 @@ import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { useState } from "react";
 import { Link } from "react-router";
-import { RecoCard } from "../features/recommendations/components/RecoCard";
+import { RecoCard } from "../components/RecoCard";
 import {
   SaveRecoModal,
   type SaveRecoStatus,
-} from "../features/recommendations/components/SaveRecoModal";
+} from "../components/SaveRecoModal";
 import {
   Step1Practical,
   Step2Climate,
   Step3Outdoor,
   Step4Culture,
   Step5Vibe,
-} from "../features/recommendations/components/steps";
-import { DEFAULT_FORM, STEPS } from "../features/recommendations/constants";
-import { useRecommendations } from "../features/recommendations/hooks/useRecommendations";
-import { saveRecommendation } from "../features/recommendations/services/recommendations.service";
-import type { RecoFormDto } from "../features/recommendations/types";
+} from "../components/steps";
+import { DEFAULT_FORM, STEPS } from "../constants";
+import { useRecommendations } from "../hooks/useRecommendations";
+import { saveRecommendation } from "../services/recommendations.service";
+import type { RecoFormDto } from "../types";
 
 export function RecommendationPage() {
   usePageTitle("Recommandations");

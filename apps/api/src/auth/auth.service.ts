@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { createHash, randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
@@ -36,6 +37,7 @@ export class AuthService {
     this.jwtSecret = jwtSecret;
     this.jwtRefreshSecret = jwtRefreshSecret;
   }
+
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -73,6 +75,7 @@ export class AuthService {
       ...tokens,
     };
   }
+
   async login(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -106,6 +109,15 @@ export class AuthService {
       ...tokens,
     };
   }
+
+  async logout(userId: string) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: null },
+    });
+    return { success: true };
+  }
+
   async refresh(dto: RefreshDto) {
     try {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(
@@ -122,11 +134,22 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException('User not found');
       }
+      if (
+        !user.refreshTokenHash ||
+        user.refreshTokenHash !== this.hashToken(dto.refreshToken)
+      ) {
+        throw new UnauthorizedException('Refresh token revoked');
+      }
       return this.generateTokens(user.id, user.email);
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
+
+  private hashToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
+  }
+
   private async generateTokens(userId: string, email: string) {
     const payload = { sub: userId, email };
 
@@ -136,12 +159,21 @@ export class AuthService {
         secret: this.jwtSecret,
         expiresIn: '15m',
       }),
-      // Refresh token : 7 jours
-      this.jwtService.signAsync(payload, {
-        secret: this.jwtRefreshSecret,
-        expiresIn: '7d',
-      }),
+      // Refresh token : 7 jours. Le jti unique garantit que deux tokens émis
+      // dans la même seconde diffèrent (sinon payload identique = token
+      // identique), condition nécessaire à la rotation et à la révocation.
+      this.jwtService.signAsync(
+        { ...payload, jti: randomUUID() },
+        {
+          secret: this.jwtRefreshSecret,
+          expiresIn: '7d',
+        },
+      ),
     ]);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: this.hashToken(refreshToken) }, // rotation refresh token : on stocke le hash du refresh token dans la base de données pour vérifier sa validité lors du prochain refresh
+    });
 
     return {
       accessToken,

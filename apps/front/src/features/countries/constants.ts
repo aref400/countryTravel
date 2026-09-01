@@ -1,4 +1,4 @@
-import type { CountryCriteria } from "../types/CountryType";
+import type { CountryCriteria } from "./types";
 
 export const CRITERIA_LABELS: Record<
   keyof Omit<CountryCriteria, "familyFriendly">,
