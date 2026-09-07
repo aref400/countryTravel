@@ -1,4 +1,4 @@
-import { useVisitStatus } from "@/features/visits/hooks/useVisitStatus";
+import { useVisitStatus } from "@/features/visits";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { Link } from "react-router";
 import { useCountryReviews } from "../hooks/useCountryReviews";

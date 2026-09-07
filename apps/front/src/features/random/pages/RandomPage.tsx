@@ -1,10 +1,10 @@
 import { usePageTitle } from "@/shared/hooks/usePageTitle";
 import { useCallback, useEffect, useState } from "react";
-import { CountryResult } from "../features/random/components/CountryResult";
-import { SlotReveal } from "../features/random/components/SlotReveal";
-import { getRandomCountry } from "../features/random/services/random.service";
-import { ErrorState } from "../shared/components/ErrorState";
-import type { CountryDetail } from "../shared/types/CountryType";
+import { CountryResult } from "../components/CountryResult";
+import { SlotReveal } from "../components/SlotReveal";
+import { getRandomCountry } from "../services/random.service";
+import { ErrorState } from "@/shared/components/ErrorState";
+import type { CountryDetail } from "@/features/countries";
 
 export function RandomPage() {
   usePageTitle("Destination aléatoire");

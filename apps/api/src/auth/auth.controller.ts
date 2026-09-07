@@ -31,6 +31,12 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@Request() req: RequestWithUser) {
+    return this.authService.logout(req.user.id);
+  }
+
   @UseGuards(JwtAuthGuard) // ← Protège cette route
   @Get('me')
   getMe(@Request() req: RequestWithUser) {

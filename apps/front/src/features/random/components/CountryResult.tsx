@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import type { CountryDetail } from "../../../shared/types/CountryType";
+import type { CountryDetail } from "@/features/countries";
 
 export function CountryResult({
   country,

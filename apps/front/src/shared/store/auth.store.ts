@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
 interface User {
   id: string;
   email: string;
@@ -15,7 +17,7 @@ interface AuthState {
   isAuthenticated: () => boolean;
   setAuth(user: User, accessToken: string, refreshToken: string): void;
   setTokens(accessToken: string, refreshToken: string): void;
-  logout(): void;
+  logout(): Promise<void>;
   expireSession(): void;
 }
 
@@ -36,7 +38,26 @@ export const useAuthStore = create<AuthState>()(
         localStorage.setItem("token", accessToken);
         set({ accessToken, refreshToken });
       },
-      logout: () => {
+      logout: async () => {
+        // Révocation côté serveur (best-effort) : invalide le refresh token en
+        // base (refreshTokenHash → null). On appelle AVANT de vider le token,
+        // car le JwtAuthGuard a besoin de l'Authorization header.
+        // fetch brut (pas apiClient) pour éviter le cycle d'imports avec
+        // fetch.instance, comme le fait déjà refreshSession.
+        const token = localStorage.getItem("token");
+        if (token) {
+          try {
+            await fetch(`${API_URL}/v1/auth/logout`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          } catch {
+            // Serveur/réseau injoignable : on déconnecte quand même en local.
+          }
+        }
         set({ user: null, accessToken: null, refreshToken: null });
         localStorage.removeItem("token");
         window.location.href = "/";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useAuthStore } from "../store/auth.store";
+import { useAuthStore } from "@/shared/store/auth.store";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -93,7 +93,7 @@ export function Navbar() {
                 <span>{user?.username}</span>
               </Link>
               <button
-                onClick={logout}
+                onClick={() => void logout()}
                 className="text-sm font-medium bg-red-500 hover:bg-red-600 transition-colors text-white px-4 py-1.5 rounded-lg"
               >
                 Déconnexion
@@ -252,7 +252,7 @@ export function Navbar() {
                   {user?.username}
                 </Link>
                 <button
-                  onClick={logout}
+                  onClick={() => void logout()}
                   className="flex-1 text-center text-sm font-semibold bg-red-500 hover:bg-red-600 transition-colors text-white py-2 rounded-lg"
                 >
                   Déconnexion

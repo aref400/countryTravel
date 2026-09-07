@@ -1,4 +1,4 @@
-import { WorldMap } from "@/shared/components/WorldMap";
+import { WorldMap } from "@/features/map";
 import { useMemo } from "react";
 import { useNavigate } from "react-router";
 import type { Visit } from "../types";

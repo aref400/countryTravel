@@ -1,11 +1,11 @@
 import type {
   RecoFormDto,
   RecommendationResponse,
-} from "@/features/recommendations/types";
-import type { Country } from "@/shared/types/CountryType";
+} from "@/features/recommendations";
+import type { Country } from "@/features/countries";
 
 // Le type Visit vit dans la feature visits (partagé avec la fiche pays)
-export type { Visit } from "@/features/visits/types";
+export type { Visit } from "@/features/visits";
 
 export interface MyReview {
   id: string;

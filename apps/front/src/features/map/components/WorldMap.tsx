@@ -1,4 +1,4 @@
-import { getAlpha2FromNumericId } from "@/shared/lib/countryIsoCode";
+import { getAlpha2FromNumericId } from "@/features/map/utils/countryIsoCode";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {

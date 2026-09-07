@@ -6,7 +6,7 @@ import type { MyReview, SavedReco } from "../types";
 export {
   deleteVisit,
   getMyVisits,
-} from "@/features/visits/services/visits.service";
+} from "@/features/visits";
 
 export const getMyReviews = () => {
   return apiClient.get<MyReview[]>("/v1/reviews/me");
