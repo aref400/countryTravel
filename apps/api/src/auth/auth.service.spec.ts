@@ -2,6 +2,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
+import { createHash } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -15,12 +16,14 @@ describe('AuthService', () => {
     user: {
       findUnique: jest.fn(),
       create: jest.fn(),
+      update: jest.fn(),
     },
   };
 
   // Mock de JwtService
   const mockJwtService = {
     signAsync: jest.fn(),
+    verifyAsync: jest.fn(),
   };
 
   // Le constructeur d'AuthService exige ces deux secrets au démarrage.
@@ -205,6 +208,105 @@ describe('AuthService', () => {
       await expect(service.login(loginDto)).rejects.toThrow(
         UnauthorizedException,
       );
+    });
+  });
+
+  // Rotation + révocation du refresh token : le hash (SHA-256) du refresh token
+  // courant est stocké en base. Un refresh n'est accepté que si le token présenté
+  // correspond au hash stocké ; le logout met ce hash à null (révocation).
+  describe('refresh', () => {
+    const refreshDto = { refreshToken: 'valid-refresh-token' };
+    const sha256 = (token: string) =>
+      createHash('sha256').update(token).digest('hex');
+
+    it('should rotate and return new tokens when the presented token matches the stored hash', async () => {
+      mockJwtService.verifyAsync.mockResolvedValue({
+        sub: 'user-id',
+        email: 'test@test.com',
+      });
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'user-id',
+        email: 'test@test.com',
+        refreshTokenHash: sha256(refreshDto.refreshToken),
+      });
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('new-access-token')
+        .mockResolvedValueOnce('new-refresh-token');
+
+      const result = await service.refresh(refreshDto);
+
+      expect(result).toEqual({
+        accessToken: 'new-access-token',
+        refreshToken: 'new-refresh-token',
+      });
+      // rotation : le nouveau hash est persisté
+      expect(mockPrismaService.user.update).toHaveBeenCalled();
+    });
+
+    it('should throw when the token is revoked (stored hash is null, ex: après logout)', async () => {
+      mockJwtService.verifyAsync.mockResolvedValue({
+        sub: 'user-id',
+        email: 'test@test.com',
+      });
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'user-id',
+        email: 'test@test.com',
+        refreshTokenHash: null,
+      });
+
+      await expect(service.refresh(refreshDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should throw when an old token is replayed (hash mismatch)', async () => {
+      mockJwtService.verifyAsync.mockResolvedValue({
+        sub: 'user-id',
+        email: 'test@test.com',
+      });
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'user-id',
+        email: 'test@test.com',
+        refreshTokenHash: sha256('un-autre-token-plus-recent'),
+      });
+
+      await expect(service.refresh(refreshDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should throw when the token signature is invalid', async () => {
+      mockJwtService.verifyAsync.mockRejectedValue(new Error('invalid'));
+
+      await expect(service.refresh(refreshDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should throw when the user no longer exists', async () => {
+      mockJwtService.verifyAsync.mockResolvedValue({
+        sub: 'user-id',
+        email: 'test@test.com',
+      });
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+
+      await expect(service.refresh(refreshDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
+  describe('logout', () => {
+    it('should revoke the refresh token by nulling the stored hash', async () => {
+      mockPrismaService.user.update.mockResolvedValue({});
+
+      const result = await service.logout('user-id');
+
+      expect(mockPrismaService.user.update).toHaveBeenCalledWith({
+        where: { id: 'user-id' },
+        data: { refreshTokenHash: null },
+      });
+      expect(result).toEqual({ success: true });
     });
   });
 });
