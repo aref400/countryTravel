@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useAuthStore } from "@/shared/store/auth.store";
+import { UserMenu } from "./UserMenu";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -85,20 +86,11 @@ export function Navbar() {
             Carte
           </Link>
           {isAuthenticated() ? (
-            <>
-              <Link
-                to="/dashboard"
-                className={`text-sm ${pathname === "/dashboard" ? "text-green-600 font-semibold" : "text-gray-500"} hover:text-gray-700`}
-              >
-                <span>{user?.username}</span>
-              </Link>
-              <button
-                onClick={() => void logout()}
-                className="text-sm font-medium bg-red-500 hover:bg-red-600 transition-colors text-white px-4 py-1.5 rounded-lg"
-              >
-                Déconnexion
-              </button>
-            </>
+            <UserMenu
+              username={user?.username ?? ""}
+              avatarUrl={user?.avatarUrl}
+              onLogout={() => void logout()}
+            />
           ) : (
             <>
               <Link
@@ -243,21 +235,28 @@ export function Navbar() {
           </Link>
           <div className="border-t border-gray-100 pt-3 flex gap-2">
             {isAuthenticated() ? (
-              <>
+              <div className="flex-1 flex flex-col gap-2">
                 <Link
                   to="/dashboard"
-                  className="flex-1 text-center text-sm font-medium border border-gray-200 text-gray-700 py-2 rounded-lg"
+                  className="text-center text-sm font-medium border border-gray-200 text-gray-700 py-2 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {user?.username}
+                  Tableau de bord
+                </Link>
+                <Link
+                  to="/mon-compte"
+                  className="text-center text-sm font-medium border border-gray-200 text-gray-700 py-2 rounded-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Mon compte
                 </Link>
                 <button
                   onClick={() => void logout()}
-                  className="flex-1 text-center text-sm font-semibold bg-red-500 hover:bg-red-600 transition-colors text-white py-2 rounded-lg"
+                  className="text-center text-sm font-semibold bg-red-500 hover:bg-red-600 transition-colors text-white py-2 rounded-lg"
                 >
                   Déconnexion
                 </button>
-              </>
+              </div>
             ) : (
               <>
                 <Link

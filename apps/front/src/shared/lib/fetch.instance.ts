@@ -1,6 +1,11 @@
 import { useAuthStore } from "@/shared/store/auth.store";
+import { API_BASE_URL as BASE_URL } from "./api.config";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+// Erreur normalisée levée par apiClient (voir request()).
+export interface ApiError {
+  status: number;
+  data?: { message?: string | string[] };
+}
 
 const getHeaders = (): Record<string, string> => {
   const headers: Record<string, string> = {
@@ -77,6 +82,11 @@ const request = async <T>(
     throw { status: response.status, data: error };
   }
 
+  // 204 No Content (ex. DELETE) : pas de corps à parser.
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json();
 };
 
@@ -84,5 +94,6 @@ export const apiClient = {
   get: <T>(path: string) => request<T>("GET", path),
   post: <T>(path: string, body: unknown) => request<T>("POST", path, body),
   put: <T>(path: string, body: unknown) => request<T>("PUT", path, body),
+  patch: <T>(path: string, body: unknown) => request<T>("PATCH", path, body),
   delete: <T>(path: string) => request<T>("DELETE", path),
 };

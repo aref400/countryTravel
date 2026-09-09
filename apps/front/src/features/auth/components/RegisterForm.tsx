@@ -1,3 +1,4 @@
+import type { ApiError } from "@/shared/lib/fetch.instance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
@@ -33,7 +34,7 @@ export const RegisterForm = () => {
       setAuth(result.user, result.accessToken, result.refreshToken);
       navigate("/");
     } catch (err: unknown) {
-      const error = err as { status: number; data: { message: string } };
+      const error = err as ApiError;
       if (error.status === 409) {
         const msg = error.data?.message;
         if (msg === "Email already exists") {

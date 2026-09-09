@@ -1,4 +1,5 @@
 import { NotFoundPage } from "@/app/pages/NotFoundPage";
+import { AccountPage } from "@/features/account";
 import { authRoutes } from "@/features/auth";
 import { CountriesPage, CountryDetailPage } from "@/features/countries";
 import { DashboardPage } from "@/features/dashboard";
@@ -22,6 +23,7 @@ export function AppRoutes() {
         <Route path="/random" element={<RandomPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/mon-compte" element={<AccountPage />} />
         </Route>
         {authRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />

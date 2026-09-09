@@ -1,7 +1,8 @@
 import * as z from "zod";
+import { passwordRules } from "@/shared/schemas/password.schema";
 
 export const loginSchema = z.object({
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
   password: z
     .string()
     .min(8, "Le mot de passe doit contenir au moins 8 caractères"),
@@ -12,12 +13,8 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export const registerSchema = z
   .object({
     username: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-    email: z.string().email("Email invalide"),
-    password: z
-      .string()
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères")
-      .regex(/\d/, "Le mot de passe doit contenir au moins un chiffre")
-      .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule"),
+    email: z.email("Email invalide"),
+    password: passwordRules,
     confirmPassword: z.string(),
     acceptTerms: z.boolean().refine((val) => val === true, {
       message: "Vous devez accepter les conditions",

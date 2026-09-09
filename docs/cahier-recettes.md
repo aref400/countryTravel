@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification, consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays (API et fiche pays), tableau de bord utilisateur, ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
+Ce document liste les scénarios de test fonctionnels permettant de vérifier le bon fonctionnement des fonctionnalités livrées, ainsi que la bonne gestion des cas d'erreur et des régressions. Il couvre le périmètre fonctionnel implémenté au moment de la rédaction : authentification (dont déconnexion serveur avec révocation), consultation des pays, moteur de recommandation, sauvegarde des recommandations, page destination aléatoire, carte mondiale interactive, pays visités, avis sur les pays (API et fiche pays), tableau de bord utilisateur, gestion de compte et droits RGPD (rectification et effacement), ainsi que les mesures de sécurité et d'accessibilité mises en œuvre (voir aussi [Sécurité et accessibilité](./securite-accessibilite.md)).
 
 ## Méthodologie
 
@@ -56,6 +56,15 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | AUTH-18 | Persistance de session côté front | Utilisateur vient de se connecter | Recharger la page front (F5) | L'utilisateur reste connecté (token bien présent en `localStorage`, régression corrigée) | ✅ |
 | AUTH-19 | Refresh silencieux côté front | Utilisateur connecté, `accessToken` expiré (15 min), `refreshToken` encore valide | Effectuer une action authentifiée (ex. charger `/dashboard`) | L'action aboutit normalement : le front rafraîchit les tokens en coulisse via `POST /auth/refresh` et rejoue la requête — aucune interruption visible (régression BUG-10, couverte par `fetch.instance.test.ts`) | ✅ |
 | AUTH-20 | Session totalement expirée | `accessToken` et `refreshToken` tous deux invalides/expirés | Effectuer une action authentifiée | Déconnexion propre : redirection vers `/auth/login?expired=1` avec le message « Votre session a expiré, veuillez vous reconnecter. » (`role="alert"`) | ✅ |
+
+### 1.4 Déconnexion serveur et révocation (CT-005)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| AUTH-23 | Déconnexion serveur (`POST /auth/logout`) | Utilisateur connecté | Appeler `POST /auth/logout` avec un `accessToken` valide | Code 200/201 ; le `refreshTokenHash` du compte est remis à `null` en base (révocation) | ✅ |
+| AUTH-24 | Refresh d'un token révoqué | L'utilisateur vient de se déconnecter (AUTH-23) | Rejouer `POST /auth/refresh` avec le refresh token d'avant le logout | Code 401 — le refresh token révoqué n'est plus accepté | ✅ |
+| AUTH-25 | Rotation + détection de réutilisation | Utilisateur connecté | `refresh(R1)` → obtenir un nouveau couple ; rejouer `refresh(R1)` (ancien token) | 1er appel : 201 (rotation, nouveau `R2`). 2e appel : **401** — l'ancien token ne correspond plus au hash stocké (unicité garantie par le `jti` du payload) | ✅ |
+| AUTH-26 | Front — déconnexion propre | Utilisateur connecté | Cliquer « Déconnexion » (navbar) | Le front appelle `POST /auth/logout` **avant** de purger la session, puis nettoie `localStorage`/store et redirige vers `/` ; si l'appel serveur échoue, la déconnexion locale a quand même lieu (best-effort, couvert par `auth.store.test.ts`) | ✅ |
 
 ---
 
@@ -264,6 +273,54 @@ Ce document liste les scénarios de test fonctionnels permettant de vérifier le
 | AVI-07 | Suppression de mon avis | Mon avis affiché dans la liste | Cliquer « Supprimer » (visible uniquement sur mon avis) | L'avis disparaît de la liste, le formulaire repasse en mode création ; le bouton n'apparaît pas sur les avis des autres utilisateurs | ✅ |
 | AVI-08 | Accessibilité de la notation | — | Naviguer au clavier jusqu'aux étoiles | Le groupe est un `radiogroup` (une seule tabulation), les flèches changent la note, chaque étoile est annoncée « x sur 5 » (couvert par `StarRating.test.tsx`) | ✅ |
 | AVI-09 | Limite de longueur de l'avis | Formulaire affiché | Saisir un texte | Compteur `x/2000` visible, saisie bloquée à 2000 caractères (`maxLength`, aligné sur le `MaxLength` API) | ✅ |
+
+---
+
+## 13. Gestion de compte — droits RGPD (CT-023)
+
+Couvre le droit de **rectification** (`PATCH /users/me`) et le droit à l'**effacement** (`DELETE /users/me`), plus la lecture de son propre profil (`GET /users/me`) et la page front `/mon-compte`.
+
+### 13.1 Lecture du profil (`GET /users/me`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| USR-01 | Lecture de mon profil | Utilisateur connecté | `GET /users/me` avec `Authorization` valide | Code 200, profil public `{id, email, username, avatarUrl, bio, role, createdAt}` — **jamais** `passwordHash` ni `refreshTokenHash` | ✅ |
+| USR-02 | Lecture sans authentification | — | `GET /users/me` sans token | Code 401 (Unauthorized) | ✅ |
+
+### 13.2 Rectification (`PATCH /users/me`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| USR-03 | Modification du profil | Utilisateur connecté | `PATCH /users/me` avec `{username, email, bio, avatarUrl}` valides | Code 200, profil mis à jour renvoyé (champs publics uniquement) | ✅ |
+| USR-04 | Conserver son propre email (self-exclusion) | Utilisateur connecté | `PATCH /users/me` avec son email actuel inchangé | Code 200 — **pas** de 409 : le contrôle d'unicité exclut l'utilisateur courant | ✅ |
+| USR-05 | Email déjà utilisé par un autre | Un autre compte possède cet email | `PATCH /users/me` avec cet email | Code 409 — "Email already in use" (couvert par `users.service.spec.ts`) | ✅ |
+| USR-06 | Username déjà utilisé par un autre | Un autre compte possède ce username | `PATCH /users/me` avec ce username | Code 409 — "Username already in use" | ✅ |
+| USR-07 | Champ interdit (whitelist) | Utilisateur connecté | `PATCH /users/me` avec `{role: "admin"}` | Code 400 — "property role should not exist" : aucune escalade de privilège possible | ✅ |
+| USR-08 | Email invalide | — | `PATCH /users/me` avec `email: "pas-un-email"` | Code 400 — "Email doit être valide" | ✅ |
+| USR-09 | Nouveau mot de passe sans l'actuel | Utilisateur connecté | `PATCH /users/me` avec `{newPassword}` sans `currentPassword` | Code 400 — "Current password is required to set a new password" | ✅ |
+| USR-10 | Mot de passe actuel incorrect | Utilisateur connecté | `PATCH /users/me` avec `{currentPassword: faux, newPassword}` | Code 401 — "Current password is incorrect" (couvert par `users.service.spec.ts`) | ✅ |
+| USR-11 | Changement de mot de passe réussi | `currentPassword` correct | `PATCH /users/me` avec `{currentPassword, newPassword}` valides | Code 200 ; nouveau hash bcrypt stocké **et** `refreshTokenHash` remis à `null` (sessions révoquées, cohérent avec AUTH-24) | ✅ |
+| USR-12 | Front — page `/mon-compte` pré-remplie | Utilisateur connecté | Ouvrir `/mon-compte` | Le formulaire Profil est pré-rempli via `GET /users/me` (username, email, bio, avatar) — pas de risque d'écraser une bio existante | ✅ |
+| USR-13 | Front — enregistrement du profil | Page `/mon-compte` ouverte | Modifier un champ, cliquer « Enregistrer » | `PATCH /users/me` renvoie 200 ; message « ✓ Modifications enregistrées » (`role="status"`) ; le pseudo de la navbar se met à jour ; conflit email/username → message d'erreur (`role="alert"`) | ✅ |
+| USR-14 | Front — changement de mot de passe | Page `/mon-compte` ouverte | Renseigner mot de passe actuel + nouveau + confirmation, soumettre | Succès → **déconnexion automatique** et redirection vers `/auth/login` avec le message « Mot de passe mis à jour. Reconnectez-vous… » (les sessions sont révoquées côté serveur) ; mot de passe actuel erroné → message d'erreur | ✅ |
+| USR-14b | Modification impossible sans authentification | Aucun token | `PATCH /users/me` sans `Authorization` **et** accès direct front à `/mon-compte` déconnecté | API : `401`. Front : `PrivateRoute` redirige vers `/auth/login` (la page compte n'est jamais rendue) | ✅ |
+
+### 13.3 Effacement RGPD (`DELETE /users/me`)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| USR-15 | Suppression du compte | Utilisateur connecté | `DELETE /users/me` | Code 204 ; compte supprimé **et** données liées (visites, avis, recos) effacées en cascade (`onDelete: Cascade`) — couvert par `users.service.spec.ts` | ✅ |
+| USR-16 | Suppression sans authentification | — | `DELETE /users/me` sans token | Code 401 (Unauthorized) | ✅ |
+| USR-17 | Front — popin de confirmation | Page `/mon-compte`, zone de danger | Cliquer « Supprimer mon compte » | Ouverture d'une popin de confirmation (avertissement d'irréversibilité, RGPD) avec « Annuler » / « Supprimer définitivement » | ✅ |
+| USR-18 | Front — accessibilité de la popin | Popin de suppression ouverte | Naviguer au clavier | Popin `role="dialog"`/`aria-modal`, **focus piégé**, `Échap` ferme et rend le focus au bouton d'origine | ✅ |
+| USR-19 | Front — suppression effective | Popin de confirmation ouverte | Cliquer « Supprimer définitivement » | `DELETE /users/me` (204) ; nettoyage local de la session (sans appel `/auth/logout`, le compte n'existant plus), redirection vers `/auth/login` avec le message « Votre compte a bien été supprimé. » ; toute reconnexion avec ce compte échoue ensuite | ✅ |
+
+### 13.4 Accessibilité et responsive (CT-023)
+
+| ID | Scénario | Préconditions | Étapes | Résultat attendu | Statut |
+|---|---|---|---|---|---|
+| USR-20 | Labels et annonces des formulaires | Page `/mon-compte` | Naviguer au clavier / lecteur d'écran dans les formulaires Profil et Mot de passe | Chaque champ a un `<label>` associé ; erreurs annoncées (`role="alert"`), succès (`role="status"`), compteur de bio (`aria-live`) | ✅ |
+| USR-21 | Rendu mobile (format téléphone) | Viewport ≤ 480px | Ouvrir `/mon-compte` sur mobile | Les 3 cartes s'empilent en colonne unique, aucun scroll horizontal ; navbar repliée avec accès « Mon compte » dans le menu | ✅ |
 
 ---
 

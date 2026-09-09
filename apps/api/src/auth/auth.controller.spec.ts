@@ -40,6 +40,7 @@ describe('AuthController', () => {
           email: 'test@test.com',
           username: 'testuser',
           role: 'user',
+          avatarUrl: null,
         },
       };
 
