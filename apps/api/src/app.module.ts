@@ -12,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ScoringModule } from './scoring/scoring.module';
+import { UsersModule } from './users/users.module';
 import { VisitsModule } from './visits/visits.module';
 
 @Module({
@@ -30,6 +31,7 @@ import { VisitsModule } from './visits/visits.module';
     RecommendationsModule,
     VisitsModule,
     ReviewsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

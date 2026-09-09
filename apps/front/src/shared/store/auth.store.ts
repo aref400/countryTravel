@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+import { API_BASE_URL as API_URL } from "@/shared/lib/api.config";
 
 interface User {
   id: string;
   email: string;
   username: string;
   role: string;
+  avatarUrl?: string | null;
 }
 
 interface AuthState {
@@ -17,6 +17,8 @@ interface AuthState {
   isAuthenticated: () => boolean;
   setAuth(user: User, accessToken: string, refreshToken: string): void;
   setTokens(accessToken: string, refreshToken: string): void;
+  setUser(user: User): void;
+  clearAuth(): void;
   logout(): Promise<void>;
   expireSession(): void;
 }
@@ -37,6 +39,15 @@ export const useAuthStore = create<AuthState>()(
       setTokens: (accessToken, refreshToken) => {
         localStorage.setItem("token", accessToken);
         set({ accessToken, refreshToken });
+      },
+      // Met à jour le user en mémoire (ex. après édition du profil) sans
+      // toucher aux tokens.
+      setUser: (user) => set({ user }),
+      // Nettoyage local de la session, sans appel réseau ni redirection
+      // (ex. après suppression du compte, où l'API n'existe plus).
+      clearAuth: () => {
+        set({ user: null, accessToken: null, refreshToken: null });
+        localStorage.removeItem("token");
       },
       logout: async () => {
         // Révocation côté serveur (best-effort) : invalide le refresh token en

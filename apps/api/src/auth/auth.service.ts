@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { createHash, randomUUID } from 'node:crypto';
+import { BCRYPT_ROUNDS } from '../common/security.constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
@@ -55,7 +56,7 @@ export class AuthService {
     if (existingUsername) {
       throw new ConflictException('Username already exists');
     }
-    const passwordHash = await bcrypt.hash(dto.password, 12);
+    const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
     const newUser = await this.prisma.user.create({
       data: {
         email: dto.email,
@@ -71,6 +72,7 @@ export class AuthService {
         email: newUser.email,
         username: newUser.username,
         role: newUser.role,
+        avatarUrl: newUser.avatarUrl,
       },
       ...tokens,
     };
@@ -105,6 +107,7 @@ export class AuthService {
         email: user.email,
         username: user.username,
         role: user.role,
+        avatarUrl: user.avatarUrl,
       },
       ...tokens,
     };

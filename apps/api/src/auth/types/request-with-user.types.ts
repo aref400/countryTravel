@@ -4,5 +4,6 @@ export interface RequestWithUser extends Request {
     email: string;
     username: string;
     role: string;
+    avatarUrl: string | null;
   };
 }

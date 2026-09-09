@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
+import { useFocusTrap } from "@/shared/hooks/useFocusTrap";
 
 export type SaveRecoStatus = "inactive" | "saving" | "success" | "error";
 
@@ -21,43 +22,12 @@ export function SaveRecoModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const previouslyFocused = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    previouslyFocused.current = document.activeElement as HTMLElement;
-    nameInputRef.current?.focus();
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onClose();
-        return;
-      }
-      if (e.key !== "Tab" || !dialogRef.current) return;
-
-      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-        'button, input, [href], select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      previouslyFocused.current?.focus();
-    };
-  }, [isOpen, onClose]);
+  useFocusTrap(dialogRef, {
+    onClose,
+    initialFocusRef: nameInputRef,
+    active: isOpen,
+  });
 
   // Le formulaire disparaît à l'affichage de la confirmation : on déplace le
   // focus sur "Fermer" pour ne pas le perdre (navigation clavier / lecteur d'écran)

@@ -1,3 +1,5 @@
+import { consumeFlash } from "@/shared/lib/flash";
+import type { ApiError } from "@/shared/lib/fetch.instance";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
@@ -16,6 +18,9 @@ export const LoginForm = () => {
   // ?expired=1 : l'utilisateur a été redirigé ici suite à une session expirée
   const [searchParams] = useSearchParams();
   const sessionExpired = searchParams.get("expired") === "1";
+  // Flashes one-shot posés avant redirection (lus puis effacés une seule fois).
+  const [passwordChanged] = useState(() => consumeFlash("passwordChanged"));
+  const [accountDeleted] = useState(() => consumeFlash("accountDeleted"));
 
   const {
     register,
@@ -31,7 +36,7 @@ export const LoginForm = () => {
       setAuth(result.user, result.accessToken, result.refreshToken);
       navigate("/");
     } catch (err: unknown) {
-      const error = err as { status: number; data: { message: string } };
+      const error = err as ApiError;
       if (error.status === 401) {
         setApiError("Email ou mot de passe incorrect.");
       } else {
@@ -66,6 +71,25 @@ export const LoginForm = () => {
           className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 mb-4"
         >
           Votre session a expiré, veuillez vous reconnecter.
+        </p>
+      )}
+
+      {passwordChanged && (
+        <p
+          role="status"
+          className="text-sm text-green-700 bg-green-50 border border-green-100 rounded-lg px-4 py-3 mb-4"
+        >
+          Mot de passe mis à jour. Reconnectez-vous avec votre nouveau mot de
+          passe.
+        </p>
+      )}
+
+      {accountDeleted && (
+        <p
+          role="status"
+          className="text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-4"
+        >
+          Votre compte a bien été supprimé. Nous espérons vous revoir bientôt.
         </p>
       )}
 

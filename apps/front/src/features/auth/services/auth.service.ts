@@ -4,7 +4,13 @@ import type { LoginFormData, RegisterFormData } from "../schemas/auth.schemas";
 interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  user: { id: string; email: string; username: string; role: string };
+  user: {
+    id: string;
+    email: string;
+    username: string;
+    role: string;
+    avatarUrl?: string | null;
+  };
 }
 
 export const loginUser = (data: LoginFormData) =>
