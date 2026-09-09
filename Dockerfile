@@ -52,5 +52,5 @@ RUN ls -la dist/src/
 # Exposer le port
 EXPOSE 3000
  
-# Démarrer l'application
-CMD ["node", "dist/src/main.js"]
+# Appliquer les migrations en attente puis démarrer l'application
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
